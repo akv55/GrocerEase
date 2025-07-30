@@ -21,9 +21,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Signup Route - GET
-router.get('/signup', (req, res) => {
+router.get('/signup',wrapAsync( (req, res) => {
     res.render("users/signup.ejs");
-});
+}));
 
 // Signup Route - POST
 router.post('/signup', wrapAsync(userController.userSignUp));
