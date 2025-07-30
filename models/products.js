@@ -44,9 +44,9 @@ const listingSchema = new Schema({
     required: true
   },
 
-  inStock: {
-    type: Boolean,
-    default: true
+  stock: {
+    type: Number,
+    min: 0,
   },
   weight: {
     type: String,

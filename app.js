@@ -1,42 +1,37 @@
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
 const express = require('express');
 const app = express();
+exports.app = app;
 const mongoose = require('mongoose');
 const path = require('path');
 const port = 8080;
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
-const Listing = require("./models/products.js");
+const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const flash = require('connect-flash');
-const userRouter = require("./routes/user.js")
-const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const multer = require('multer');
-const Address = require('./models/address.js');
-require('dotenv').config();
 
-// Multer configuration for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './public/uploads/profiles/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
+//  routers
+const userRouter = require("./routes/user.js")
+const listingRouter = require("./routes/listing.js");
+const adminRouter = require("./routes/admin.js");
 
-const upload = multer({ storage: storage });
+
+
 
 // database connection 
 mongoose.set('strictQuery', false);
-// const Mongo_url = process.env.MONGO_URL;
-const AtlasDB_URL = process.env.ATLASDB_URL;
+const Mongo_url = process.env.MONGO_URL;
+// const AtlasDB_URL = process.env.ATLASDB_URL;
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(AtlasDB_URL);
+        await mongoose.connect(Mongo_url);
         console.log("connected to DB");
     } catch (err) {
         console.error("Database connection error:", err);
@@ -52,9 +47,23 @@ app.use(express.urlencoded({ extended: true }));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+// MongoDB session store
+const store = MongoStore.create({
+    mongoUrl: Mongo_url,
+    crypto: {
+        secret: process.env.SECRET,
+    },
+    touchAfter: 24 * 3600,
+});
+
+
+store.on("error", (err)=>{
+console.log("ERROR in MONGO SESSION STORE",err);
+})
 // Session Configuration
 const sessionOptions = {
-    secret: "mysupersecretstring",
+    store,
+    secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -81,237 +90,11 @@ app.use((req, res, next) => {
     next();
 });
 
-// Use user router for authentication routes (mounted before main routes)
 app.use("/", userRouter);
-
-// Routes
-app.get('/', (req, res) => {
-    res.redirect('/listings');
-});
-
-// Index Routes 
-app.get("/listings", wrapAsync(async (req, res) => {
-    const allListings = await Listing.find();
-    res.render("./listing/index.ejs", { allListings });
-}));
-
-// Show Routes 
-app.get("/listings/:slug", wrapAsync(async (req, res) => {
-    const listing = await Listing.findOne({ slug: req.params.slug });
-    res.render("./listing/show.ejs", { listing });
-
-}));
+app.use("/", listingRouter);
+app.use("/", adminRouter);
 
 
-//admin Routes
-app.get("/admin/dashboard", wrapAsync(async (req, res) => {
-    // Check if user is authenticated
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in to access the admin dashboard");
-        return res.redirect("/login");
-    }
-
-    // Check if user has admin role
-    if (req.user.role !== 'admin') {
-        req.flash("error", "You don't have permission to access the admin dashboard");
-        return res.redirect("/");
-    }
-    const users = await User.find();
-    const listings = await Listing.find();
-    res.render("./admin/dashboard.ejs", { users, listings });
-}));
-
-app.get("/admin/users", wrapAsync(async (req, res) => {
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in to access the admin users");
-        return res.redirect("/login");
-    }
-
-    // Check if user has admin role
-    if (req.user.role !== 'admin') {
-        req.flash("error", "You don't have permission to access this page");
-        return res.redirect("/");
-    }
-
-    const users = await User.find();
-    res.render("./admin/users.ejs", { users });
-}))
-//   USER PROFILE ROUTES 
-app.get("/profile", wrapAsync(async (req, res) => {
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in to view your profile");
-        return res.redirect("/login");
-    }
-    res.render("./users/profile.ejs", { user: req.user });
-}));
-
-app.get("/profile/edit", wrapAsync(async (req, res) => {
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in to edit your profile");
-        return res.redirect("/login");
-    }
-    res.render("./users/profile-edit.ejs", { user: req.user });
-}));
-app.post("/profile/edit", upload.single('profileImage'), wrapAsync(async (req, res) => {
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in to edit your profile");
-        return res.redirect("/login");
-    }
-    const { name, email, phone, street, landmark, city, state, country, zip } = req.body;
-    try {
-        // Update user fields (note: using 'name' not 'username' as per your model)
-        if (name && name.trim()) req.user.name = name.trim();
-        if (email && email.trim()) req.user.email = email.trim().toLowerCase();
-        if (phone && phone.trim()) req.user.phone = phone.trim();
-
-        // Handle file upload for profile image
-        if (req.file) {
-            // Always create a new profileImage object structure
-            req.user.profileImage = {
-                filename: req.file.filename,
-                url: `/uploads/profiles/${req.file.filename}`
-            };
-            // Mark the field as modified to ensure Mongoose saves the new structure
-            req.user.markModified('profileImage');
-        }
-        await req.user.save();
-        req.flash("success", "Profile updated successfully");
-        res.redirect("/profile");
-    } catch (error) {
-        console.error("Profile update error:", error);
-        req.flash("error", "Error updating profile. Please try again.");
-        res.redirect("/profile/edit");
-    }
-}));
-
-app.get("/profile/change_password", wrapAsync(async (req, res) => {
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in to view settings");
-        return res.redirect("/login");
-    }
-    res.render("./users/changePassword.ejs", { user: req.user });
-}));
-app.post("/profile/change-password", wrapAsync(async (req, res) => {
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in to change settings");
-        return res.redirect("/login");
-    }
-    const { currentPassword, newPassword, confirmPassword } = req.body;
-
-    // Validate input
-    if (!currentPassword || !newPassword || !confirmPassword) {
-        req.flash("error", "All password fields are required");
-        return res.redirect("/settings");
-    }
-
-    // Check if new password and confirm password match
-    if (newPassword !== confirmPassword) {
-        req.flash("error", "New password and confirm password do not match");
-        return res.redirect("/settings");
-    }
-
-    try {
-        // Verify current password
-        await req.user.authenticate(currentPassword);
-
-        // Set new password
-        await req.user.setPassword(newPassword);
-        await req.user.save();
-
-        req.flash("success", "Password changed successfully");
-    } catch (error) {
-        req.flash("error", "Current password is incorrect");
-    }
-    res.redirect("/listings");
-}));
-
-app.get("/profile/address", wrapAsync(async (req, res) => {
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in to view your address");
-        return res.redirect("/login");
-    }
-
-    // Fetch user's address from Address collection
-    const userAddress = await Address.findOne({ userId: req.user._id });
-
-    res.render("./users/address.ejs", { user: req.user, address: userAddress });
-}));
-app.get("/profile/change-address", wrapAsync(async (req, res) => {
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in to change your address");
-        return res.redirect("/login");
-    }
-
-    // Fetch existing address to populate form
-    const userAddress = await Address.findOne({ userId: req.user._id });
-
-    res.render("./users/updateAddress.ejs", { user: req.user, address: userAddress });
-}));
-app.post("/profile/change-address", wrapAsync(async (req, res) => {
-    if (!req.isAuthenticated()) {
-        req.flash("error", "You must be logged in to change your address");
-        return res.redirect("/login");
-    }
-
-    const { street, landmark, city, state, country, zip, isDefault } = req.body;
-
-    try {
-        // Optional: unset previous default address if a new default is set
-        if (isDefault === 'on') {
-            await Address.updateMany({ userId: req.user._id }, { isDefault: false });
-        }
-
-        // Check if user already has an address entry (you can allow one or multiple)
-        let existingAddress = await Address.findOne({ userId: req.user._id });
-
-        if (existingAddress) {
-            // Update the existing address
-            existingAddress.address.street = street.trim();
-            existingAddress.address.landmark = landmark.trim();
-            existingAddress.address.city = city.trim();
-            existingAddress.address.state = state.trim();
-            existingAddress.address.country = country.trim();
-            existingAddress.address.pincode = zip.trim();
-            existingAddress.address.isDefault = isDefault === 'on';
-
-            await existingAddress.save();
-        } else {
-            // Create a new address with correct structure
-            await Address.create({
-                userId: req.user._id,
-                address: {
-                    street: street.trim(),
-                    landmark: landmark.trim(),
-                    city: city.trim(),
-                    state: state.trim(),
-                    country: country.trim(),
-                    pincode: zip.trim(),
-                    isDefault: isDefault === 'on'
-                }
-            });
-        }
-
-        req.flash("success", "Address updated successfully");
-        res.redirect("/profile/address");
-    } catch (error) {
-        console.error("Address update error:", error);
-        req.flash("error", "Error updating address. Please try again.");
-        res.redirect("/profile/change-address");
-    }
-}));
-
-app.get("/admin/products", wrapAsync(async (req, res) => {
-    // if (!req.isAuthenticated()) {
-    //     req.flash("error", "You must be an admin to view this page");
-    //     return res.redirect("/login");
-    // }
-    // if (req.user.role !== 'admin') {
-    //     req.flash("error", "You don't have permission to access this page");
-    //     return res.redirect("/");
-    // }
-    const products = await Listing.find({});
-    res.render("./admin/products.ejs", { products });
-}));
 
 app.all("*", (req, res, next) => {
     next(new ExpressError("Page Not Found", 404));

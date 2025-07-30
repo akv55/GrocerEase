@@ -122,7 +122,7 @@ body {
     margin: 5px 25px 25px 270px;
     padding: 20px;
     background-color: #fff;
-    min-height: auto;
+    /* min-height: auto; */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
@@ -347,19 +347,31 @@ body {
     border: 1px solid #28a745;
 }
 
-.user-edit-btn,
+.product-edit-btn {
+    color: #28a745;
+    border: 1px solid #28a745;
+}
+.user-edit-btn:hover {
+    background-color: #28a745;
+    color: #fff;
+
+}
+
 .product-edit-btn:hover {
     background-color: #28a745;
     color: #fff;
 }
 
-.user-info .user-delete-btn,
+.user-delete-btn,
 .product-delete-btn {
     color: #dc3545;
     border: 1px solid #dc3545;
 }
 
-.user-delete-btn,
+.user-delete-btn:hover{
+    background-color: #dc3545;
+    color: #fff;
+}
 .product-delete-btn:hover {
     background-color: #dc3545;
     color: #fff;
@@ -427,10 +439,12 @@ body {
     transition: background-color 0.3s ease;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .table-body tr {
     height: 50px;
     transition: background-color 0.3s ease;
 }
+
 .table-body img {
     height: 60px;
     width: 80px;
@@ -439,10 +453,12 @@ body {
     border: 2px solid #e9ecef;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .table-body img:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
 .table-body td {
     padding: 12px;
     text-align: center;

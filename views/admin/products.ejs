@@ -31,7 +31,7 @@
                             <%= product.category %>
                         </td>
                         <td>
-                            <%= product.stock %>
+                            <%= product.stock ||"00" %>
                         </td>
                         <td>
                             <%= product.createdAt.toLocaleDateString() %>
