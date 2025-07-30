@@ -32,7 +32,7 @@ const AtlasDB_URL = process.env.ATLASDB_URL;
 const connectDB = async () => {
     try {
         await mongoose.connect(AtlasDB_URL);
-        console.log("connected to DB");
+        console.log("Connected to MongoDB Atlas successfully");
     } catch (err) {
         console.error("Database connection error:", err);
         process.exit(1);
@@ -50,16 +50,27 @@ app.use(express.static(path.join(__dirname, "/public")));
 // MongoDB session store
 const store = MongoStore.create({
     mongoUrl: AtlasDB_URL,
+    collectionName: 'sessions',
     crypto: {
         secret: process.env.SECRET_KEY,
     },
     touchAfter: 24 * 3600,
+    autoRemove: 'native',
+    autoRemoveInterval: 10,
 });
 
 
-store.on("error", (err)=>{
-console.log("ERROR in MONGO SESSION STORE",err);
-})
+// store.on("error", (err) => {
+//     console.log("ERROR in MONGO SESSION STORE:", err);
+// });
+
+// store.on("connected", () => {
+//     console.log("MongoDB session store connected successfully");
+// });
+
+// store.on("create", (sessionId) => {
+//     console.log("Session created:", sessionId);
+// });
 // Session Configuration
 const sessionOptions = {
     store,
@@ -93,6 +104,20 @@ app.use((req, res, next) => {
 app.use("/", userRouter);
 app.use("/", listingRouter);
 app.use("/", adminRouter);
+
+// Test route to check session creation
+app.get("/test-session", (req, res) => {
+    if (!req.session.views) {
+        req.session.views = 1;
+    } else {
+        req.session.views++;
+    }
+    res.json({
+        message: "Session test successful",
+        views: req.session.views,
+        sessionId: req.sessionID
+    });
+});
 
 
 
