@@ -1,0 +1,27 @@
+<% layout("/layouts/adminboilerplate") -%>
+<div class="category-container">
+    <h1>Product Categories</h1>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            <% categories.forEach(category => { %>
+                <tr>
+                    <td><%= category.id %></td>
+                    <td><%= category.name %></td>
+                    <td><%= category.description %></td>
+                    <td>
+                        <a href="">View</a>
+                        <a href="/admin/categories/delete/<%= category.id %>" class="delete-btn">Delete</a>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,101 @@
+<% layout("/layouts/boilerplate") -%>
+    <div class="address-container">
+        <h2>Address Details</h2>
+        <div class="address-info">
+            <% if (address && address.address) { %>
+                <div class="address-details">
+                    <p><strong>Street:</strong> <%= address.address.street %></p>
+                    <p><strong>Landmark:</strong> <%= address.address.landmark || 'Not provided' %></p>
+                    <p><strong>City:</strong> <%= address.address.city %></p>
+                    <p><strong>State:</strong> <%= address.address.state %></p>
+                    <p><strong>Country:</strong> <%= address.address.country || 'India' %></p>
+                    <p><strong>PIN Code:</strong> <%= address.address.pincode %></p>
+                </div>
+            <% } else { %>
+                <p class="no-address">No address found. Please add your address.</p>
+            <% } %>
+        </div>
+        <div class="profile-links">
+            <a href="/profile/change-address" class="update-address-btn"> <i class="fa-solid fa-pen-to-square"></i> Update Address</a>
+        </div>
+    </div>
+    <style>
+        .address-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .address-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+
+        .address-info {
+            text-align: left;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .address-info strong {
+            display: inline-block;
+            width: 110px;
+            color: #555;
+        }
+
+        .address-info p {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            margin: 0;
+        }
+
+       
+
+        .update-address-btn {
+            text-decoration: none;
+            background-color: #28a745;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+
+        .update-address-btn:hover {
+            background-color: #218838;
+        }
+
+        @media (max-width: 480px) {
+            .address-container {
+                margin: 20px;
+            }
+
+            .address-info strong {
+                width: 100px;
+            }
+
+            .address-info {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .address-info p {
+                text-align: center;
+            }
+
+            .update-address-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>

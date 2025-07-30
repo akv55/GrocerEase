@@ -1,0 +1,135 @@
+<nav class="navbar">
+    <div class="nav-container">
+        <!-- Logo Section -->
+        <div class="nav-logo">
+            <a href="/">
+                <i class="fas fa-shopping-basket"></i>
+                <span>GrocerEase</span>
+            </a>
+        </div>
+
+        <!-- Search Section -->
+        <div class="nav-search">
+            <form class="search-form">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search for products, categories...">
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="nav-links">
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="fas fa-th-large"></i> Categories
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="/products?category=Fruits">🍎 Fruits</a>
+                        <a href="/products?category=Vegetables">🥬 Vegetables</a>
+                        <a href="/products?category=Dairy">🥛 Dairy</a>
+                        <a href="/products?category=Meat">🥩 Meat</a>
+                        <a href="/products?category=Bakery">🍞 Bakery</a>
+                        <a href="/products?category=Beverages">🥤 Beverages</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="/listings/cart/:id" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        Cart
+                        <span class="cart-count">0</span>
+                    </a>
+                </li>
+                <% if(!currentUser) { %>
+                    <li><a href="/login"><i class="fas fa-user"></i> Login</a></li>
+                    <li><a href="/signup" class="signup-btn">Sign Up</a></li>
+                    <% } else { %>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle">
+                                <i class="fas fa-user"></i>
+                                <%= currentUser.name.toUpperCase() %>
+                                    <i class="fas fa-chevron-down"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a href="/profile"> <i class="fa-solid fa-user"></i> Profile</a>
+                                <a href="/orders"> <i class="fa-solid fa-box"></i> Orders</a>
+                                <!-- <a href="/settings">Settings</a> -->
+                                 <a href="/wishlist"><i class="fa-solid fa-heart"></i> Wishlist</a>
+                                <a href="/profile/address"><i class="fa-solid fa-location-dot"></i> Address</a>
+                                <a href="/profile/change_password"><i class="fa-solid fa-lock"></i> Change password</a>
+                                <a href="/profile/edit"><i class="fa-solid fa-user-edit"></i> Edit Profile</a>
+                            </div>
+                        <li>
+                            <a href="/logout" class="logout-btn">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </li>
+                        <% } %>
+            </ul>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+
+        <div class="mobile-menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu">
+    <div class="mobile-menu-header">
+        <% if(!currentUser) { %>
+            <span>Menu</span>
+
+            <% } else { %>
+                <%= currentUser.name.toUpperCase() %>
+                    <%}%>
+
+                        <i class="fas fa-times mobile-menu-close"></i>
+    </div>
+    <div class="mobile-menu-content">
+        <div><a href="/"><i class="fas fa-home"></i> Home</a></div>
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle">
+                <i class="fas fa-th-large"></i> Categories
+                <i class="fas fa-chevron-down"></i>
+            </a>
+            <div class="dropdown-menu mobile-dropdown-menu">
+                <a href="/products?category=Fruits">🍎 Fruits</a>
+                <a href="/products?category=Vegetables">🥬 Vegetables</a>
+                <a href="/products?category=Dairy">🥛 Dairy</a>
+                <a href="/products?category=Meat">🥩 Meat</a>
+                <a href="/products?category=Bakery">🍞 Bakery</a>
+                <a href="/products?category=Beverages">🥤 Beverages</a>
+            </div>
+        </div>
+        <div>
+            <a href="/listings/cart/:id"><i class="fas fa-shopping-cart"></i> Cart</a>
+        </div>
+        <% if(!currentUser) { %>
+            <div><a href="/login"><i class="fas fa-user"></i> Login</a></div>
+            <div><a href="/signup"><i class="fa-solid fa-user-plus"></i> Sign Up</a></div>
+            <% } else { %>
+                <div><a href="/profile"><i class="fa-solid fa-user"></i> Profile</a></div>
+                <div><a href="/orders"><i class="fas fa-box"></i> Orders</a></div>
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="fas fa-cog"></i> Settings
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu mobile-dropdown-menu">
+                        <a href="/profile/address"><i class="fa-solid fa-location-dot"></i> Address</a>
+                        <a href="/profile/change_password"><i class="fa-solid fa-lock"></i> Change password</a>
+                        <a href="/profile/edit"><i class="fa-solid fa-user-edit"></i> Edit Profile</a>
+                    </div>
+                </div>
+                <div><a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
+                <% } %>
+    </div>
+</div>

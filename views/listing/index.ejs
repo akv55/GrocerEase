@@ -1,0 +1,162 @@
+<% layout("/layouts/boilerplate") -%>
+    <div class="listing-card-container">
+
+        <% for(let listing of allListings){ %>
+            <a href="/listings/<%=listing.slug%>" class="listing-link">
+                <div class="listing-card">
+                    <!-- Stock Status Badge -->
+                    <!-- <div class="stock-status">In Stock</div> -->
+
+                    <!-- Product Badge -->
+                    <!-- <div class="product-badge organic">Fresh</div> -->
+
+                    <!-- Image Container -->
+                    <div class="listing-image-container">
+                        <img src="<%= listing.image && listing.image.url ? listing.image.url : '/assets/img.jpg' %>"
+                            class="listing-image" alt="<%= listing.title %>" />
+
+                        
+                    </div>
+
+
+                    <!-- Card Body -->
+                    <div class="listing-card-body">
+                        <!-- Category -->
+                        <div class="listing-category">
+                            <%= listing.category%>
+                        </div>
+
+                        <!-- Title -->
+                        <h3 class="listing-title">
+                            <%= listing.title %>
+                        </h3>
+
+
+
+                        <!-- Rating -->
+                        <div class="rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="rating-count">(4.5)</span>
+                        </div>
+
+                        <!-- Product Details -->
+                        <div class="listing-details">
+                            <div class="listing-weight">
+                                <%= listing.weight || '' %>
+                            </div>
+                            <div class="listing-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <%= listing.location || 'Local' %>
+                            </div>
+                        </div>
+                        <div class="listing-price">
+                            <span class="currency">₹</span>
+                            <%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %>
+                        </div>
+                        <!-- Footer -->
+
+                    </div>
+                </div>
+
+            </a>
+            
+
+            <% } %>
+
+    </div>
+
+    <!-- <script>
+            function addToCart(productId) {
+                // Add to cart functionality
+                console.log('Adding to cart:', productId);
+
+                // Get current cart from localStorage
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+                // Check if product already exists in cart
+                const existingProduct = cart.find(item => item.id === productId);
+
+                if (existingProduct) {
+                    existingProduct.quantity += 1;
+                } else {
+                    cart.push({
+                        id: productId,
+                        quantity: 1
+                    });
+                }
+
+                // Save to localStorage
+                localStorage.setItem('cart', JSON.stringify(cart));
+
+                // Update cart count in navbar
+                if (typeof updateCartCount === 'function') {
+                    updateCartCount();
+                }
+
+                // Show success message
+                showNotification('Product added to cart!', 'success');
+            }
+
+            function toggleWishlist(productId) {
+                // Wishlist functionality
+                console.log('Toggle wishlist:', productId);
+
+                // Get current wishlist from localStorage
+                let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+                // Check if product is already in wishlist
+                const index = wishlist.indexOf(productId);
+
+                if (index > -1) {
+                    wishlist.splice(index, 1);
+                    showNotification('Removed from wishlist', 'info');
+                } else {
+                    wishlist.push(productId);
+                    showNotification('Added to wishlist!', 'success');
+                }
+
+                // Save to localStorage
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            }
+
+            function showNotification(message, type) {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>${message}</span>
+    `;
+
+                // Style the notification
+                notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: ${type === 'success' ? '#28a745' : '#17a2b8'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideIn 0.3s ease;
+    `;
+
+                // Add to page
+                document.body.appendChild(notification);
+
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            } -->
+    </script>

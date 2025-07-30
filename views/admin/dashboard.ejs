@@ -1,0 +1,69 @@
+<% layout("/layouts/adminboilerplate") -%>
+  
+  <!-- Main Dashboard Content -->
+  <div class="admin-dashboard">
+    <div class="dashboard-header">
+      <h1>Admin Dashboard</h1>
+      <p>Welcome to GrocerEase Admin Panel</p>
+    </div>
+
+    <!-- Dashboard Statistics -->
+    <!-- Dashboard Statistics -->
+    <div class="dashboard-stats">
+      <div class="stat-card">
+        <h3><%= users.length %></h3>
+        <p>Total Users</p>
+      </div>
+      <div class="stat-card">
+        <h3><%= listings.length %></h3>
+        <p>Total Products</p>
+      </div>
+      <div class="stat-card">
+        <h3>00</h3>
+        <p>Total Orders</p>
+      </div>
+      <div class="stat-card">
+        <h3>$0</h3>
+        <p>Total Revenue</p>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <!-- <div class="dashboard-charts">
+      <div class="chart-container">
+        <h3>Sales Overview</h3>
+        <canvas id="salesChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>Product Categories</h3>
+        <canvas id="categoryChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>Order Status</h3>
+        <canvas id="orderChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>Monthly Revenue</h3>
+        <canvas id="revenueChart"></canvas>
+      </div>
+    </div> -->
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="action-buttons">
+        <a href="/admin/products/new" class="btn btn-primary">Add New Product</a>
+        <a href="/admin/orders" class="btn btn-secondary">View Orders</a>
+        <a href="/admin/users" class="btn btn-info">Manage Users</a>
+        <a href="/admin/reports" class="btn btn-success">Generate Reports</a>
+      </div>
+    </div>
+  </div>
+
+
+  
+
+  <!-- Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Dashboard Charts JavaScript -->

@@ -1,0 +1,73 @@
+<header>
+    <nav class="admin-navbar">
+        <div class="admin-navbar-container">
+            <div class="admin-nav-logo">
+                <a href="/admin/dashboard">
+                    <i class="fas fa-shopping-basket"></i>
+                    <span>GrocerEase</span>
+                </a>
+            </div>
+            <div class="admin-title">
+                <h3>Welcome: </h3>
+
+            </div>
+            <div class="admin-logout">
+                <a href="/logout" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+<style>
+    .admin-navbar {
+        background: linear-gradient(135deg, #28a745, #4ad385);
+        padding: 2rem 4rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        height: 70px;
+    }
+
+    .admin-navbar-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    .admin-nav-logo a {
+        display: flex;
+        align-items: center;
+        color: white;
+        font-size: 28px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 0.3s ease;
+    }
+
+    .nav-logo a:hover {
+        transform: scale(1.05);
+    }
+
+    .nav-logo i {
+        margin-right: 10px;
+        font-size: 32px;
+    }
+
+    .admin-title {
+        color: #fff;
+    }
+
+    .admin-logout a {
+        text-decoration: none;
+        color: #FFF;
+        transition: tranform .3s ease;
+    }
+
+    .admin-logout a:hover {
+        transform: translateX(2px);
+    }
+</style>

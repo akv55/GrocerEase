@@ -1,0 +1,56 @@
+<% layout("/layouts/adminboilerplate") -%>
+
+  <!-- User Management  -->
+
+  <div class="user-details" id="users">
+    <div class="user-header">
+      <h1> <i class="fa-solid fa-users"></i> User Management</h1>
+      <p>Manage all registered users</p>
+    </div>
+    <div class="user-stats">
+      <div class="stat-card">
+        <h3><%= users.length %></h3>
+        <p>Total Users</p>
+      </div>
+      <div class="stat-card">
+        <h3><%= users.filter(user => user.role === 'admin').length %></h3>
+        <p>Admin Users</p>
+      </div>
+      <div class="stat-card">
+        <h3><%= users.filter(user => user.role === 'user').length %></h3>
+        <p>Regular Users</p>
+      </div>
+    </div>
+
+    <!-- User List -->
+    <div class="user-container">
+      <div class="user-list-title">
+        <h3>All Users</h3>
+      </div>
+      <br>
+      <!-- Table Header -->
+      <div class="user-list">
+        <div>Name</div>
+        <div>Email</div>
+        <div>Phone</div>
+        <div>Role</div>
+        <div>Joined</div>
+        <div>Actions</div>
+      </div>
+      
+      <!-- Table Rows -->
+      <% users.forEach(user => { %>
+        <div class="user-info">
+          <div class="user-name"><%= user.name %></div>
+          <div class="user-email"><%= user.email %></div>
+          <div class="user-phone"><%= user.phone %></div>
+          <div class="user-role"><%= user.role.toUpperCase() %></div>
+          <div class="user-joined"><%= user.createdAt.toLocaleDateString() %></div>
+          <div class="user-actions">
+            <a href="/admin/users/<%= user._id %>/edit" class="user-edit-btn"> <i class="fa-solid fa-pen-to-square"></i> Edit</a>
+            <a href="#delete-user-<%= user._id %>" class="user-delete-btn"> <i class="fa-solid fa-trash"></i> Delete</a>
+            <a href="/admin/users-info/<%= user._id %>" class="user-view-btn"><i class="fa-solid fa-eye"></i> View</a>
+          </div>
+        </div>
+      <% }) %>
+    </div>

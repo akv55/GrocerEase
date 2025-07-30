@@ -1,0 +1,15 @@
+<% layout("/layouts/adminboilerplate") -%>
+    <div class="admin-settings">
+        <h1>Admin Settings</h1>
+        <form action="/admin/settings/update" method="POST">
+            <div class="form-group">
+                <label for="siteName">Site Name:</label>
+                <input type="text" id="siteName" name="siteName" value="<%= settings.siteName %>" required>
+            </div>
+            <div class="form-group">
+                <label for="adminEmail">Admin Email:</label>
+                <input type="email" id="adminEmail" name="adminEmail" value="<%= settings.adminEmail %>" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Settings</button>
+        </form>
+    </div>

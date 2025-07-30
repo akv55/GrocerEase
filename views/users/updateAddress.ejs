@@ -1,0 +1,84 @@
+<% layout("/layouts/boilerplate") -%>
+
+    <div class="address-update-container">
+        <h2>Update Address</h2>
+        <form action="/profile/change-address" method="POST">
+            <div class="form-group">
+                <label for="street">Street:</label>
+                <input type="text" id="street" name="street" placeholder="Enter your street address" minlength="3"
+                    maxlength="100" value="<%= address && address.address ? address.address.street : '' %>" required>
+
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" placeholder="Enter your city" minlength="3" maxlength="50"
+                    value="<%= address && address.address ? address.address.city : '' %>" required>
+
+                <label for="landmark">Landmark:</label>
+                <input type="text" id="landmark" name="landmark" placeholder="Enter a landmark" minlength="3"
+                    maxlength="50" value="<%= address && address.address ? address.address.landmark : '' %>">
+
+                <label for="state">State:</label>
+                <input type="text" id="state" name="state" placeholder="Enter your state" minlength="3" maxlength="50"
+                    value="<%= address && address.address ? address.address.state : '' %>" required>
+
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="country" placeholder="Enter your country" minlength="3"
+                    maxlength="50" value="India" required>
+
+                <label for="zip">PIN CODE:</label>
+                <input type="text" id="zip" name="zip" placeholder="Enter your PIN code" minlength="6" maxlength="6"
+                    value="<%= address && address.address ? address.address.pincode : '' %>" required>
+            </div>
+            <button type="submit" class="address-update-btn">Update Address</button>
+        </form>
+    </div>
+    <style>
+        .address-update-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            /* text-align: center; */
+        }
+
+        .address-update-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            /* gap: 10px; */
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+        }
+        .form-group input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus {
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+            border-color: #28a745;
+        }
+        .address-update-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+    </style>
