@@ -105,22 +105,6 @@ app.use("/", userRouter);
 app.use("/", listingRouter);
 app.use("/", adminRouter);
 
-// Test route to check session creation
-app.get("/test-session", (req, res) => {
-    if (!req.session.views) {
-        req.session.views = 1;
-    } else {
-        req.session.views++;
-    }
-    res.json({
-        message: "Session test successful",
-        views: req.session.views,
-        sessionId: req.sessionID
-    });
-});
-
-
-
 app.all("*", (req, res, next) => {
     next(new ExpressError("Page Not Found", 404));
 });

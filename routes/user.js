@@ -21,7 +21,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Signup Route - GET
-router.get('/signup',wrapAsync( (req, res) => {
+router.get('/signup', wrapAsync((req, res) => {
+    if (!isLogined) { return res.redirect("/"); }
+    else if (req.user) {
+        req.flash("error", "You are already logged in!");
+        return res.redirect("/");
+    }
     res.render("users/signup.ejs");
 }));
 
@@ -29,7 +34,7 @@ router.get('/signup',wrapAsync( (req, res) => {
 router.post('/signup', wrapAsync(userController.userSignUp));
 
 // Login Route - GET
-router.get('/login',wrapAsync((req, res) => {
+router.get('/login', wrapAsync((req, res) => {
     res.render("users/login.ejs");
 }));
 
@@ -40,12 +45,12 @@ router.post("/login",
         {
             failureRedirect: "/login",
             failureFlash: true
-        }),wrapAsync(userController.userLogin));
+        }), wrapAsync(userController.userLogin));
 
-router.get('/logout',userController.userLogout);
+router.get('/logout', userController.userLogout);
 
 // Profile Route
-        router.get("/profile", isLogined, wrapAsync(userController.userProfile));
+router.get("/profile", isLogined, wrapAsync(userController.userProfile));
 router.get("/profile/edit", isLogined, wrapAsync(userController.userProfileEdit));
 router.post("/profile/edit", upload.single('profileImage'), isLogined, wrapAsync(userController.userProfileEditPost));
 router.get("/profile/change_password", isLogined, wrapAsync(userController.userChangePassword));
