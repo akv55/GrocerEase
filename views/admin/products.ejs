@@ -1,6 +1,26 @@
 <% layout("/layouts/adminboilerplate") -%>
     <div class="product">
         <h1>Product List</h1>
+        <div class="user-controls">
+            <input type="text" id="searchInput" placeholder="Search...." oninput="resetPaginationAndRender()" />
+
+            <select id="roleFilter" onchange="resetPaginationAndRender()">
+                <option value="">Category</option>
+                <option value="fruits">Fruits</option>
+                <option value="vegetables">Vegetables</option>
+                <option value="dairy">Dairy</option>
+                <option value="meat">Meat</option>
+                <option value="bakery">Bakery</option>
+                <option value="beverages">Beverages</option>
+            </select>
+
+            <select id="limitSelect" onchange="resetPaginationAndRender()">
+                <option value="10" selected>10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+            </select>
+
+        </div>
         <table class="styled-table ">
             <thead>
                 <tr class="table-header">
@@ -50,6 +70,12 @@
                     <% } %>
             </tbody>
         </table>
+        <br>
+        <div class="pagination">
+            <button>Prev</button>
+            <span>Page</span>
+            <button >Next</button>
+        </div>
     </div>
     <script>
         const rows = document.querySelectorAll(".styled-table tbody tr");

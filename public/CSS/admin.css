@@ -127,16 +127,19 @@ body {
     border-radius: 10px;
 }
 
-.dashboard-header {
+.dashboard-header,
+.user-header {
     margin-bottom: 30px;
 }
 
-.dashboard-header h1 {
+.dashboard-header h1,
+.user-header h1 {
     font-size: 2em;
     margin-bottom: 10px;
 }
 
-.dashboard-header p {
+.dashboard-header p,
+.user-header p {
     color: #000;
 }
 
@@ -261,15 +264,10 @@ body {
     margin-bottom: 30px;
 }
 
-.user-container {
-    width: 100%;
-    background-color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
-}
 
-.user-list-title {
+
+.user-list-title,
+.user-table-header {
     height: 40px;
     background-color: #e1eaf2;
     border-top-left-radius: 5px;
@@ -315,6 +313,17 @@ body {
     color: #495057;
 }
 
+.user-table {
+    border-collapse: collapse;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    background-color: #e1eaf2;
+
+}
+
 .user-info:hover {
     background-color: #f8f9fa;
 }
@@ -326,6 +335,11 @@ body {
     gap: 8px;
     font-size: 12px;
     align-items: center;
+
+}
+
+.user-actions {
+    padding-left: 50px;
 }
 
 .user-actions a,
@@ -337,9 +351,32 @@ body {
     border-radius: 5px;
 }
 
-.user-info .user-role.admin {
-    color: #007bff;
+.admin-role {
+  background-color: #e74c3c;       /* Red */
+  color: white;
+  padding: 5px 15px;
+  border-radius: 50px;             /* Pill shape */
+  text-align: center;
+  display: inline-block;
+  height: 30px;
+  line-height: 10px;
+  font-size: 13px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+.user-role {
+  background-color: #27ae60;       /* Green */
+  color: white;
+  padding: 5px 15px;
+  border-radius: 50px;             /* Pill shape */
+  text-align: center;
+  display: inline-block;
+  height: 30px;
+  line-height: 10px;
+  font-size: 13px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
 
 .user-edit-btn,
 .product-edit-btn {
@@ -351,6 +388,7 @@ body {
     color: #28a745;
     border: 1px solid #28a745;
 }
+
 .user-edit-btn:hover {
     background-color: #28a745;
     color: #fff;
@@ -368,10 +406,11 @@ body {
     border: 1px solid #dc3545;
 }
 
-.user-delete-btn:hover{
+.user-delete-btn:hover {
     background-color: #dc3545;
     color: #fff;
 }
+
 .product-delete-btn:hover {
     background-color: #dc3545;
     color: #fff;
@@ -386,6 +425,87 @@ body {
     background-color: #007bff;
     color: #fff;
 }
+
+.user-controls {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    gap: 2rem;
+}
+
+.user-controls input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+}
+
+#roleFilter,
+#limitSelect {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    color: #495057;
+
+
+}
+
+#roleFilter:focus,
+#limitSelect:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+
+}
+#roleFilter option,#limitSelect option{
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    color: #27ae60;
+    background-color: #fff;
+    transition: tranform .3s ease;
+}
+
+#roleFilter option:hover,
+#limitSelect option:hover{
+    background-color: #27ae60;
+    color: #fff;
+    transform: scaleX(1px);
+}
+.user-controls input:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+select option {
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+.pagination button {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    color: #495057;
+
+}
+
+.pagination span {
+    color: #495057;
+    padding: 8px;
+
+}
+
+
 
 /* PRODUCT MANAGEMENT */
 
@@ -460,6 +580,6 @@ body {
 }
 
 .table-body td {
-    padding: 12px;
+    padding: 10px;
     text-align: center;
 }

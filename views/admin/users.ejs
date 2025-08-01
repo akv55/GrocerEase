@@ -9,15 +9,21 @@
     </div>
     <div class="user-stats">
       <div class="stat-card">
-        <h3><%= users.length %></h3>
+        <h3>
+          <%= users.length %>
+        </h3>
         <p>Total Users</p>
       </div>
       <div class="stat-card">
-        <h3><%= users.filter(user => user.role === 'admin').length %></h3>
+        <h3>
+          <%= users.filter(user=> user.role === 'admin').length %>
+        </h3>
         <p>Admin Users</p>
       </div>
       <div class="stat-card">
-        <h3><%= users.filter(user => user.role === 'user').length %></h3>
+        <h3>
+          <%= users.filter(user=> user.role === 'user').length %>
+        </h3>
         <p>Regular Users</p>
       </div>
     </div>
@@ -28,29 +34,82 @@
         <h3>All Users</h3>
       </div>
       <br>
-      <!-- Table Header -->
-      <div class="user-list">
-        <div>Name</div>
-        <div>Email</div>
-        <div>Phone</div>
-        <div>Role</div>
-        <div>Joined</div>
-        <div>Actions</div>
+      <div class="user-controls">
+        <input type="text" id="searchInput" placeholder="Search...." oninput="resetPaginationAndRender()" />
+
+        <select id="roleFilter" onchange="resetPaginationAndRender()">
+          <option value="">All Roles</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+
+        <select id="limitSelect" onchange="resetPaginationAndRender()">
+          <option value="10" selected>10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+        </select>
+
       </div>
       
-      <!-- Table Rows -->
-      <% users.forEach(user => { %>
-        <div class="user-info">
-          <div class="user-name"><%= user.name %></div>
-          <div class="user-email"><%= user.email %></div>
-          <div class="user-phone"><%= user.phone %></div>
-          <div class="user-role"><%= user.role.toUpperCase() %></div>
-          <div class="user-joined"><%= user.createdAt.toLocaleDateString() %></div>
-          <div class="user-actions">
-            <a href="/admin/users/<%= user._id %>/edit" class="user-edit-btn"> <i class="fa-solid fa-pen-to-square"></i> Edit</a>
-            <a href="#delete-user-<%= user._id %>" class="user-delete-btn"> <i class="fa-solid fa-trash"></i> Delete</a>
-            <a href="/admin/users-info/<%= user._id %>" class="user-view-btn"><i class="fa-solid fa-eye"></i> View</a>
-          </div>
-        </div>
-      <% }) %>
+      <table class="user-table">
+        <thead class="user-table-header">
+          <tr>
+            <th>Sr. No.</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Joined</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody class="table-body">
+          <% users.forEach(user=> { %>
+            <tr>
+              <td></td>
+              <td>
+                <%= user.name %>
+              </td>
+              <td>
+                <%= user.email %>
+              </td>
+              <td>
+                <%= user.phone %>
+              </td>
+              <td class="<%= user.role === 'admin' ? 'admin-role' : 'user-role' %>">
+                <%= user.role.toUpperCase() %>
+              </td>
+              <td>
+                <%= user.createdAt.toLocaleDateString() %>
+              </td>
+              <td class="user-actions">
+                <a href="/admin/users/<%= user._id %>/edit" class="user-edit-btn">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit
+                </a>
+                <% if (user.role !=='admin' ) { %>
+                  <a href="#delete-user-<%= user._id %>" class="user-delete-btn">
+                    <i class="fa-solid fa-trash"></i> Delete
+                  </a>
+                  <% } %>
+                    <a href="/admin/users-info/<%= user._id %>" class="user-view-btn">
+                      <i class="fa-solid fa-eye"></i> View
+                    </a>
+              </td>
+            </tr>
+            <% }) %>
+        </tbody>
+      </table>
+      <br>
+      <div class="pagination">
+        <button>Prev</button>
+        <span>Page</span>
+        <button>Next</button>
+      </div>
     </div>
+  </div>
+  <script>
+        const rows = document.querySelectorAll(".user-table tbody tr");
+        rows.forEach((row, index) => {
+            row.cells[0].textContent = index + 1;
+        });
+    </script>

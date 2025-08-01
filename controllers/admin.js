@@ -4,8 +4,8 @@ const User = require('../models/user.js');
 
 module.exports.admindashboard = async (req, res) => {
     const users = await User.find();
-    const listings = await Listing.find();
-    res.render("./admin/dashboard.ejs", { users, listings });
+    const products = await Listing.find();
+    res.render("./admin/dashboard.ejs", { users, products });
 }
 
 module.exports.registerUser = async (req, res) => {

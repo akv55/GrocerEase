@@ -39,7 +39,7 @@
                     </div>
                 </li>
                 <li>
-                    <a href="/listings/cart/:id" class="cart-link">
+                    <a href="/cart/:id" class="cart-link">
                         <i class="fas fa-shopping-cart"></i>
                         Cart
                         <span class="cart-count">0</span>
@@ -110,7 +110,7 @@
             </div>
         </div>
         <div>
-            <a href="/listings/cart/:id"><i class="fas fa-shopping-cart"></i> Cart</a>
+            <a href="/cart/:id"><i class="fas fa-shopping-cart"></i> Cart</a>
         </div>
         <% if(!currentUser) { %>
             <div><a href="/login"><i class="fas fa-user"></i> Login</a></div>
@@ -118,6 +118,7 @@
             <% } else { %>
                 <div><a href="/profile"><i class="fa-solid fa-user"></i> Profile</a></div>
                 <div><a href="/orders"><i class="fas fa-box"></i> Orders</a></div>
+                <div><a href="/wishlist"><i class="fa-solid fa-heart"></i> Wishlist</a></div>
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle">
                         <i class="fas fa-cog"></i> Settings

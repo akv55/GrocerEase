@@ -1,8 +1,8 @@
 <% layout("/layouts/boilerplate") -%>
     <div class="listing-card-container">
 
-        <% for(let listing of allListings){ %>
-            <a href="/<%=listing.slug%>" class="listing-link">
+        <% for(let product of products){ %>
+            <a href="/<%=product.slug%>" class="listing-link">
                 <div class="listing-card">
                     <!-- Stock Status Badge -->
                     <!-- <div class="stock-status">In Stock</div> -->
@@ -12,8 +12,8 @@
 
                     <!-- Image Container -->
                     <div class="listing-image-container">
-                        <img src="<%= listing.image && listing.image.url ? listing.image.url : '/assets/img.jpg' %>"
-                            class="listing-image" alt="<%= listing.title %>" />
+                        <img src="<%= product.image && product.image.url ? product.image.url : '/assets/img.jpg' %>"
+                            class="listing-image" alt="<%= product.title %>" />
 
                         
                     </div>
@@ -23,12 +23,12 @@
                     <div class="listing-card-body">
                         <!-- Category -->
                         <div class="listing-category">
-                            <%= listing.category%>
+                            <%= product.category %>
                         </div>
 
                         <!-- Title -->
                         <h3 class="listing-title">
-                            <%= listing.title %>
+                            <%= product.title %>
                         </h3>
 
 
@@ -48,16 +48,16 @@
                         <!-- Product Details -->
                         <div class="listing-details">
                             <div class="listing-weight">
-                                <%= listing.weight || '' %>
+                                <%= product.weight || '' %>
                             </div>
                             <div class="listing-location">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <%= listing.location || 'Local' %>
+                                <%= product.location || 'Local' %>
                             </div>
                         </div>
                         <div class="listing-price">
                             <span class="currency">₹</span>
-                            <%= listing.price ? listing.price.toLocaleString("en-IN") : "0" %>
+                            <%= product.price ? product.price.toLocaleString("en-IN") : "0" %>
                         </div>
                         <!-- Footer -->
 

@@ -21,17 +21,14 @@ const userRouter = require("./routes/user.js")
 const listingRouter = require("./routes/listing.js");
 const adminRouter = require("./routes/admin.js");
 
-
-
-
 // database connection 
 mongoose.set('strictQuery', false);
-// const Mongo_url = process.env.MONGO_URL;
-const AtlasDB_URL = process.env.ATLASDB_URL;
+const Mongo_url = process.env.MONGO_URL;
+// const AtlasDB_URL = process.env.ATLASDB_URL;
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(AtlasDB_URL);
+        await mongoose.connect(Mongo_url);
         console.log("Connected to MongoDB Atlas successfully");
     } catch (err) {
         console.error("Database connection error:", err);
@@ -49,7 +46,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 // MongoDB session store
 const store = MongoStore.create({
-    mongoUrl: AtlasDB_URL,
+    mongoUrl: Mongo_url,
     collectionName: 'sessions',
     crypto: {
         secret: process.env.SECRET_KEY,
@@ -59,18 +56,6 @@ const store = MongoStore.create({
     autoRemoveInterval: 10,
 });
 
-
-// store.on("error", (err) => {
-//     console.log("ERROR in MONGO SESSION STORE:", err);
-// });
-
-// store.on("connected", () => {
-//     console.log("MongoDB session store connected successfully");
-// });
-
-// store.on("create", (sessionId) => {
-//     console.log("Session created:", sessionId);
-// });
 // Session Configuration
 const sessionOptions = {
     store,
@@ -105,13 +90,14 @@ app.use("/", userRouter);
 app.use("/", listingRouter);
 app.use("/", adminRouter);
 
+// --------ERROR HANDLING--------
 app.all("*", (req, res, next) => {
     next(new ExpressError("Page Not Found", 404));
 });
 
 app.use((err, req, res, next) => {
-    let { statusCode = 500, message = "Something went wrong!" } = err;
-    res.status(statusCode).send(message);
+    let {statusCode=500,message="Something went wrong!"} = err;
+    return res.status(statusCode).render("error.ejs", { err, user: req.user });
 });
 
 app.listen(port, () => {
