@@ -1,15 +1,29 @@
 <% layout("/layouts/boilerplate") -%>
-<div class="order-container">
-    <h1>Order Details</h1>
-    <div class="order-details">
-        <p>Order ID: </p>
-        <p>Customer Name: </p>
-        <p>Order Date: </p>
-        <p>Total Amount: $</p>
+    <div class="order-container">
+        <div class="order-title">
+            <h2>My Orders</h2>
+            <p>No items found in this order.</p>
+        </div>
     </div>
-    
-    <h2>Items in this Order</h2>
-    
-    
-    <a href="/users/orders" class="back-button">Back to Orders</a>
-</div>
+
+    <style>
+        .order-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .order-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+        .order-container p {
+            font-size: 16px;
+            color: #333;
+        }
+    </style>

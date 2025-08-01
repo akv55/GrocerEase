@@ -15,17 +15,14 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const flash = require('connect-flash');
 const ExpressError = require("./utils/ExpressError.js");
-
 //  routers
 const userRouter = require("./routes/user.js")
 const listingRouter = require("./routes/listing.js");
 const adminRouter = require("./routes/admin.js");
-
 // database connection 
 mongoose.set('strictQuery', false);
 // const Mongo_url = process.env.MONGO_URL;
 const AtlasDB_URL = process.env.ATLASDB_URL;
-
 const connectDB = async () => {
     try {
         await mongoose.connect(AtlasDB_URL);
@@ -35,15 +32,13 @@ const connectDB = async () => {
         process.exit(1);
     }
 };
-
 connectDB();
-
+// Middleware
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
-
 // MongoDB session store
 const store = MongoStore.create({
     mongoUrl: AtlasDB_URL,
@@ -55,7 +50,6 @@ const store = MongoStore.create({
     autoRemove: 'native',
     autoRemoveInterval: 10,
 });
-
 // Session Configuration
 const sessionOptions = {
     store,
@@ -68,15 +62,13 @@ const sessionOptions = {
         httpOnly: true
     }
 };
-
+// Passport Configuration
 app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-
 // connect-flash 
 app.use(flash());
 app.use((req, res, next) => {
@@ -85,21 +77,19 @@ app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     next();
 });
-
+// --------ROUTES--------
 app.use("/", userRouter);
 app.use("/", listingRouter);
 app.use("/", adminRouter);
-
 // --------ERROR HANDLING--------
 app.all("*", (req, res, next) => {
     next(new ExpressError("Page Not Found", 404));
 });
-
 app.use((err, req, res, next) => {
     let {statusCode=500,message="Something went wrong!"} = err;
     return res.status(statusCode).render("error.ejs", { err, user: req.user });
 });
-
+// --------SERVER START--------
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });

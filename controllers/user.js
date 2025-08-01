@@ -1,6 +1,8 @@
 const Address = require('../models/address.js');
 const User = require('../models/user.js');
-
+const Cart = require('../models/cart.js');
+const Listing = require('../models/products.js');
+// User Sign Up Controller
 module.exports.userSignUp = async (req, res) => {
     try {
         let { name, password, email, phone, role } = req.body;
@@ -18,8 +20,6 @@ module.exports.userSignUp = async (req, res) => {
         res.redirect("/signup");
     }
 };
-
-
 module.exports.userLogin =
     async (req, res) => {
         if (req.user.role === "admin") {
@@ -39,15 +39,13 @@ module.exports.userLogout = (req, res, next) => {
          res.redirect('/');
     });
 };
-
+// User Profile Controller
 module.exports.userProfile = async (req, res) => {
     res.render("./users/profile.ejs", { user: req.user });
 };
-
 module.exports.userProfileEdit = async (req, res) => {
     res.render("./users/profile-edit.ejs", { user: req.user });
 };
-
 module.exports.userProfileEditPost = async (req, res) => {
     const { name, email, phone } = req.body;
 
@@ -70,11 +68,10 @@ module.exports.userProfileEditPost = async (req, res) => {
     res.redirect("/profile");
 
 };
-
+// Change Password Controller
 module.exports.userChangePassword = async (req, res) => {
     res.render("./users/changePassword.ejs", { user: req.user });
 };
-
 module.exports.userChangePasswordUpdate = async (req, res) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     // Validate input
@@ -96,32 +93,25 @@ module.exports.userChangePasswordUpdate = async (req, res) => {
     res.redirect("/profile");
 
 };
-
+// User Address Controller
 module.exports.userAddress = async (req, res) => {
-
     // Fetch user's address from Address collection
     const userAddress = await Address.findOne({ userId: req.user._id });
     res.render("./users/address.ejs", { user: req.user, address: userAddress });
 };
-
 module.exports.userAddressEdit = async (req, res) => {
     // Fetch existing address to populate form
     const userAddress = await Address.findOne({ userId: req.user._id });
-
     res.render("./users/updateAddress.ejs", { user: req.user, address: userAddress });
 };
-
 module.exports.userAddressUpdate = async (req, res) => {
-
     const { street, landmark, city, state, country, zip, isDefault } = req.body;
     // Optional: unset previous default address if a new default is set
     if (isDefault === 'on') {
         await Address.updateMany({ userId: req.user._id }, { isDefault: false });
     }
-
     // Check if user already has an address entry (you can allow one or multiple)
     let existingAddress = await Address.findOne({ userId: req.user._id });
-
     if (existingAddress) {
         // Update the existing address
         existingAddress.address.street = street.trim();
@@ -131,7 +121,6 @@ module.exports.userAddressUpdate = async (req, res) => {
         existingAddress.address.country = country.trim();
         existingAddress.address.pincode = zip.trim();
         existingAddress.address.isDefault = isDefault === 'on';
-
         await existingAddress.save();
     } else {
         // Create a new address with correct structure
@@ -148,24 +137,26 @@ module.exports.userAddressUpdate = async (req, res) => {
             }
         });
     }
-
     req.flash("success", "Address updated successfully");
     res.redirect("/profile/address");
 };
-
 // User Order Route
 module.exports.userOrders = async (req, res) => {
     res.render("./users/orders.ejs");
 }
-
 // User Order Details
 module.exports.userOrderDetails = async (req, res) => {
     const { orderId } = req.params;
     // Add logic to fetch order details here
     res.render("./users/orders.ejs", { orderId });
 }
-
 // user Wishlist
 module.exports.userWishlist = async (req, res) => {
     res.render("./users/wishlist.ejs");
+}
+// user Cart Controller
+module.exports.userCart = async (req, res) => {
+    const cart = await Listing.findById(req.params.id);
+    const userAddress = await Address.findOne({ userId: req.user._id });
+    res.render("./listing/carts.ejs",{cart,user:req.user,address:userAddress} );
 }

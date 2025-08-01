@@ -121,4 +121,31 @@
                             border-color: #1e7e34;
                             transform: translateY(-2px);
                         }
+
+                        @media (max-width: 498px) {
+                            .error-container {
+                                padding: 20px;
+                                width: 90%;
+                            }
+
+                            .error-icon {
+                                font-size: 3rem;
+                            }
+
+                            .error-title {
+                                font-size: 2rem;
+                            }
+
+                            .error-message,
+                            .error-details,
+                            .error-status {
+                                font-size: 1rem;
+                            }
+
+                            .error-actions {
+                                flex-direction: row;
+                                flex-wrap: wrap;
+                                gap: 1rem;
+                            }
+                        }
                     </style>

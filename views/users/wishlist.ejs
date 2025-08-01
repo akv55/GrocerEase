@@ -1,5 +1,29 @@
 <% layout("/layouts/boilerplate") -%>
-<div class="wishlist">
-    <h1>Your Wishlist</h1>
-    
-</div>
+    <div class="wishlist-container">
+        <div class="wishlist">
+            <h2>My Wishlist</h2>
+            <p>No items found in your wishlist.</p>
+        </div>
+    </div>
+
+    <style>
+        
+        .wishlist-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .wishlist-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+        .wishlist-container p {
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
