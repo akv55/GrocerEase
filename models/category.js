@@ -1,21 +1,24 @@
 const mongoose = require('mongoose');
+
 const categorySchema = new mongoose.Schema({
-    name: String,
-    image: {
-        type: String,
-        default: "https://example.com/default-category-image.jpg" // Placeholder image URL
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
-}, {
-    timestamps: true // Automatically manage createdAt and updatedAt fields
-
-
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  description: {
+    type: String,
+    default: ""
+  },
+  image: {
+    type: String,
+    default: "" // URL or filename of category image
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
+
 module.exports = mongoose.model('Category', categorySchema);

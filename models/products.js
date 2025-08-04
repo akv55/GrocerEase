@@ -43,21 +43,28 @@ const listingSchema = new Schema({
     type: String,
     required: true
   },
-
   stock: {
     type: Number,
-    min: 0,
+    required: true,
+    min: 0
   },
   weight: {
     type: String,
+    enum: ['g', 'kg', 'oz', 'lb', 'ml', 'l', 'fl oz', 'pt', 'qt', 'gal'],
     required: true
   },
   category: {
     type: String,
     required: true
   },
-  category_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
-  created_by: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },
+  category_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category'
+  },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Admin'
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -68,8 +75,7 @@ const listingSchema = new Schema({
   }
 });
 
-// Update the updatedAt field before saving
-
+// Automatically generate slug from title before saving
 listingSchema.pre('save', function (next) {
   if (this.isModified('title')) {
     this.slug = slugify(this.title, { lower: true });

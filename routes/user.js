@@ -16,13 +16,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 // Signup Route - GET
-router.get('/signup', isNotLogined, wrapAsync((req, res) => {
+router.get('/signup', wrapAsync((req, res) => {
     res.render("users/signup.ejs");
 }));
 // Signup Route - POST
-router.post('/signup', isNotLogined, wrapAsync(userController.userSignUp));
+router.post('/signup', wrapAsync(userController.userSignUp));
 // Login Route - GET
-router.get('/login', isNotLogined, wrapAsync((req, res) => {
+router.get('/login', wrapAsync((req, res) => {
     res.render("users/login.ejs");
 }));
 // Login Route - POST
@@ -40,7 +40,7 @@ router.get("/profile", isLogined, wrapAsync(userController.userProfile));
 router.get("/profile/edit", isLogined, wrapAsync(userController.userProfileEdit));
 router.post("/profile/edit", upload.single('profileImage'), isLogined, wrapAsync(userController.userProfileEditPost));
 router.get("/profile/change_password", isLogined, wrapAsync(userController.userChangePassword));
-router.post("/profile/change-password", isLogined, wrapAsync(userController.userChangePasswordUpdate));
+router.post("/profile/update-password", isLogined, wrapAsync(userController.userChangePasswordUpdate));
 router.get("/profile/address", isLogined, wrapAsync(userController.userAddress));
 router.get("/profile/change-address", isLogined, wrapAsync(userController.userAddressEdit));
 router.post("/profile/change-address", isLogined, wrapAsync(userController.userAddressUpdate));
@@ -52,7 +52,7 @@ router.get("/wishlist", isLogined, wrapAsync(userController.userWishlist));
 router.post("/wishlist/add", isLogined, wrapAsync(userController.addToWishlist));
 router.post("/wishlist/remove", isLogined, wrapAsync(userController.removeFromWishlist));
 // User Cart Route
-router.get("/cart/", isLogined, wrapAsync(userController.userCart));
+router.get("/cart", isLogined, wrapAsync(userController.userCart));
 router.post("/cart/add", isLogined, wrapAsync(userController.addToCart));
 router.post("/cart/remove", isLogined, wrapAsync(userController.removeFromCart));
 

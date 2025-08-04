@@ -332,16 +332,12 @@ body {
 
 .user-actions {
     display: flex;
-    gap: 8px;
+    justify-content:center;
+    gap: 10px;
     font-size: 12px;
     align-items: center;
 
 }
-
-.user-actions {
-    padding-left: 50px;
-}
-
 .user-actions a,
 .product-action a,
 .product-delete-btn {
@@ -358,8 +354,8 @@ body {
   border-radius: 50px;             /* Pill shape */
   text-align: center;
   display: inline-block;
-  height: 30px;
-  line-height: 10px;
+  height: 20px;
+  line-height: .5px;
   font-size: 13px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
@@ -371,8 +367,8 @@ body {
   border-radius: 50px;             /* Pill shape */
   text-align: center;
   display: inline-block;
-  height: 30px;
-  line-height: 10px;
+  height: 20px;
+  line-height: .5px;
   font-size: 13px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
@@ -382,6 +378,7 @@ body {
 .product-edit-btn {
     color: #28a745;
     border: 1px solid #28a745;
+    margin-left: 0;
 }
 
 .product-edit-btn {

@@ -11,10 +11,12 @@ const userSchema = new Schema({
         trim: true,
     },
     phone: {
-        type: Number,
+        type: String,
         required: true,
         unique: true,
         trim: true,
+        minlength: 10,
+        maxlength: 10
     },
     name: {
         type: String,

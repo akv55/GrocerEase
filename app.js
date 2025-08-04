@@ -21,11 +21,11 @@ const listingRouter = require("./routes/listing.js");
 const adminRouter = require("./routes/admin.js");
 // database connection 
 mongoose.set('strictQuery', false);
-// const Mongo_url = process.env.MONGO_URL;
-const AtlasDB_URL = process.env.ATLASDB_URL;
+const Mongo_url = process.env.MONGO_URL;
+// const AtlasDB_URL = process.env.ATLASDB_URL;
 const connectDB = async () => {
     try {
-        await mongoose.connect(AtlasDB_URL);
+        await mongoose.connect(Mongo_url);
         console.log("Connected to MongoDB Atlas successfully");
     } catch (err) {
         console.error("Database connection error:", err);
@@ -41,7 +41,7 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 // MongoDB session store
 const store = MongoStore.create({
-    mongoUrl: AtlasDB_URL,
+    mongoUrl: Mongo_url,
     collectionName: 'sessions',
     crypto: {
         secret: process.env.SECRET_KEY,
