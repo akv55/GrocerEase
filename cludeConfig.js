@@ -9,8 +9,11 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  folder: 'GrocerEase', // The name of the folder in Cloudinary
-  allowedFormats: ['jpg', 'png', 'jpeg'],
+  params: {
+    folder: 'GrocerEase', // The name of the folder in Cloudinary
+    allowed_formats: ['jpg', 'png', 'jpeg'],
+    resource_type: 'auto'
+  }
 });
 
 module.exports = { cloudinary, storage };
