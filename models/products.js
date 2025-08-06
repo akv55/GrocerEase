@@ -35,31 +35,26 @@ const listingSchema = new Schema({
     required: true,
     min: 0
   },
-  location: {
-    type: String,
-    required: true
+  location:{
+    type:String,
+    required:true
   },
-  country: {
-    type: String,
-    required: true
+  country:{
+    type:String,
+    required:true
   },
-  stock: {
+  inStock: {
     type: Number,
     required: true,
     min: 0
   },
   weight: {
     type: String,
-    enum: ['g', 'kg', 'oz', 'lb', 'ml', 'l', 'fl oz', 'pt', 'qt', 'gal'],
     required: true
   },
   category: {
     type: String,
     required: true
-  },
-  category_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category'
   },
   created_by: {
     type: mongoose.Schema.Types.ObjectId,
@@ -73,6 +68,8 @@ const listingSchema = new Schema({
     type: Date,
     default: Date.now
   }
+
+  
 });
 
 // Automatically generate slug from title before saving

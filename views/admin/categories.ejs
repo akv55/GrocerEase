@@ -1,27 +1,44 @@
 <% layout("/layouts/adminboilerplate") -%>
-<div class="category-container">
-    <h1>Product Categories</h1>
-    <table class="styled-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody class="table-body">
-            <% categories.forEach(category => { %>
-                <tr>
-                    <td><%= category.id %></td>
-                    <td><%= category.name %></td>
-                    <td><%= category.description %></td>
-                    <td>
-                        <a href="">View</a>
-                        <a href="/admin/categories/delete/<%= category.id %>" class="delete-btn">Delete</a>
-                    </td>
+    <div class="category-container product">
+        <h1>Product Categories</h1>
+        <table class="styled-table">
+            <thead>
+                <tr class="table-header">
+                    <th>Sr. No.</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
                 </tr>
-            <% }) %>
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody class="table-body">
+                <% for(let category of categories){ %>
+                    <tr class="table-body">
+                        <td></td>
+                        <td><img src="<%= category.image ? category.image : '/assets/img.jpg' %>"
+                                class="listing-image" /></td>
+                        <td>
+                            <%= category.name %>
+                        </td>
+                        <td>
+                            <%= category.description %>
+                        </td>
+                       <td class="product-action">
+                           <a href="/admin/categories/edit/<%= category.id %>" class="product-edit-btn">Edit</a>
+                           <form action="/admin/categories/delete/<%= category.id %>" method="POST"
+                               style="display:inline;">
+                               <button type="submit" class="product-delete-btn">Delete</button>
+                           </form>
+                           <a href="/admin/categories/products/<%= category.id %>" class="user-view-btn">View</a>
+                       </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+     <script>
+        const rows = document.querySelectorAll(".styled-table tbody tr");
+        rows.forEach((row, index) => {
+            row.cells[0].textContent = index + 1;
+        });
+    </script>

@@ -1,10 +1,11 @@
 const Listing = require("../models/products.js");
 const ExpressError = require("../utils/ExpressError.js");
-
+const category = require("../models/category.js");
 module.exports.index = async (req, res, next) => {
     try {
         const products = await Listing.find();
-        return res.render("./listing/index.ejs", { products });
+        const categories = await category.find();
+        return res.render("./listing/index.ejs", { products, categories });
     } catch (err) {
         return next(err);  // Pass unexpected DB errors to global error handler
     }
@@ -21,5 +22,19 @@ module.exports.showIndex = async (req, res, next) => {
         return res.render("./listing/show.ejs", { product });
     } catch (err) {
         return next(err);  // Handle DB or query errors
+    }
+};
+
+module.exports.deleteListing = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const deletedProduct = await Listing.findByIdAndDelete(id);
+        if (!deletedProduct) {
+            return next(new ExpressError("Product not found", 404));
+        }
+        req.flash("success", "Product deleted successfully");
+        return res.redirect("/admin/products");
+    } catch (err) {
+        return next(err);  // Handle DB errors or invalid ID
     }
 };

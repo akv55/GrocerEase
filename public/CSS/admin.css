@@ -118,7 +118,8 @@ body {
 .user-details,
 .product,
 .category-container,
-.admin-settings {
+.admin-settings,
+.new-product {
     margin: 5px 25px 25px 270px;
     padding: 20px;
     background-color: #fff;
@@ -332,45 +333,52 @@ body {
 
 .user-actions {
     display: flex;
-    justify-content:center;
+    justify-content: center;
     gap: 10px;
     font-size: 12px;
     align-items: center;
 
 }
+
 .user-actions a,
+.user-delete-form button,
 .product-action a,
 .product-delete-btn {
     text-decoration: none;
     transition: color 0.3s ease;
     padding: 5px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .admin-role {
-  background-color: #e74c3c;       /* Red */
-  color: white;
-  padding: 5px 15px;
-  border-radius: 50px;             /* Pill shape */
-  text-align: center;
-  display: inline-block;
-  height: 20px;
-  line-height: .5px;
-  font-size: 13px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #e74c3c;
+    /* Red */
+    color: white;
+    padding: 5px 15px;
+    border-radius: 50px;
+    /* Pill shape */
+    text-align: center;
+    display: inline-block;
+    height: 20px;
+    line-height: .5px;
+    font-size: 13px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .user-role {
-  background-color: #27ae60;       /* Green */
-  color: white;
-  padding: 5px 15px;
-  border-radius: 50px;             /* Pill shape */
-  text-align: center;
-  display: inline-block;
-  height: 20px;
-  line-height: .5px;
-  font-size: 13px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #27ae60;
+    /* Green */
+    color: white;
+    padding: 5px 15px;
+    border-radius: 50px;
+    /* Pill shape */
+    text-align: center;
+    display: inline-block;
+    height: 20px;
+    line-height: .5px;
+    font-size: 13px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -459,7 +467,9 @@ body {
     box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
 
 }
-#roleFilter option,#limitSelect option{
+
+#roleFilter option,
+#limitSelect option {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -471,11 +481,12 @@ body {
 }
 
 #roleFilter option:hover,
-#limitSelect option:hover{
+#limitSelect option:hover {
     background-color: #27ae60;
     color: #fff;
     transform: scaleX(1px);
 }
+
 .user-controls input:focus {
     border-color: #28a745;
     box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
@@ -579,4 +590,229 @@ select option {
 .table-body td {
     padding: 10px;
     text-align: center;
+}
+
+/* -----------------------------ADD PRODUCT PAGE----------------------------- */
+.new-product h1 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(135deg, #28a745, #4ad385);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+    color: #495057;
+}
+
+.breadcrumb a {
+    color: #28a745;
+    text-decoration: none;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.new-product p {
+    color: #495057;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: 400;
+    color: #495057;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #495057;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+.form-select-group {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    justify-content: space-between;
+}
+
+.select-group,
+.location-group,
+.price-quantity {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-select-group label {
+    margin-bottom: 5px;
+    font-weight: 400;
+    color: #495057;
+}
+
+.form-select-group select {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #495057;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+    width: 380px;
+}
+
+.form-select-group select:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+.form-select-group input {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #495057;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+    width: 380px;
+
+}
+
+.form-select-group input:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+.form-group input[type="file"] {
+    padding: 15px;
+    border: 2px dashed #28a745;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #495057;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+
+}
+
+.form-group input[type="file"]:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+.form-group input[type="file"]::file-selector-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+}
+
+.form-group input[type="file"]::file-selector-button:hover {
+    background-color: #218838;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.add-btn {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.add-btn:hover {
+    background-color: #fff;
+    color: #28a745;
+    transition: background-color 0.3s ease;
+    border: 2px solid #28a745;
+}
+
+/* -------------------------------USER INFO PAGE------------------------------- */
+.user-info-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    gap: 200px;
+}
+
+.user-details-info {
+    flex: 1;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-details-info p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #495057;
+
+}
+
+.user-details-info h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #2c3e50;
+}
+.user-details-info strong {
+    color: #28a745;
+}   
+.user-info-actions{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+.user-info-actions a {
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.user-info-actions a:hover {
+    background-color: #5a6268;
+}
+
+.user-details h2{
+    padding: 10px 0;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #2c3e50;
 }

@@ -50,7 +50,7 @@
         </select>
 
       </div>
-      
+
       <table class="user-table">
         <thead class="user-table-header">
           <tr>
@@ -86,14 +86,10 @@
                 <a href="/admin/users/<%= user._id %>/edit" class="user-edit-btn">
                   <i class="fa-solid fa-pen-to-square"></i> Edit
                 </a>
-                <% if (user.role !=='admin' ) { %>
-                  <a href="#delete-user-<%= user._id %>" class="user-delete-btn">
-                    <i class="fa-solid fa-trash"></i> Delete
-                  </a>
-                  <% } %>
-                    <a href="/admin/users-info/<%= user._id %>" class="user-view-btn">
-                      <i class="fa-solid fa-eye"></i> View
-                    </a>
+
+                <a href="/admin/users-info/<%= user._id %>" class="user-view-btn">
+                  <i class="fa-solid fa-eye"></i> View
+                </a>
               </td>
             </tr>
             <% }) %>
@@ -108,8 +104,8 @@
     </div>
   </div>
   <script>
-        const rows = document.querySelectorAll(".user-table tbody tr");
-        rows.forEach((row, index) => {
-            row.cells[0].textContent = index + 1;
-        });
-    </script>
+    const rows = document.querySelectorAll(".user-table tbody tr");
+    rows.forEach((row, index) => {
+      row.cells[0].textContent = index + 1;
+    });
+  </script>

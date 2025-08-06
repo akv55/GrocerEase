@@ -49,11 +49,11 @@ router.get("/orders", isLogined, wrapAsync(userController.userOrders));
 router.get("/orders/:orderId", isLogined, wrapAsync(userController.userOrderDetails));
 // User Wishlist Route
 router.get("/wishlist", isLogined, wrapAsync(userController.userWishlist));
-router.post("/wishlist/add", isLogined, wrapAsync(userController.addToWishlist));
-router.post("/wishlist/remove", isLogined, wrapAsync(userController.removeFromWishlist));
+// router.post("/wishlist/add", isLogined, wrapAsync(userController.addToWishlist));
+// router.post("/wishlist/remove", isLogined, wrapAsync(userController.removeFromWishlist));
 // User Cart Route
 router.get("/cart", isLogined, wrapAsync(userController.userCart));
-router.post("/cart/add", isLogined, wrapAsync(userController.addToCart));
-router.post("/cart/remove", isLogined, wrapAsync(userController.removeFromCart));
+// router.post("/cart/add", isLogined, wrapAsync(userController.addToCart));
+// router.post("/cart/remove", isLogined, wrapAsync(userController.removeFromCart));
 
 module.exports = router;

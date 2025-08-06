@@ -1,0 +1,86 @@
+<% layout("/layouts/adminboilerplate") -%>
+    <div class="user-details">
+        <div class="breadcrumb">
+            <a href="/admin/dashboard">Admin Dashboard</a> &gt;
+            <a href="/admin/users">Users</a> &gt;
+            <span>User Details</span>
+        </div>
+        <h1>User Information</h1>
+        <div class="user-info-container">
+            <div class="user-avatar">
+                <img src="<%= user.profileImage.url %>" alt="<%= user.name %>'s Profile"
+                    style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+            </div>
+            <div class="user-details-info">
+                <h2>
+                    <%= user.name %>
+                </h2>
+                <p><strong>Email:</strong>
+                    <%= user.email %>
+                </p>
+                <p><strong>Username:</strong>
+                    <%= user.username %>
+                </p>
+                <p><strong>Phone:</strong>
+                    <%= user.phone %>
+                </p>
+                <p><strong>Role:</strong>
+                    <%= user.role %>
+                </p>
+                <p><strong>Member Since:</strong>
+                    <%= user.createdAt.toDateString() %>
+                </p>
+            </div>
+        </div>
+        <hr>
+        <h2>Address Information</h2>
+        <% if (address && address.address) { %>
+            <div class="address-details">
+                <p><strong>Street:</strong>
+                    <%= address.address.street %>
+                </p>
+                <p><strong>Landmark:</strong>
+                    <%= address.address.landmark || 'Not provided' %>
+                </p>
+                <p><strong>City:</strong>
+                    <%= address.address.city %>
+                </p>
+                <p><strong>State:</strong>
+                    <%= address.address.state %>
+                </p>
+                <p><strong>Country:</strong>
+                    <%= address.address.country || 'India' %>
+                </p>
+                <p><strong>PIN Code:</strong>
+                    <%= address.address.pincode %>
+                </p>
+            </div>
+
+
+
+            <% } else { %>
+                <p class="no-address">No address found. Please add your address.</p>
+                <% } %>
+                    <br>
+                    <hr>
+
+                    <h2>Order Information</h2>
+                    <div class="order-details">
+                        <!--  -->
+                    </div>
+                    <div class="user-info-actions">
+                        <a href="/admin/users" class="back-btn">Back to Users</a>
+                        <% if (user.role !=='admin' ) { %>
+                            <form action="/admin/users/<%= user._id %>?_method=DELETE" method="POST"
+                                class="user-delete-form">
+                                <button type="submit" class="user-delete-btn"
+                                    onclick="return confirm('⚠️ WARNING: This will permanently delete this user and ALL associated data including:\\n\\n• Profile information\\n• Profile images from Cloudinary\\n• Address details\\n• Cart items\\n• Wishlist items\\n• Order history\\n• Reviews\\n\\nThis action cannot be undone. Are you absolutely sure you want to proceed?');">
+                                    <i class="fa-solid fa-trash"></i> Delete User & All Data
+                                </button>
+                            </form>
+                            <% } %>
+
+                    </div>
+
+
+    </div>

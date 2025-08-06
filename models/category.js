@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const categorySchema = new mongoose.Schema({
   name: {
@@ -7,18 +7,16 @@ const categorySchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+ 
   description: {
     type: String,
     default: ""
   },
   image: {
-    type: String,
-    default: "" // URL or filename of category image
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
+    filename: String,
+    url: String
   }
-});
-
-module.exports = mongoose.model('Category', categorySchema);
+}, { timestamps: true }
+);
+const Category = mongoose.model("Category", categorySchema);
+module.exports = Category;

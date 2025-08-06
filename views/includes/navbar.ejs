@@ -59,10 +59,14 @@
                                 <a href="/profile"> <i class="fa-solid fa-user"></i> Profile</a>
                                 <a href="/orders"> <i class="fa-solid fa-box"></i> Orders</a>
                                 <!-- <a href="/settings">Settings</a> -->
-                                 <a href="/wishlist"><i class="fa-solid fa-heart"></i> Wishlist</a>
+                                <a href="/wishlist"><i class="fa-solid fa-heart"></i> Wishlist</a>
                                 <a href="/profile/address"><i class="fa-solid fa-location-dot"></i> Address</a>
                                 <a href="/profile/change_password"><i class="fa-solid fa-lock"></i> Change password</a>
                                 <a href="/profile/edit"><i class="fa-solid fa-user-edit"></i> Edit Profile</a>
+                                <% if(currentUser.role==='admin' ) { %>
+                                    <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</a>
+                                    <% } %>
+
                             </div>
                         <li>
                             <a href="/logout" class="logout-btn">

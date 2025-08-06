@@ -3,15 +3,13 @@
         <h1>Product List</h1>
         <div class="user-controls">
             <input type="text" id="searchInput" placeholder="Search...." oninput="resetPaginationAndRender()" />
-
-            <select id="roleFilter" onchange="resetPaginationAndRender()">
-                <option value="">Category</option>
-                <option value="fruits">Fruits</option>
-                <option value="vegetables">Vegetables</option>
-                <option value="dairy">Dairy</option>
-                <option value="meat">Meat</option>
-                <option value="bakery">Bakery</option>
-                <option value="beverages">Beverages</option>
+            <select id="roleFilter" name="category" onchange="resetPaginationAndRender()">
+                <option value="">Select Category</option>
+                <% categories.forEach(category=> { %>
+                    <option value="<%= category._id %>">
+                        <%= category.name %>
+                    </option>
+                    <% }) %>
             </select>
 
             <select id="limitSelect" onchange="resetPaginationAndRender()">
@@ -45,13 +43,14 @@
                             <%= product.title %>
                         </td>
                         <td>
-                            <%= product.price %>
+                            ₹<%= product.price %>.00
                         </td>
                         <td>
-                            <%= product.category %>
+                            <%= categories.find(cat=> cat._id.equals(product.category))?.name || 'Unknown' %>
+
                         </td>
                         <td>
-                            <%= product.stock ||"00" %>
+                            <%= product.inStock ||"00" %>
                         </td>
                         <td>
                             <%= product.createdAt.toLocaleDateString() %>
@@ -60,8 +59,8 @@
                             <%= product.updatedAt.toLocaleDateString() %>
                         </td>
                         <td class="product-action">
-                            <a href="/admin/products/edit/<%= product.id %>" class="product-edit-btn">Edit</a>
-                            <form action="/admin/products/delete/<%= product.id %>" method="POST"
+                            <a href="/admin/products/edit/<%= product._id %>" class="product-edit-btn">Edit</a>
+                            <form action="/admin/products/<%= product._id %>?_method=DELETE" method="POST"
                                 style="display:inline;">
                                 <button type="submit" class="product-delete-btn">Delete</button>
                             </form>
@@ -74,7 +73,7 @@
         <div class="pagination">
             <button>Prev</button>
             <span>Page</span>
-            <button >Next</button>
+            <button>Next</button>
         </div>
     </div>
     <script>

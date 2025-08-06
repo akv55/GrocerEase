@@ -6,6 +6,17 @@ const Listing = require('../models/products.js');
 // User Sign Up Controller
 module.exports.userSignUp = async (req, res) => {
     try {
+        const exitEmail = await User.findOne({ email: req.body.email });
+        if (exitEmail) {
+            req.flash("error", "Email already exists. Please try another.");
+            return res.redirect("/signup");
+        }
+        const exitPhone = await User.findOne({ phone: req.body.phone });
+        if (exitPhone) {
+            req.flash("error", "Phone number already exists. Please try another.");
+            return res.redirect("/signup");
+        }
+
         let { name, password, email, phone, role } = req.body;
         const newUser = new User({
             username: email,
@@ -34,6 +45,7 @@ module.exports.userLogin = async (req, res) => {
         req.flash("success", "Welcome to the admin dashboard!");
         return res.redirect('/admin/dashboard');
     }
+    
     req.flash("success", "Welcome To GrocerEase!");
     return res.redirect('/');
 };

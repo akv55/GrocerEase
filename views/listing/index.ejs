@@ -23,7 +23,7 @@
                     <div class="listing-card-info">
                         <!-- Category -->
                         <div class="listing-category">
-                            <%= product.category %>
+                            <%= categories.find(cat => cat._id.equals(product.category))?.name || 'Unknown' %>
                         </div>
 
                         <!-- Title -->

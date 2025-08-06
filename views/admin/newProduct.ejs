@@ -1,0 +1,83 @@
+<% layout("/layouts/adminboilerplate") -%>
+    <div class="new-product">
+        <div class="breadcrumb">
+            <a href="/admin/dashboard">Admin Dashboard</a> &gt;
+            <a href="/admin/products">Products</a> &gt;
+            <span>Add New Product</span>
+        </div>
+        <h1>Add New Product</h1>
+        <p>Fill in the details below to add a new product.</p>
+        <br>
+        <form action="/admin/products/new-product" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">Product Title:</label>
+                <input type="text" id="title" name="product[title]" required placeholder="Enter product title">
+            </div>
+            <div class="form-group">
+                <label for="slug">Slug:</label>
+                <input type="text" id="slug" name="product[slug]" required placeholder="Enter product slug">
+            </div>
+            <div class="form-group full-width">
+                <label for="description">Description:</label>
+                <textarea id="description" name="product[description]" required
+                    placeholder="Enter detailed product description"></textarea>
+            </div>
+            <div class="form-select-group">
+                <div class="select-group">
+                    <label for="weight">Weight/Unit:</label>
+                    <select id="weight" name="product[weight]" required>
+                        <option value="">Select Weight/Unit</option>
+                        <option value="g">Grams (g)</option>
+                        <option value="kg">Kilograms (kg)</option>
+                        <option value="oz">Ounces (oz)</option>
+                        <option value="lb">Pounds (lb)</option>
+                        <option value="ml">Milliliters (ml)</option>
+                        <option value="l">Liters (l)</option>
+                        <option value="fl oz">Fluid Ounces (fl oz)</option>
+                        <option value="pt">Pints (pt)</option>
+                        <option value="qt">Quarts (qt)</option>
+                        <option value="gal">Gallons (gal)</option>
+                    </select>
+                </div>
+                <div class="select-group">
+                    <label for="category">Category:</label>
+                    <select id="category" colspan="2" name="product[category]" required>
+                        <option value="">Select Category</option>
+                        <% categories.forEach(category=> { %>
+                            <option value="<%= category._id %>">
+                                <%= category.name %>
+                            </option>
+                            <% }) %>
+                    </select>
+                </div>
+                <div class="price-quantity">
+                    <label for="price">Price (₹):</label>
+                    <input type="number" id="price" name="product[price]" step="1" required placeholder="0.00">
+                </div>
+            </div>
+            <div class="form-select-group">
+                <div class="price-quantity">
+                    <label for="quantity">Stock Quantity:</label>
+                    <input type="number" id="quantity" name="product[quantity]" required
+                        placeholder="Available quantity">
+                </div>
+
+                <div class="location-group">
+                    <label for="country">Country:</label>
+                    <input type="text" id="country" name="product[country]" required
+                        placeholder="Product origin country">
+                </div>
+                <div class="location-group">
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="product[location]" required
+                        placeholder="Product location/region">
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="image">Product Image:</label>
+                <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png, .gif">
+            </div>
+            <button type="submit" class="add-btn">Add Product</button>
+        </form>
+    </div>
