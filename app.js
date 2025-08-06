@@ -17,7 +17,6 @@ const flash = require('connect-flash');
 const ExpressError = require("./utils/ExpressError.js");
 const methodOverride = require("method-override");
 const multer = require("multer");
-const upload = multer({ dest: 'uploads/' }); // Set up multer for file uploads
 //  routers
 const userRouter = require("./routes/user.js")
 const listingRouter = require("./routes/listing.js");
