@@ -39,10 +39,10 @@
                     </div>
                 </li>
                 <li>
-                    <a href="/cart/" class="cart-link">
+                    <a href="/cart" class="cart-link">
                         <i class="fas fa-shopping-cart"></i>
                         Cart
-                        <span class="cart-count">0</span>
+                        <span class="cart-count"><%= (cartItem && cartItem.items) ? cartItem.items.length : 0 %></span>
                     </a>
                 </li>
                 <% if(!currentUser) { %>

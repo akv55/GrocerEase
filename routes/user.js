@@ -31,8 +31,8 @@ router.post("/login",
 router.get('/logout', isLogined, userController.userLogout);
 // Profile Route
 router.get("/profile", isLogined, wrapAsync(userController.userProfile));
-router.get("/profile/edit", isLogined, wrapAsync(userController.userProfileEdit));
-router.post("/profile/edit", upload.single("image"), isLogined, wrapAsync(userController.userProfileEditPost));
+router.get("/profile/edit", isLogined, wrapAsync(userController.userProfileForm));
+router.post("/profile/edit", upload.single("image"), isLogined, wrapAsync(userController.userProfileEdit));
 router.get("/profile/change_password", isLogined, wrapAsync(userController.userChangePassword));
 router.post("/profile/update-password", isLogined, wrapAsync(userController.userChangePasswordUpdate));
 router.get("/profile/address", isLogined, wrapAsync(userController.userAddress));
@@ -47,7 +47,7 @@ router.get("/wishlist", isLogined, wrapAsync(userController.userWishlist));
 // router.post("/wishlist/remove", isLogined, wrapAsync(userController.removeFromWishlist));
 // User Cart Route
 router.get("/cart", isLogined, wrapAsync(userController.userCart));
-// router.post("/cart/add", isLogined, wrapAsync(userController.addToCart));
+router.post("/cart/add/:id", isLogined, wrapAsync(userController.addToCart));
 // router.post("/cart/remove", isLogined, wrapAsync(userController.removeFromCart));
 
 module.exports = router;

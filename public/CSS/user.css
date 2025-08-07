@@ -990,7 +990,7 @@ label {
 
 }
 
-/* CART CONTAINER  */
+/* -----------------------------------------CART CONTAINER PAGE----------------------------- */
 .cart-container {
     display: flex;
     flex-direction: row;
@@ -1053,6 +1053,27 @@ label {
     height: 100px;
     object-fit: cover;
 }
+/* No address styles */
+.no-address {
+    color: #dc3545;
+    font-style: italic;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+}
+
+.no-address a {
+    color: #721c24;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.no-address a:hover {
+    color: #495057;
+}
+
 
 .remove-action {
     margin-left: 400px;
@@ -1300,3 +1321,4 @@ label {
     }
 
 }
+

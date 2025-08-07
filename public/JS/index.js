@@ -24,53 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Search functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const searchForm = document.querySelector('.search-form');
-    const searchInput = document.querySelector('.search-input');
-
-    if (searchForm && searchInput) {
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const searchTerm = searchInput.value.trim();
-            
-            if (searchTerm) {
-                // Redirect to search results page
-                window.location.href = `/search?q=${encodeURIComponent(searchTerm)}`;
-            }
-        });
-    }
-});
-
-// Cart functionality
-document.addEventListener('DOMContentLoaded', function() {
-    updateCartCount();
-});
-
-function updateCartCount() {
-    // Get cart count from localStorage or API
-    const cartCount = getCartItemCount();
-    const cartCountElement = document.querySelector('.cart-count');
-    
-    if (cartCountElement) {
-        cartCountElement.textContent = cartCount;
-        
-        // Hide badge if count is 0
-        if (cartCount === 0) {
-            cartCountElement.style.display = 'none';
-        } else {
-            cartCountElement.style.display = 'flex';
-        }
-    }
-}
-
-function getCartItemCount() {
-    // This would typically fetch from localStorage or make an API call
-    // For now, returning a static value
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    return cart.reduce((total, item) => total + (item.quantity || 1), 0);
-}
-
 // Dropdown functionality
 document.addEventListener('DOMContentLoaded', function() {
     const dropdownToggle = document.querySelector('.dropdown-toggle');
@@ -105,27 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Utility functions
-function showNotification(message, type = 'info') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    
-    // Add to page
-    document.body.appendChild(notification);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
-}
+// -----------------------------CART CONTAINER PAGE-----------------------------
 
-// Export functions for use in other files
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        updateCartCount,
-        getCartItemCount,
-        showNotification
-    };
-}
+
+// -----------------------------END OF CART CONTAINER PAGE-----------------------------

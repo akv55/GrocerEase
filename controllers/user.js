@@ -45,7 +45,7 @@ module.exports.userLogin = async (req, res) => {
         req.flash("success", "Welcome to the admin dashboard!");
         return res.redirect('/admin/dashboard');
     }
-    
+
     req.flash("success", "Welcome To GrocerEase!");
     return res.redirect('/');
 };
@@ -63,25 +63,25 @@ module.exports.userProfile = async (req, res) => {
     res.render("./users/profile.ejs", { user: req.user });
 };
 
-module.exports.userProfileEdit = async (req, res) => {
+module.exports.userProfileForm = async (req, res) => {
     res.render("./users/profile-edit.ejs", { user: req.user });
 };
 
-module.exports.userProfileEditPost = async (req, res) => {
+module.exports.userProfileEdit = async (req, res) => {
     const { name, email, phone } = req.body;
 
     if (name && name.trim()) req.user.name = name.trim();
     if (email && email.trim()) req.user.email = email.trim().toLowerCase();
     if (phone && phone.trim()) req.user.phone = phone.trim();
 
+
+
     if (req.file) {
         req.user.profileImage = {
             filename: req.file.filename,
-            url: `/uploads/profiles/${req.file.filename}`
+            url: req.file.path
         };
-        req.user.markModified('profileImage');
     }
-
     await req.user.save();
     req.flash("success", "Profile updated successfully");
     return res.redirect("/profile");
@@ -189,7 +189,52 @@ module.exports.userWishlist = async (req, res) => {
 
 // User Cart Controller
 module.exports.userCart = async (req, res) => {
-    const cart = await Listing.findById(req.params.id);
+    const cartItem = await Cart.findOne({ user_id: req.user._id }).populate('items.product_id');
+    let totalPrice = 0;
+    let totalItems = 0;
+    
+    if (cartItem && cartItem.items) {
+        cartItem.items.forEach(item => {
+            totalPrice += item.product_id.price * item.quantity;
+            totalItems += item.quantity;
+        });
+    }
+    
     const userAddress = await Address.findOne({ userId: req.user._id });
-    res.render("./listing/carts.ejs", { cart, user: req.user, address: userAddress });
+    res.render("./listing/carts.ejs", { cartItem, user: req.user, address: userAddress, totalPrice, totalItems });
+};
+
+module.exports.addToCart = async (req, res) => {
+    const productId = req.params.id;
+    const product = await Listing.findById(productId);
+    let cartItem = await Cart.findOne({ user_id: req.user._id });
+    
+    if (!product) {
+        req.flash("error", "Product not found");
+        return res.redirect("/cart");
+    }
+
+    // Create a new cart if it doesn't exist
+    if (!cartItem) {
+        cartItem = new Cart({
+            user_id: req.user._id,
+            items: [],
+            totalPrice: 0,
+            totalItems: 0
+        });
+    }
+
+    const existingItem = cartItem.items.find(item => item.product_id.equals(product._id));
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cartItem.items.push({ product_id: product._id, quantity: 1 });
+    }
+
+    cartItem.totalPrice += product.price;
+    cartItem.totalItems += 1;
+    await cartItem.save();
+
+    req.flash("success", "Product added to cart");
+    return res.redirect("/cart");
 };

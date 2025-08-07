@@ -23,11 +23,11 @@ const listingRouter = require("./routes/listing.js");
 const adminRouter = require("./routes/admin.js");
 // database connection 
 mongoose.set('strictQuery', false);
-// const Mongo_url = process.env.MONGO_URL;
-const AtlasDB_URL = process.env.ATLASDB_URL;
+const Mongo_url = process.env.MONGO_URL;
+// const AtlasDB_URL = process.env.ATLASDB_URL;
 const connectDB = async () => {
     try {
-        await mongoose.connect(AtlasDB_URL);
+        await mongoose.connect(Mongo_url);
         console.log("Connected to MongoDB Atlas successfully");
     } catch (err) {
         console.error("Database connection error:", err);
@@ -45,7 +45,7 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 // MongoDB session store
 const store = MongoStore.create({
-    mongoUrl: AtlasDB_URL,
+    mongoUrl: Mongo_url,
     collectionName: 'sessions',
     crypto: {
         secret: process.env.SECRET_KEY,
@@ -79,6 +79,23 @@ app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currentUser = req.user;
+    next();
+});
+
+// Add cart data to all templates
+const Cart = require('./models/cart.js');
+app.use(async (req, res, next) => {
+    if (req.user) {
+        try {
+            const cartItem = await Cart.findOne({ user_id: req.user._id }).populate('items.product_id');
+            res.locals.cartItem = cartItem;
+        } catch (err) {
+            console.error('Error fetching cart data:', err);
+            res.locals.cartItem = null;
+        }
+    } else {
+        res.locals.cartItem = null;
+    }
     next();
 });
 // --------ROUTES--------
