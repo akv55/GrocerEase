@@ -14,12 +14,12 @@ module.exports.index = async (req, res, next) => {
 module.exports.showIndex = async (req, res, next) => {
     try {
         const product = await Listing.findOne({ slug: req.params.slug });
-
+        const categories = await category.find();
         if (!product) {
             return next(new ExpressError("Page Not Found", 404));
         }
 
-        return res.render("./listing/show.ejs", { product });
+        return res.render("./listing/show.ejs", { product, categories });
     } catch (err) {
         return next(err);  // Handle DB or query errors
     }

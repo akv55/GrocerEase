@@ -115,7 +115,8 @@ module.exports.createProduct = async (req, res, next) => {
             description: product.description,
             price: product.price,
             inStock: product.quantity,
-            weight: product.weight,
+            quantity: product.quantity,
+            unit: product.unit,
             location: product.location,
             country: product.country,
             category: product.category

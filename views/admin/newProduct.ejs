@@ -24,9 +24,14 @@
             </div>
             <div class="form-select-group">
                 <div class="select-group">
-                    <label for="weight">Weight/Unit:</label>
-                    <select id="weight" name="product[weight]" required>
-                        <option value="">Select Weight/Unit</option>
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="product[quantity]" step="1" required
+                        placeholder="Enter product quantity">
+                </div>
+                <div class="select-group">
+                    <label for="unit">Unit:</label>
+                    <select id="unit" name="product[unit]" required>
+                        <option value="">Select Unit</option>
                         <option value="g">Grams (g)</option>
                         <option value="kg">Kilograms (kg)</option>
                         <option value="oz">Ounces (oz)</option>
@@ -37,6 +42,8 @@
                         <option value="pt">Pints (pt)</option>
                         <option value="qt">Quarts (qt)</option>
                         <option value="gal">Gallons (gal)</option>
+                        <option value="pcs">Pieces (pcs)</option>
+                        <option value="box">Boxes (box)</option>
                     </select>
                 </div>
                 <div class="select-group">

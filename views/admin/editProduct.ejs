@@ -11,7 +11,8 @@
         <form action="/admin/products/edit/<%= product._id %>" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="title">Product Title:</label>
-                <input type="text" id="title" name="product[title]" value="<%= product.title %>" required placeholder="Enter product title">
+                <input type="text" id="title" name="product[title]" value="<%= product.title %>" required
+                    placeholder="Enter product title">
             </div>
             <div class="form-group full-width">
                 <label for="description">Description:</label>
@@ -20,19 +21,26 @@
             </div>
             <div class="form-select-group">
                 <div class="select-group">
-                    <label for="weight">Weight/Unit:</label>
-                    <select id="weight" name="product[weight]" required>
-                        <option value="">Select Weight/Unit</option>
-                        <option value="g" <%= product.weight === 'g' ? 'selected' : '' %>>Grams (g)</option>
-                        <option value="kg" <%= product.weight === 'kg' ? 'selected' : '' %>>Kilograms (kg)</option>
-                        <option value="oz" <%= product.weight === 'oz' ? 'selected' : '' %>>Ounces (oz)</option>
-                        <option value="lb" <%= product.weight === 'lb' ? 'selected' : '' %>>Pounds (lb)</option>
-                        <option value="ml" <%= product.weight === 'ml' ? 'selected' : '' %>>Milliliters (ml)</option>
-                        <option value="l" <%= product.weight === 'l' ? 'selected' : '' %>>Liters (l)</option>
-                        <option value="fl oz" <%= product.weight === 'fl oz' ? 'selected' : '' %>>Fluid Ounces (fl oz)</option>
-                        <option value="pt" <%= product.weight === 'pt' ? 'selected' : '' %>>Pints (pt)</option>
-                        <option value="qt" <%= product.weight === 'qt' ? 'selected' : '' %>>Quarts (qt)</option>
-                        <option value="gal" <%= product.weight === 'gal' ? 'selected' : '' %>>Gallons (gal)</option>
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="product[quantity]" step="1" required
+                        placeholder="Enter product quantity">
+                </div>
+                <div class="select-group">
+                    <label for="unit">Unit:</label>
+                    <select id="unit" name="product[unit]" required>
+                        <option value="">Select Unit</option>
+                        <option value="g" <%=product.unit==='g' ? 'selected' : '' %>>Grams (g)</option>
+                        <option value="kg" <%=product.unit==='kg' ? 'selected' : '' %>>Kilograms (kg)</option>
+                        <option value="oz" <%=product.unit==='oz' ? 'selected' : '' %>>Ounces (oz)</option>
+                        <option value="lb" <%=product.unit==='lb' ? 'selected' : '' %>>Pounds (lb)</option>
+                        <option value="ml" <%=product.unit==='ml' ? 'selected' : '' %>>Milliliters (ml)</option>
+                        <option value="l" <%=product.unit==='l' ? 'selected' : '' %>>Liters (l)</option>
+                        <option value="fl oz" <%=product.unit==='fl oz' ? 'selected' : '' %>>Fluid Ounces (fl oz)</option>
+                        <option value="pt" <%=product.unit==='pt' ? 'selected' : '' %>>Pints (pt)</option>
+                        <option value="qt" <%=product.unit==='qt' ? 'selected' : '' %>>Quarts (qt)</option>
+                        <option value="gal" <%=product.unit==='gal' ? 'selected' : '' %>>Gallons (gal)</option>
+                        <option value="pcs" <%=product.unit==='pcs' ? 'selected' : '' %>>Pieces (pcs)</option>
+                        <option value="box" <%=product.unit==='box' ? 'selected' : '' %>>Boxes (box)</option>
                     </select>
                 </div>
                 <div class="select-group">
@@ -40,7 +48,8 @@
                     <select id="category" colspan="2" name="product[category]" required>
                         <option value="">Select Category</option>
                         <% categories.forEach(category=> { %>
-                            <option value="<%= category._id %>" <%= product.category_id && product.category_id.toString() === category._id.toString() ? 'selected' : '' %>>
+                            <option value="<%= category._id %>" <%=product.category_id &&
+                                product.category_id.toString()===category._id.toString() ? 'selected' : '' %>>
                                 <%= category.name %>
                             </option>
                             <% }) %>
@@ -48,7 +57,8 @@
                 </div>
                 <div class="price-quantity">
                     <label for="price">Price (₹):</label>
-                    <input type="number" id="price" name="product[price]" value="<%= product.price %>" step="1" required placeholder="0.00">
+                    <input type="number" id="price" name="product[price]" value="<%= product.price %>" step="1" required
+                        placeholder="0.00">
                 </div>
             </div>
             <div class="form-select-group">
@@ -73,10 +83,11 @@
             <div class="form-group full-width">
                 <label for="image">Product Image:</label>
                 <% if (product.image && product.image.url) { %>
-                    <p>Current image: <img src="<%= product.image.url %>" alt="Current product image" style="max-width: 100px; height: auto;"></p>
-                <% } %>
-                <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png, .gif">
-                <small>Leave empty to keep current image</small>
+                    <p>Current image: <img src="<%= product.image.url %>" alt="Current product image"
+                            style="max-width: 100px; height: auto;"></p>
+                    <% } %>
+                        <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png, .gif">
+                        <small>Leave empty to keep current image</small>
             </div>
             <button type="submit" class="add-btn">Update Product</button>
         </form>

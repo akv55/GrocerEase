@@ -3,8 +3,9 @@ const router = express.Router();
 const passport = require('passport');
 const wrapAsync = require('../utils/wrapAsync.js');
 const multer = require("multer");
-const {storage,}=require("../cludeConfig.js");
-const upload = multer({ storage });
+const {storage,userStorage}=require("../cludeConfig.js");
+const upload = multer({ storage }); // Set up multer for file uploads
+const userImageStorage = multer({  userStorage }); // Set up multer for user image uploads
 const { saveRedirecturl, isLogined, isUser, isNotLogined } = require('../middleware.js');
 const userController = require('../controllers/user.js');
 // Multer configuration for file uploads
@@ -32,7 +33,7 @@ router.get('/logout', isLogined, userController.userLogout);
 // Profile Route
 router.get("/profile", isLogined, wrapAsync(userController.userProfile));
 router.get("/profile/edit", isLogined, wrapAsync(userController.userProfileForm));
-router.post("/profile/edit", upload.single("image"), isLogined, wrapAsync(userController.userProfileEdit));
+router.post("/profile/edit", userImageStorage.single("image"), isLogined, wrapAsync(userController.userProfileEdit));
 router.get("/profile/change_password", isLogined, wrapAsync(userController.userChangePassword));
 router.post("/profile/update-password", isLogined, wrapAsync(userController.userChangePasswordUpdate));
 router.get("/profile/address", isLogined, wrapAsync(userController.userAddress));

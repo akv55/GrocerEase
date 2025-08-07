@@ -35,23 +35,28 @@ const listingSchema = new Schema({
     required: true,
     min: 0
   },
-  location:{
-    type:String,
-    required:true
+  location: {
+    type: String,
+    required: true
   },
-  country:{
-    type:String,
-    required:true
+  country: {
+    type: String,
+    required: true
   },
   inStock: {
     type: Number,
     required: true,
     min: 0
   },
-  weight: {
+  quantity: {
     type: String,
     required: true
   },
+  unit: {
+    type: String,
+    required: true
+  },
+ 
   category: {
     type: String,
     required: true
@@ -69,7 +74,7 @@ const listingSchema = new Schema({
     default: Date.now
   }
 
-  
+
 });
 
 // Automatically generate slug from title before saving

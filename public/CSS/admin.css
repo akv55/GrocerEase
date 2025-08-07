@@ -686,7 +686,7 @@ select option {
     color: #495057;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     outline: none;
-    width: 380px;
+    width: 300px;
 }
 
 .form-select-group select:focus {
@@ -702,7 +702,7 @@ select option {
     color: #495057;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     outline: none;
-    width: 380px;
+    width: 250px;
 
 }
 

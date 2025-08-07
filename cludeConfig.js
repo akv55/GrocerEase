@@ -16,4 +16,13 @@ const storage = new CloudinaryStorage({
   }
 });
 
-module.exports = { cloudinary, storage };
+const userStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'GrocerEase/Users',
+    allowed_formats: ['jpg', 'png', 'jpeg'],
+    resource_type: 'auto'
+  }
+});
+
+module.exports = { cloudinary, storage, userStorage };

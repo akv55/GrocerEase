@@ -12,8 +12,6 @@
                     <% } else { %>
                         <p style="color: red;">Product data not available.</p>
                         <% } %>
-
-
                             <button class="btn-btn-buy" onclick="">
                                 Buy Now
                             </button>
@@ -24,7 +22,7 @@
             <div class="listing-card-body">
                 <!-- Category -->
                 <div class="listing-category">
-                    <%= product.category || 'Grocery' %>
+                    <%= categories.find(cat=> cat._id.equals(product.category))?.name || 'Unknown' %>
                 </div>
 
                 <!-- Title -->

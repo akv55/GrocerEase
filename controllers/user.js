@@ -73,9 +73,6 @@ module.exports.userProfileEdit = async (req, res) => {
     if (name && name.trim()) req.user.name = name.trim();
     if (email && email.trim()) req.user.email = email.trim().toLowerCase();
     if (phone && phone.trim()) req.user.phone = phone.trim();
-
-
-
     if (req.file) {
         req.user.profileImage = {
             filename: req.file.filename,
