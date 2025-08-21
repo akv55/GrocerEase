@@ -22,7 +22,7 @@
             <div class="form-select-group">
                 <div class="select-group">
                     <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="product[quantity]" step="1" required
+                    <input type="number" id="quantity" name="product[quantity]" value="<%= product.quantity %>" step="1" required
                         placeholder="Enter product quantity">
                 </div>
                 <div class="select-group">
@@ -63,8 +63,8 @@
             </div>
             <div class="form-select-group">
                 <div class="price-quantity">
-                    <label for="quantity">Stock Quantity:</label>
-                    <input type="number" id="quantity" name="product[quantity]" value="<%= product.inStock %>" required
+                    <label for="inStock">Stock Quantity:</label>
+                    <input type="number" id="inStock" name="product[inStock]" value="<%= product.inStock %>" required
                         placeholder="Available quantity">
                 </div>
 

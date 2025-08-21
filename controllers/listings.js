@@ -1,10 +1,12 @@
 const Listing = require("../models/products.js");
 const ExpressError = require("../utils/ExpressError.js");
-const category = require("../models/category.js");
+const Category = require("../models/category.js");
+const Cart = require("../models/cart.js");
+const User = require("../models/user.js")
 module.exports.index = async (req, res, next) => {
     try {
         const products = await Listing.find();
-        const categories = await category.find();
+        const categories = await Category.find();
         return res.render("./listing/index.ejs", { products, categories });
     } catch (err) {
         return next(err);  // Pass unexpected DB errors to global error handler
@@ -14,7 +16,7 @@ module.exports.index = async (req, res, next) => {
 module.exports.showIndex = async (req, res, next) => {
     try {
         const product = await Listing.findOne({ slug: req.params.slug });
-        const categories = await category.find();
+        const categories = await Category.find();
         if (!product) {
             return next(new ExpressError("Page Not Found", 404));
         }
@@ -36,5 +38,28 @@ module.exports.deleteListing = async (req, res, next) => {
         return res.redirect("/admin/products");
     } catch (err) {
         return next(err);  // Handle DB errors or invalid ID
+    }
+};
+
+module.exports.searchListings = async (req, res) => {
+    try {
+        const query = req.query.q;
+        if (!query) {
+            return res.status(400).json({ message: "Search query is required" });
+        }
+        const regex = new RegExp(query, "i");
+        const categories = await Category.find({ name: regex }).select("_id");
+        const products = await Listing.find({
+            $or: [
+                { title: regex },
+                { category: { $in: categories.map(cat => cat._id) } }
+            ]
+        }).populate("category", "name");
+
+        const allCategories = await Category.find();
+        res.render("./listing/search-results.ejs", { results: products, query, categories: allCategories });
+    } catch (error) {
+        console.error("Search error:", error);
+        res.status(500).send({ message: "Server error" });
     }
 };

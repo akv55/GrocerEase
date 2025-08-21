@@ -1,7 +1,7 @@
 <% layout("/layouts/adminboilerplate") -%>
     <div class="category-container product">
         <h1>Product Categories</h1>
-        <table class="styled-table">
+        <table class="categoryTable">
             <thead>
                 <tr class="table-header">
                     <th>Sr. No.</th>
@@ -37,7 +37,7 @@
         </table>
     </div>
      <script>
-        const rows = document.querySelectorAll(".styled-table tbody tr");
+        const rows = document.querySelectorAll(".categoryTable tbody tr");
         rows.forEach((row, index) => {
             row.cells[0].textContent = index + 1;
         });

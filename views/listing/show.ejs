@@ -5,16 +5,14 @@
                 class="show-image" alt="<%= product ? product.title : 'Product Image' %>" />
 
             <div class="show-actions">
-                <% if (product && product._id) { %>
+               
                     <form action="/cart/add/<%= product._id %>" method="POST">
                         <button type="submit" class="btn-btn-add">Add to Cart</button>
                     </form>
-                    <% } else { %>
-                        <p style="color: red;">Product data not available.</p>
-                        <% } %>
-                            <button class="btn-btn-buy" onclick="">
-                                Buy Now
-                            </button>
+                
+                <button class="btn-btn-buy" onclick="">
+                    Buy Now
+                </button>
 
             </div>
         </div>

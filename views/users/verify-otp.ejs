@@ -1,0 +1,19 @@
+<% layout("/layouts/boilerplate") -%>
+<div class="form-container">
+  <form class="form" action="/verify-otp" method="POST">
+    <h2>Enter OTP</h2>
+    <p class="otpSubheading">We have sent a verification code to your Email</p>
+    <div class="inputContainer">
+      <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input1" name="otp[]">
+      <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input2" name="otp[]">
+      <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input3" name="otp[]">
+      <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input4" name="otp[]">
+      <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input5" name="otp[]">
+      <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input6" name="otp[]">
+    </div>
+    <button class="btn" type="submit">Verify</button>
+  </form>
+  <form action="/resend-otp" method="POST" class="form">
+    <p class="resendNote">Didn't receive the code? <button class="resendBtn">Resend Code</button></p>
+  </form>
+</div>

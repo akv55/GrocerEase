@@ -3,9 +3,8 @@ const router = express.Router();
 const passport = require('passport');
 const wrapAsync = require('../utils/wrapAsync.js');
 const multer = require("multer");
-const {storage,userStorage}=require("../cludeConfig.js");
-const upload = multer({ storage }); // Set up multer for file uploads
-const userImageStorage = multer({  userStorage }); // Set up multer for user image uploads
+const {userStorage}=require("../config/cloudinary.js");
+const userImageStorage = multer({ storage: userStorage }); // Set up multer for user image uploads
 const { saveRedirecturl, isLogined, isUser, isNotLogined } = require('../middleware.js');
 const userController = require('../controllers/user.js');
 // Multer configuration for file uploads
@@ -35,7 +34,7 @@ router.get("/profile", isLogined, wrapAsync(userController.userProfile));
 router.get("/profile/edit", isLogined, wrapAsync(userController.userProfileForm));
 router.post("/profile/edit", userImageStorage.single("image"), isLogined, wrapAsync(userController.userProfileEdit));
 router.get("/profile/change_password", isLogined, wrapAsync(userController.userChangePassword));
-router.post("/profile/update-password", isLogined, wrapAsync(userController.userChangePasswordUpdate));
+router.post("/profile/update-password", isLogined, wrapAsync(userController.userPasswordUpdate));
 router.get("/profile/address", isLogined, wrapAsync(userController.userAddress));
 router.get("/profile/change-address", isLogined, wrapAsync(userController.userAddressEdit));
 router.post("/profile/change-address", isLogined, wrapAsync(userController.userAddressUpdate));
@@ -44,11 +43,15 @@ router.get("/orders", isLogined, wrapAsync(userController.userOrders));
 router.get("/orders/:orderId", isLogined, wrapAsync(userController.userOrderDetails));
 // User Wishlist Route
 router.get("/wishlist", isLogined, wrapAsync(userController.userWishlist));
-// router.post("/wishlist/add", isLogined, wrapAsync(userController.addToWishlist));
-// router.post("/wishlist/remove", isLogined, wrapAsync(userController.removeFromWishlist));
+router.post("/wishlist/add/:id", isLogined, wrapAsync(userController.addToWishlist));
+router.post("/wishlist/remove/:id", isLogined, wrapAsync(userController.removeFromWishlist));
 // User Cart Route
 router.get("/cart", isLogined, wrapAsync(userController.userCart));
 router.post("/cart/add/:id", isLogined, wrapAsync(userController.addToCart));
-// router.post("/cart/remove", isLogined, wrapAsync(userController.removeFromCart));
-
+router.post("/cart/remove/:id", isLogined, wrapAsync(userController.removeFromCart));
+// Forget Password Route
+router.get("/forgot-password", wrapAsync(userController.forgotPassword));
+router.post("/forgot-password", wrapAsync(userController.forgotPasswordForm));
+router.get("/verify-otp", wrapAsync(userController.verifyOtpForm));
+router.post("/verify-otp", wrapAsync(userController.verifyOtp));
 module.exports = router;

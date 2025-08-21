@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const wrapAsync = require('../utils/wrapAsync.js');
 const multer = require("multer");
-const {storage,}=require("../cludeConfig.js");
+const {storage,}=require("../config/cloudinary.js");
 const upload = multer({ storage }); // Set up multer for file uploads
 const { isLogined, isAdmin } = require('../middleware.js');
 // Controller

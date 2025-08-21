@@ -6,7 +6,7 @@ const Cart = require('../models/cart.js');
 const Wishlist = require('../models/wishlist.js');
 const Order = require('../models/order.js');
 const Review = require('../models/reviews.js');
-const { cloudinary } = require('../cludeConfig.js');
+const { cloudinary } = require('../config/cloudinary.js');
 
 
 module.exports.admindashboard = async (req, res, next) => {
@@ -114,7 +114,7 @@ module.exports.createProduct = async (req, res, next) => {
             slug: product.slug, // Ensure slug is included
             description: product.description,
             price: product.price,
-            inStock: product.quantity,
+            inStock: product.inStock,
             quantity: product.quantity,
             unit: product.unit,
             location: product.location,
@@ -166,11 +166,12 @@ module.exports.editProduct = async (req, res, next) => {
             title: product.title,
             description: product.description,
             price: product.price,
-            inStock: product.quantity,
-            weight: product.weight,
+            inStock: product.inStock,
+            quantity: product.quantity,
+            unit: product.unit,
             location: product.location,
             country: product.country,
-            category_id: product.category
+            category: product.category
         }, { new: true });
 
         // Handle image upload if new image is provided

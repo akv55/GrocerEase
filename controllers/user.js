@@ -1,7 +1,14 @@
+const mongoose = require('mongoose');
 const Address = require('../models/address.js');
 const User = require('../models/user.js');
 const Cart = require('../models/cart.js');
 const Listing = require('../models/products.js');
+const Wishlist = require('../models/wishlist.js');
+const crypto = require('crypto');
+const transporter = require('../config/email.js');
+
+// OTP storage (in production, use Redis or similar)
+let otpStore = {};
 
 // User Sign Up Controller
 module.exports.userSignUp = async (req, res) => {
@@ -58,38 +65,115 @@ module.exports.userLogout = (req, res, next) => {
     });
 };
 
+// ---------------------FORGOT PASSWORD------------------
+
+module.exports.forgotPassword = (req, res) => {
+    res.render("./users/forgotPassword.ejs");
+};
+
+
+module.exports.forgotPasswordForm = async (req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+        req.flash("error", "User not found");
+        return res.redirect("/forgot-password");
+    }
+    const otp = crypto.randomInt(100000, 999999);
+    otpStore[email] = { otp, expires: Date.now() + 5 * 60 * 1000 };
+    try {
+        await transporter.sendMail({
+            from: `"GroceEase" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: "GroceEase - OTP Verification",
+            html: `
+                <div style="font-family: Arial, sans-serif; padding:20px;">
+                    <h2 style="color:#28a728;">GroceEase - OTP Verification</h2>
+                    <p>Hello,</p>
+                    <p>Your One-Time Password (OTP) is: <b>${otp}</b></p>
+                    <p>This OTP is valid for <b>5 minutes</b>. Please do not share it with anyone.</p>
+                    <p>Thank you,<br>Team GroceEase</p>
+                </div>
+                <div style="font-size: 12px; color: #888;">
+                    <p>If you did not request this OTP, please ignore this email.</p>
+                </div>
+            `
+        });
+        req.flash("success", "OTP sent to your email.");
+        res.redirect("/verify-otp");
+    } catch (error) {
+        req.flash("error", "Error sending OTP email:", error);
+    }
+};
+module.exports.verifyOtpForm = (req, res) => {
+    res.render("./users/verify-otp.ejs")
+}
+module.exports.verifyOtp = async (req, res) => {
+    const { email } = req.body;
+    // Collect OTP digits from six inputs (otp[0], otp[1], ..., otp[5])
+    const otpInputs = req.body.otp; // should be an array from your form
+    const otp = otpInputs.join(""); // combine into a single string
+    if (!otpStore[email]) {
+        req.flash("error", "Invalid or expired OTP");
+        return res.redirect("/verify-otp");
+    }
+    const { expires } = otpStore[email];
+    if (Date.now() > expires) {
+        delete otpStore[email];
+        req.flash("error", "OTP expired");
+        return res.redirect("/verify-otp");
+    }
+    if (otp !== otpStore[email].otp) {
+        req.flash("error", "Invalid OTP");
+        return res.redirect("/verify-otp");
+    }
+
+    // Success
+    delete otpStore[email];
+    req.flash("success", "OTP verified successfully");
+    return res.redirect("/login"); // change route as per your flow
+};
+
+
 // User Profile Controller
 module.exports.userProfile = async (req, res) => {
     res.render("./users/profile.ejs", { user: req.user });
 };
 
 module.exports.userProfileForm = async (req, res) => {
-    res.render("./users/profile-edit.ejs", { user: req.user });
+    res.render("./users/profileUpdate.ejs", { user: req.user });
 };
 
 module.exports.userProfileEdit = async (req, res) => {
-    const { name, email, phone } = req.body;
-
-    if (name && name.trim()) req.user.name = name.trim();
-    if (email && email.trim()) req.user.email = email.trim().toLowerCase();
-    if (phone && phone.trim()) req.user.phone = phone.trim();
-    if (req.file) {
-        req.user.profileImage = {
-            filename: req.file.filename,
-            url: req.file.path
-        };
+    const { id } = req.params;
+    const { user } = req.body;
+    try {
+        const updateProfile = await User.findByIdAndUpdate(id, {
+            name: user.name,
+            email: user.email,
+            phone: user.phone
+        }, { new: true });
+        if (req.file) {
+            updateProfile.image = {
+                filename: req.file.filename,
+                url: req.file.path
+            };
+            await updateProfile.save();
+        }
+    } catch (err) {
+        req.flash("error", "Failed to update profile. Please try again.");
+        return next(err);
     }
-    await req.user.save();
     req.flash("success", "Profile updated successfully");
     return res.redirect("/profile");
 };
 
-// Change Password Controller (✅ Fixed version)
+
 module.exports.userChangePassword = async (req, res) => {
     res.render("./users/changePassword.ejs", { user: req.user });
 };
 
-module.exports.userChangePasswordUpdate = async (req, res) => {
+module.exports.userPasswordUpdate = async (req, res) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
 
     if (!currentPassword || !newPassword || !confirmPassword) {
@@ -168,35 +252,104 @@ module.exports.userAddressUpdate = async (req, res) => {
     return res.redirect("/profile/address");
 };
 
-// User Order Route
-module.exports.userOrders = async (req, res) => {
-    res.render("./users/orders.ejs");
-};
 
-// User Order Details
-module.exports.userOrderDetails = async (req, res) => {
-    const { orderId } = req.params;
-    res.render("./users/orders.ejs", { orderId });
-};
-
-// User Wishlist
+// ----------------------------------User Wishlist----------------------------
 module.exports.userWishlist = async (req, res) => {
-    res.render("./users/wishlist.ejs");
+    try {
+        const wishlist = await Wishlist.findOne({ user: req.user._id }).populate("products");
+        res.render("./users/wishlist.ejs", {
+            user: req.user,
+            wishlistItems: wishlist ? wishlist.products : []
+        });
+    } catch (error) {
+        console.error("Error fetching wishlist:", error);
+        req.flash("error", "Unable to load wishlist");
+    }
 };
 
-// User Cart Controller
+
+module.exports.addToWishlist = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const userId = req.user._id;
+        const product = await Listing.findById(productId);
+
+        if (!product) {
+            req.flash("error", "Product not found");
+            return res.redirect("back");
+        }
+
+        let wishlist = await Wishlist.findOne({ user: userId });
+
+        if (!wishlist) {
+            wishlist = new Wishlist({ user: userId, products: [] });
+        }
+        // Convert productId to ObjectId
+        const objectId = new mongoose.Types.ObjectId(productId);
+        // Check if already exists
+        if (!wishlist.products.some(p => p.equals(objectId))) {
+            wishlist.products.push(objectId);
+            await wishlist.save();
+            req.flash("success", "Product added to wishlist");
+        } else {
+            req.flash("success", "Product already in wishlist");
+        }
+
+        return res.redirect("back");
+    } catch (error) {
+        req.flash("error", "Error adding product to wishlist");
+        return res.redirect("back");
+    }
+};
+
+
+module.exports.removeFromWishlist = async (req, res) => {
+    const productId = req.params.id;
+    const userId = req.user._id;
+
+    try {
+        const wishlist = await Wishlist.findOne({ user: userId });
+
+        if (wishlist) {
+            wishlist.products = wishlist.products.filter(id => !id.equals(productId));
+            await wishlist.save();
+            req.flash("success", "Product removed from wishlist");
+        }
+
+        res.redirect("back");
+    } catch (error) {
+        console.error(error);
+        req.flash("error", "Error removing product from wishlist");
+        res.redirect("back");
+    }
+};
+
+
+
+
+// ----------------------------------------User Cart Controller--------------------
 module.exports.userCart = async (req, res) => {
     const cartItem = await Cart.findOne({ user_id: req.user._id }).populate('items.product_id');
     let totalPrice = 0;
     let totalItems = 0;
-    
+
     if (cartItem && cartItem.items) {
+        // Filter out items with null product_id (deleted products)
+        cartItem.items = cartItem.items.filter(item => item.product_id !== null);
+
         cartItem.items.forEach(item => {
-            totalPrice += item.product_id.price * item.quantity;
-            totalItems += item.quantity;
+            if (item.product_id && item.product_id.price) {
+                totalPrice += item.product_id.price * item.quantity;
+                totalItems += item.quantity;
+            }
         });
+
+        // Save the cart after filtering out invalid items
+        if (cartItem.isModified()) {
+            await cartItem.save();
+        }
     }
-    
+
     const userAddress = await Address.findOne({ userId: req.user._id });
     res.render("./listing/carts.ejs", { cartItem, user: req.user, address: userAddress, totalPrice, totalItems });
 };
@@ -205,7 +358,7 @@ module.exports.addToCart = async (req, res) => {
     const productId = req.params.id;
     const product = await Listing.findById(productId);
     let cartItem = await Cart.findOne({ user_id: req.user._id });
-    
+
     if (!product) {
         req.flash("error", "Product not found");
         return res.redirect("/cart");
@@ -234,4 +387,47 @@ module.exports.addToCart = async (req, res) => {
 
     req.flash("success", "Product added to cart");
     return res.redirect("/cart");
+};
+
+module.exports.removeFromCart = async (req, res) => {
+    const productId = req.params.id;
+    const product = await Listing.findById(productId);
+    if (!product) {
+        req.flash("error", "Product not found");
+        return res.redirect("/cart");
+    }
+    let cartItem = await Cart.findOne({ user_id: req.user._id });
+    if (!cartItem) {
+        req.flash("error", "Cart not found");
+        return res.redirect("/cart");
+    }
+    const existingItemIndex = cartItem.items.findIndex(item => item.product_id.equals(product._id));
+    if (existingItemIndex === -1) {
+        req.flash("error", "Product not found in cart");
+        return res.redirect("/cart");
+    }
+    const existingItem = cartItem.items[existingItemIndex];
+    if (existingItem.quantity > 1) {
+        existingItem.quantity -= 1;
+        cartItem.totalPrice -= product.price;
+        cartItem.totalItems -= 1;
+    } else {
+        cartItem.items.splice(existingItemIndex, 1);
+        cartItem.totalPrice -= product.price;
+        cartItem.totalItems -= 1;
+    }
+    await cartItem.save();
+    req.flash("success", "Product removed from cart");
+    return res.redirect("/cart");
+};
+
+
+// ---------------------------------ORDER---------------------
+
+module.exports.userOrders = async (req, res) => {
+    res.render("./users/orders.ejs");
+};
+module.exports.userOrderDetails = async (req, res) => {
+    const { orderId } = req.params;
+    res.render("./users/orders.ejs", { orderId });
 };

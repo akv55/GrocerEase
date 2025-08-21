@@ -1,112 +1,13 @@
 <% layout("/layouts/boilerplate") -%>
-
-    <style>
-        .profile-card {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .profile-card h2 {
-             text-align: center;
-            margin-bottom: 20px;
-            color: #28a745;
-        }
-
-        .profile-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 20px;
-        }
-
-        .profile-info {
-            text-align: left;
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .profile-info strong {
-            display: inline-block;
-            width: 110px;
-        }
-
-        .profile-info p {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            margin: 0;
-        }
-
-        .profile-links a {
-            margin-right: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        
-
-        .edit-profile-btn {
-            text-decoration: none;
-            background-color: #28a745;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-        .edit-profile-btn:hover {
-            background-color: #218838;
-        }
-        
-
-
-        @media (max-width: 480px) {
-            .profile-card {
-                margin: 20px;
-            }
-
-            .profile-info strong {
-                width: 100px;
-            }
-
-            .profile-links {
-                display: flex;
-                gap: 40px;
-            }
-
-            .profile-links a {
-                margin-right: 0;
-                text-align: center;
-            }
-        }
-    </style>
-
-    <div class="profile-card">
+    <div class="form-container">
         <h2>User Profile Information</h2>
-        <img src=" <%= currentUser.profileImage && currentUser.profileImage.url ? currentUser.profileImage.url : 'https://cdn-icons-png.flaticon.com/512/147/147144.png' %>" alt="Profile" class="profile-image">
-
-        <div class="profile-info">
-            <p><strong>Name:</strong>
-                <%= currentUser.name.toUpperCase() %>
-            </p>
-            <p><strong>Email:</strong>
-                <%= currentUser.email %>
-            </p>
-            <p><strong>Phone:</strong>
-                <%= currentUser.phone %>
-            </p>
-            <p><strong>Joined:</strong>
-                <%= currentUser.createdAt.toLocaleDateString() %>
-            </p>
+        <img src=" <%= currentUser.profileImage && currentUser.profileImage.url ? currentUser.profileImage.url : 'https://cdn-icons-png.flaticon.com/512/147/147144.png' %>"
+            alt="Profile" class="profile-image">
+        <div class="details">
+            <p><strong>Name:</strong> <%= currentUser.name.toUpperCase() %></p>
+            <p><strong>Email:</strong> <%= currentUser.email %></p>
+            <p><strong>Phone:</strong> <%= currentUser.phone %></p>
+            <p><strong>Address:</strong> <%= currentUser.address %></p>
+            <p><strong>Joined:</strong> <%= currentUser.createdAt.toLocaleDateString() %></p>
         </div>
-
-        <!-- <div class="profile-links">
-            <a href="/profile/edit" class="edit-profile-btn"> <i class="fa-solid fa-pen-to-square"></i> Edit Profile</a>
-        </div> -->
     </div>

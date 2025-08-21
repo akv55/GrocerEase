@@ -1,30 +1,32 @@
 <% layout("/layouts/boilerplate") -%>
+    <h2 style="margin-left: 50px; color: #666;">Search results for "<%= query %>"</h2>
     <div class="listing-card-container">
-        <% for(let product of products){ %>
+        <% for(let product of results){ %>
             <a href="/<%=product.slug%>" class="listing-link">
+
                 <div class="listing-card">
-
-                    <!-- Image Skeleton Loader -->
-                    <div class="listing-image-container skeleton">
+                    <!-- Image Container -->
+                    <div class="listing-image-container">
                         <img src="<%= product.image && product.image.url ? product.image.url : '/assets/img.jpg' %>"
-                            class="listing-image" alt="<%= product.title %>" onload="removeSkeleton(this)" />
+                            class="listing-image" alt="<%= product.title %>" />
                     </div>
-
+                    <!-- Wishlist Button -->
                     <form action="/wishlist/add/<%= product._id %>" method="POST" class="wishlist-form">
                         <button type="submit" class="wishlist-btn" title="Add to Wishlist">
                             <i class="fas fa-heart"></i>
                         </button>
                     </form>
-
+                    <!-- Card Body -->
                     <div class="listing-card-info">
+                        <!-- Category -->
                         <div class="listing-category">
-                            <%= categories.find(cat=> cat._id.equals(product.category))?.name || 'Unknown' %>
+                            <%= product.category && product.category.name ? product.category.name : 'Unknown' %>
                         </div>
-
+                        <!-- Title -->
                         <h3 class="listing-title">
                             <%= product.title %>
                         </h3>
-
+                        <!-- Rating -->
                         <div class="rating">
                             <div class="stars">
                                 <i class="fas fa-star"></i>
@@ -35,7 +37,7 @@
                             </div>
                             <span class="rating-count">(4.5)</span>
                         </div>
-
+                        <!-- Product Details -->
                         <div class="listing-details">
                             <div class="listing-quantity">
                                 <%= product.quantity || '' %>
@@ -46,55 +48,33 @@
                                 <%= product.location || 'Local' %>
                             </div>
                         </div>
-
                         <div class="listing-price">
                             <span class="currency">₹</span>
                             <%= product.price ? product.price.toLocaleString("en-IN") : "0" %>
                         </div>
+                        <!-- Footer -->
+                        <!-- <div class="listing-footer">
+                            <% if (product && product._id) { %>
+                                <form action="/cart/add/<%= product._id %>" method="POST">
+                                    <button type="submit" class="btn-add">Add to Cart</button>
+                                </form>
+                                <% } else { %>
+                                    <p style="color: red;">Product data not available.</p>
+                                    <% } %>
+                                        <button class="btn-buy" onclick="">
+                                            Buy Now
+                                        </button>
+                        </div> -->
                     </div>
                 </div>
+
             </a>
+
+
             <% } %>
+
     </div>
-    <style>
-        /* Skeleton effect */
-        .skeleton {
-            background: linear-gradient(90deg, #eee 25%, #ddd 50%, #eee 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.2s infinite;
-        }
-
-        @keyframes shimmer {
-            from {
-                background-position: 200% 0;
-            }
-
-            to {
-                background-position: -200% 0;
-            }
-        }
-
-        /* Image container */
-        .listing-image-container {
-            position: relative;
-            width: 100%;
-            height: 180px;
-            overflow: hidden;
-            border-radius: 8px;
-        }
-
-        /* Hide image until loaded */
-        .listing-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-            transition: opacity 0.4s ease-in-out;
-        }
-    </style>
-    <script>
-        function removeSkeleton(img) {
-            img.style.display = "block"; // Show image
-            img.parentElement.classList.remove("skeleton"); // Remove skeleton shimmer
-        }
-    </script>
+    
+    <% if (results.length === 0) { %>
+        <p>No products found for "<%= query %>"</p>
+    <% } %>

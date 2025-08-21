@@ -1,18 +1,16 @@
 <% layout("/layouts/boilerplate") -%>
 
-    <div class="login-container">
+    <div class="form-container">
         <h2 class="login-content">Login</h2>
-        <form action="/login" method="POST" class="login-form">
-
-            <label for="username">Username :</label>
-            <input name="username" type="text" id="username" required />
-
+        <form action="/login" method="POST" class="form">
+            <label for="username">Email/Username :</label>
+            <input name="username" type="text" id="username" placeholder="Enter your email or username" required />
             <label for="password">Password :</label>
-            <input name="password" type="password" id="password" required />
-
-            <button class="login-btn">Login</button>
+            <input name="password" type="password" id="password" placeholder="Enter your password" required />
+            <p class="forgot-password" style="text-align: end !important;"><a href="/forgot-password" >Forgot Password?</a></p>
+            <br>
+            <button class="btn">Login</button>
         </form>
-
         <hr class="form-divider">
         <div class="form-footer">
             <p>Don't have an account? <a href="/signup">Sign Up</a></p>

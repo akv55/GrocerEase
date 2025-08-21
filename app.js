@@ -16,18 +16,18 @@ const User = require("./models/user.js");
 const flash = require('connect-flash');
 const ExpressError = require("./utils/ExpressError.js");
 const methodOverride = require("method-override");
-const multer = require("multer");
+const Category = require("./models/category.js");
 //  routers
 const userRouter = require("./routes/user.js")
 const listingRouter = require("./routes/listing.js");
 const adminRouter = require("./routes/admin.js");
 // database connection 
 mongoose.set('strictQuery', false);
-// const Mongo_url = process.env.MONGO_URL;
-const AtlasDB_URL = process.env.ATLASDB_URL;
+const Mongo_url = process.env.MONGO_URL;
+// const AtlasDB_URL = process.env.ATLASDB_URL;
 const connectDB = async () => {
     try {
-        await mongoose.connect(AtlasDB_URL);
+        await mongoose.connect(Mongo_url);
         console.log("Connected to MongoDB Atlas successfully");
     } catch (err) {
         console.error("Database connection error:", err);
@@ -45,7 +45,7 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 // MongoDB session store
 const store = MongoStore.create({
-    mongoUrl: AtlasDB_URL,
+    mongoUrl: Mongo_url,
     collectionName: 'sessions',
     crypto: {
         secret: process.env.SECRET_KEY,
@@ -88,6 +88,16 @@ app.use(async (req, res, next) => {
     if (req.user) {
         try {
             const cartItem = await Cart.findOne({ user_id: req.user._id }).populate('items.product_id');
+            if (cartItem && cartItem.items) {
+                // Filter out items with null product_id (deleted products)
+                const originalLength = cartItem.items.length;
+                cartItem.items = cartItem.items.filter(item => item.product_id !== null);
+
+                // Save if items were removed
+                if (cartItem.items.length !== originalLength) {
+                    await cartItem.save();
+                }
+            }
             res.locals.cartItem = cartItem;
         } catch (err) {
             console.error('Error fetching cart data:', err);
@@ -96,6 +106,11 @@ app.use(async (req, res, next) => {
     } else {
         res.locals.cartItem = null;
     }
+    next();
+});
+app.use(async (req, res, next) => {
+    const categories = await Category.find({});
+    res.locals.categories = categories;
     next();
 });
 // --------ROUTES--------
@@ -107,7 +122,7 @@ app.all("*", (req, res, next) => {
     next(new ExpressError("Page Not Found", 404));
 });
 app.use((err, req, res, next) => {
-    let {statusCode=500,message="Something went wrong!"} = err;
+    let { statusCode = 500, message = "Something went wrong!" } = err;
     return res.status(statusCode).render("error.ejs", { err, user: req.user });
 });
 // --------SERVER START--------

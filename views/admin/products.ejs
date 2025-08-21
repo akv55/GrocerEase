@@ -1,9 +1,13 @@
 <% layout("/layouts/adminboilerplate") -%>
     <div class="product">
+        <div class="breadcrumb">
+            <a href="/admin/dashboard">Admin Dashboard</a> &gt;
+            <span>Product</span>
+        </div>
         <h1>Product List</h1>
         <div class="user-controls">
-            <input type="text" id="searchInput" placeholder="Search...." oninput="resetPaginationAndRender()" />
-            <select id="roleFilter" name="category" onchange="resetPaginationAndRender()">
+            <input type="text" id="searchInput" placeholder="Search...." />
+            <select id="roleFilter" name="category" >
                 <option value="">Select Category</option>
                 <% categories.forEach(category=> { %>
                     <option value="<%= category._id %>">
@@ -12,14 +16,14 @@
                     <% }) %>
             </select>
 
-            <select id="limitSelect" onchange="resetPaginationAndRender()">
+            <select id="limitSelect" >
                 <option value="10" selected>10</option>
                 <option value="20">20</option>
                 <option value="30">30</option>
             </select>
 
         </div>
-        <table class="styled-table ">
+        <table class="productTable" id="productTable">
             <thead>
                 <tr class="table-header">
                     <th>Sr. No.</th>
@@ -76,9 +80,4 @@
             <button>Next</button>
         </div>
     </div>
-    <script>
-        const rows = document.querySelectorAll(".styled-table tbody tr");
-        rows.forEach((row, index) => {
-            row.cells[0].textContent = index + 1;
-        });
-    </script>
+   

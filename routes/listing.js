@@ -7,9 +7,10 @@ const { isLogined, isUser, isAdmin } = require('../middleware.js');
 const listingcontroller=require("../controllers/listings")
 // Index Routes 
 router.get("/", wrapAsync(listingcontroller.index));
+// Search Routes - Must come before /:slug to avoid conflicts
+router.get("/search", wrapAsync(listingcontroller.searchListings));
 // Show Routes 
 router.get("/:slug", wrapAsync(listingcontroller.showIndex));
 // Delete Routes
 router.delete("/admin/products/:id", isLogined, isAdmin, wrapAsync(listingcontroller.deleteListing));
-
 module.exports = router;

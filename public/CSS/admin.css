@@ -533,7 +533,8 @@ select option {
     background-clip: text;
 }
 
-.styled-table {
+.productTable,
+.categoryTable {
     border-collapse: collapse;
     width: 100%;
     border-radius: 12px;

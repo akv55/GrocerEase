@@ -19,7 +19,7 @@ const storage = new CloudinaryStorage({
 const userStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'GrocerEase/Users',
+    folder: 'Users',
     allowed_formats: ['jpg', 'png', 'jpeg'],
     resource_type: 'auto'
   }

@@ -1,81 +1,94 @@
 <% layout("/layouts/boilerplate") -%>
     <div class="cart-container">
-
-        <% if (!cartItem || !cartItem.items || cartItem.items.length === 0) { %>
-            <h2>Your Cart</h2>
-            <p class="cart-empty-message">Your cart is empty. Please add items to your cart.</p>
-        <% } else { %>
-            <div class="cart-items">
-                <div class="cart-title">
-                    <h4>Your Cart</h4>
-                </div>
-                <br>
-                <p>You have <strong>
-                        <%= cartItem.items.length %>
-                    </strong> items in your cart.</p>
-
-
-                <div class="delivery-details">
-                    <% if (address && address.address) { %>
-                        <p>Delivery to: <strong>
-                                <%=user.name.toUpperCase()%>, <%= address.address.pincode %>
-                            </strong></p>
-                        <p>
-                            <%=address.address.street %>,
-                                <%=address.address.landmark || 'Not provided' %>,
-                                    <%=address.address.city %>,
-                                        <%=address.address.state %>,
-                                            <%= address.address.country || 'India' %>
-                        </p>
-                        <% } else { %>
+        <% if (!cartItem || !cartItem.items || cartItem.items.length===0) { %>
+            <div class="empty-cart">
+                <h2>Your Cart</h2>
+                <i class="fa-solid fa-heart-crack"></i>
+                <p class="cart-empty-message">Your cart is empty. Please add items to your cart.</p>
+                <a href="/" class="btn-cart">Continue Shopping</a>
+            </div>
+            <% } else { %>
+                <div class="cart-items">
+                    <div class="cart-title">
+                        <h4>Your Cart (<%= cartItem.items.length %>)</h4>
+                    </div>
+                    <br>
+                    <div class="delivery-details">
+                        <% if (address && address.address) { %>
                             <p>Delivery to: <strong>
-                                    <%=user.name.toUpperCase()%>
+                                    <%=user.name.toUpperCase()%>, <%= address.address.pincode %>
                                 </strong></p>
-                            <p class="no-address">No delivery address found. Please <a
-                                    href="/profile/change-address">add your address</a> to continue.</p>
-                            <% } %>
-                </div>
-                <br>
-                <% cartItem.items.forEach(function(item) { %>
-                <div class="cart-listing-container">
-                    <img src="<%= item.product_id.image.url %>"
-                        class="listing-image" alt="<%= item.product_id.title %>" />
-                    <div class="cart-info">
-                        <p><strong><%= item.product_id.title %></strong></p>
-                        <p><%= item.product_id.description %></p>
-                        <p>₹<span class="product-price"><%= item.product_id.price %></span> <%= item.product_id.weight %></p>
-                        <p>Quantity: <%= item.quantity %></p>
+                            <p>
+                                <%=address.address.street %>,
+                                    <%=address.address.landmark || 'Not provided' %>,
+                                        <%=address.address.city %>,
+                                            <%=address.address.state %>,
+                                                <%= address.address.country || 'India' %>
+                            </p>
+                            <% } else { %>
+                                <p>Delivery to: <strong>
+                                        <%=user.name.toUpperCase()%>
+                                    </strong></p>
+                                <p class="no-address">No delivery address found. Please <a
+                                        href="/profile/change-address">add your address</a> to continue.</p>
+                                <% } %>
                     </div>
-                    <div class="remove-action">
-                        <form action="/cart/remove/<%= item.product_id._id %>" method="POST">
-                            <button type="submit" class="remove-button">Remove</button>
-                        </form>
+                    <br>
+                    <% cartItem.items.forEach(function(item) { %>
+                        <% if (item.product_id && item.product_id._id) { %>
+                            <div class="cart-listing-container">
+                                <img src="<%= item.product_id.image && item.product_id.image.url ? item.product_id.image.url : '/assets/img.jpg' %>" class="listing-image"
+                                    alt="<%= item.product_id.title || 'Product' %>" />
+                                <div class="cart-info">
+                                    <p><strong>
+                                            <%= item.product_id.title || 'Product name not available' %>
+                                        </strong></p>
+                                    
+                                    <p>₹<span class="product-price">
+                                            <%= item.product_id.price || 0 %>
+                                        </span>
+                                        <%= item.product_id.weight || '' %>
+                                    </p>
+                                    <p>Quantity: <%= item.quantity %>
+                                    </p>
+                                </div>
+                                <div class="remove-action">
+                                    <form action="/cart/remove/<%= item.product_id._id %>" method="POST">
+                                        <button type="submit" class="remove-button">Remove</button>
+                                    </form>
+                                </div>
+                            </div>
+                        <% } %>
+                        <% }); %>
+                            <br>
+                            <div class="checkout-action">
+                                <form action="/checkout" method="POST">
+                                    <button type="submit" class="checkout-button">Checkout</button>
+                                </form>
+                            </div>
+                </div>
+                <div class="cart-price">
+                    <div class="cart-price-title">
+                        <h4>PRICE DETAILS</h4>
+                    </div>
+                    <br>
+                    <div class="price-details">
+                        <p>Price (<%= cartItem.items.length %> item)<span>₹<span class="total-price">
+                                        <%= totalPrice %>
+                                    </span></span></p>
+                        <p>Delivery Charges: <span class="delivery-charges">₹<span
+                                    class="delivery-charges">50</span></span></p>
+                        <p>Discount :<span class="product-discount" style="color: #28a728;">- ₹<span
+                                    class="product-discount">10</span></span></p>
+                        <p>Coupon Discount:<span class="coupon-amount">₹<span class="coupon-amount">0</span></span></p>
+                        <p>Platform Fee: <span class="platform-fee">₹<span class="platform-amount">0</span></span></p>
+                        <hr>
+                        <h3>Total Amount: <span class="total-amount">₹<span class="total-amount-value">
+                                    <%= totalPrice + 50 - 10 %>
+                                </span></span>
+                        </h3>
+                        <hr>
                     </div>
                 </div>
-                <% }); %>
-                <br>
-                <div class="checkout-action">
-                    <form action="/checkout" method="POST">
-                        <button type="submit" class="checkout-button">Checkout</button>
-                    </form>
-                </div>
-            </div>
-            <div class="cart-price">
-                <div class="cart-price-title">
-                    <h4>PRICE DETAILS</h4>
-                </div>
-                <br>
-                <div class="price-details">
-                    <p>Price (<%= cartItem.items.length %> item)<span>₹<span class="total-price"><%= totalPrice %></span></span></p>
-                    <p>Delivery Charges: ₹<span class="delivery-charges">50</span></p>
-                    <p>Product Discount : <span class="product-discount">10</span></p>
-                    <p>Coupon Discount: <span class="coupon-discount">₹<span class="coupon-amount">0</span></span></p>
-                    <p>Platform Fee: <span class="platform-fee">₹<span class="platform-amount">0</span></span></p>
-                    <hr>
-                    <h3>Total Amount: <span class="total-amount">₹<span class="total-amount-value"><%= totalPrice + 50 - 10 %></span></span>
-                    </h3>
-                    <hr>
-                </div>
-            </div>
-            <% } %>
+                <% } %>
     </div>

@@ -48,17 +48,19 @@ const listingSchema = new Schema({
     required: true,
     min: 0
   },
-  quantity: {
-    type: String,
-    required: true
-  },
   unit: {
     type: String,
     required: true
   },
- 
+  quantity: {
+    type: Number,
+    required: true
+  },
+
+
   category: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
     required: true
   },
   created_by: {
