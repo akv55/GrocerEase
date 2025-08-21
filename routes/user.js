@@ -54,4 +54,5 @@ router.get("/forgot-password", wrapAsync(userController.forgotPassword));
 router.post("/forgot-password", wrapAsync(userController.forgotPasswordForm));
 router.get("/verify-otp", wrapAsync(userController.verifyOtpForm));
 router.post("/verify-otp", wrapAsync(userController.verifyOtp));
+// router.post("/resend-otp", wrapAsync(userController.resendOtp));
 module.exports = router;

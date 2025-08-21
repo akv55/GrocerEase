@@ -100,40 +100,106 @@ module.exports.forgotPasswordForm = async (req, res) => {
             `
         });
         req.flash("success", "OTP sent to your email.");
+        req.session.otpEmail = email;
         res.redirect("/verify-otp");
     } catch (error) {
-        req.flash("error", "Error sending OTP email:", error);
+        req.flash("error", "Error sending OTP email");
+        res.redirect("/forgot-password");
     }
 };
 module.exports.verifyOtpForm = (req, res) => {
     res.render("./users/verify-otp.ejs")
 }
 module.exports.verifyOtp = async (req, res) => {
-    const { email } = req.body;
-    // Collect OTP digits from six inputs (otp[0], otp[1], ..., otp[5])
-    const otpInputs = req.body.otp; // should be an array from your form
-    const otp = otpInputs.join(""); // combine into a single string
-    if (!otpStore[email]) {
-        req.flash("error", "Invalid or expired OTP");
-        return res.redirect("/verify-otp");
-    }
-    const { expires } = otpStore[email];
-    if (Date.now() > expires) {
+    try {
+        const otpInputs = req.body.otp;
+        const enteredOtp = otpInputs.join("");
+
+        // Get email from session
+        const email = req.session.otpEmail;
+        if (!email) {
+            req.flash("error", "Session expired. Please request OTP again.");
+            return res.redirect("/forgot-password");
+        }
+
+        // Check if OTP exists for this email
+        if (!otpStore[email]) {
+            req.flash("error", "OTP expired or not found. Please request a new OTP.");
+            return res.redirect("/forgot-password");
+        }
+
+        const storedData = otpStore[email];
+
+        // Check if OTP has expired
+        if (Date.now() > storedData.expires) {
+            delete otpStore[email];
+            delete req.session.otpEmail;
+            req.flash("error", "OTP expired. Please request a new OTP.");
+            return res.redirect("/forgot-password");
+        }
+
+        // Convert stored OTP to string for comparison
+        if (enteredOtp !== storedData.otp.toString()) {
+            req.flash("error", "Invalid OTP. Please try again.");
+            return res.redirect("/verify-otp");
+        }
+
+        // OTP verified successfully - find user and get password
+        const user = await User.findOne({ email });
+        if (!user) {
+            delete otpStore[email];
+            delete req.session.otpEmail;
+            req.flash("error", "User not found. Please try again.");
+            return res.redirect("/forgot-password");
+        }
+
+        // Clean up OTP data
         delete otpStore[email];
-        req.flash("error", "OTP expired");
-        return res.redirect("/verify-otp");
-    }
-    if (otp !== otpStore[email].otp) {
-        req.flash("error", "Invalid OTP");
-        return res.redirect("/verify-otp");
-    }
+        delete req.session.otpEmail;
 
-    // Success
-    delete otpStore[email];
-    req.flash("success", "OTP verified successfully");
-    return res.redirect("/login"); // change route as per your flow
+        // Generate a temporary password or use existing one
+        // Note: In production, you should implement proper password reset instead of sending existing password
+        const tempPassword = crypto.randomBytes(4).toString('hex');
+
+        // Update user password (you might want to hash this)
+        await user.setPassword(tempPassword);
+        await user.save();
+
+        // Send password recovery email
+        try {
+            await transporter.sendMail({
+                from: `"GroceEase" <${process.env.EMAIL_USER}>`,
+                to: email,
+                subject: "GroceEase - Password Recovery",
+                html: `
+                <div style="font-family: Arial, sans-serif; padding: 20px;">
+                    <h2 style="color: #28a745;">GroceEase - Password Recovery</h2>
+                    <p>Hello,</p>
+                    <p>You requested to recover your password. Your new temporary password is: <b>${tempPassword}</b></p>
+                    <p><strong>Important:</strong> Please change your password immediately after logging in for better security.</p>
+                    <p>Thank you,<br>Team GroceEase</p>
+                </div>
+                <div style="font-size: 12px; color: #888;">
+                    <p>If you did not request this password recovery, please contact our support team immediately.</p>
+                </div>
+                `
+            });
+
+            req.flash("success", "New password has been sent to your email. Please check your inbox.");
+        } catch (emailError) {
+            console.error("Email sending error:", emailError);
+            req.flash("error", "Error sending password recovery email. Please try again.");
+            return res.redirect("/forgot-password");
+        }
+
+        return res.redirect("/login");
+
+    } catch (error) {
+        console.error("OTP verification error:", error);
+        req.flash("error", "An unexpected error occurred. Please try again.");
+        return res.redirect("/forgot-password");
+    }
 };
-
 
 // User Profile Controller
 module.exports.userProfile = async (req, res) => {
