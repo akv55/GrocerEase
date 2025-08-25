@@ -1,0 +1,210 @@
+<% layout("/layouts/boilerplate") -%>
+    <div class="cart-container">
+        <div class="cart-items" style="background-color: #fff;">
+            <form action="/checkout" method="POST">
+                <div class="content-section">
+                    <div class="header-section">
+                        <span class="step-number">1</span>
+                        <h3>LOGIN</h3>
+                        <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                    </div>
+                    <div class="user-info">
+                        <p><strong>
+                                <%= user.name.toUpperCase() %>
+                            </strong> <Span>+91 <%= user.phone %></Span></p>
+                    </div>
+                </div>
+                <div class="content-section">
+                    <div class="header-section">
+                        <span class="step-number">2</span>
+                        <h3>DELIVERY ADDRESS</h3>
+                        <% if (addresses && addresses.length> 0) { %>
+                            <span class="checkmark"><i class="fa-solid fa-check"></i></span>
+                            <% } else { %>
+                                <span class="checkmark" style="color: red;"><i class="fa-solid fa-xmark"></i></span>
+                                <% } %>
+                    </div>
+                    <div class="delivery-detail">
+                        <% if (addresses && addresses.length> 0) { %>
+                            <div class="address-selection">
+                                <div class="address-option">
+                                    <input type="radio" id="address" name="addressId" value="<%= addresses[0]._id %>"
+                                        checked required>
+
+                                    <label for="address" class="address-label">
+                                        <div class="address-card" id="card">
+                                            <div class="address-header">
+                                                <strong>
+                                                    <%= user.name.toUpperCase() %>
+                                                </strong>
+                                                <span>+91 <%= user.phone %></span>
+                                                <% if (addresses[0].isDefault) { %>
+                                                    <span class="default-badge">Default</span>
+                                                    <% } %>
+                                            </div>
+                                            <div class="address-details">
+                                                <%= addresses[0].address.street %>,
+                                                    <%= addresses[0].address.landmark || 'Not provided' %>,
+                                                        <%= addresses[0].address.city %>,
+                                                            <%= addresses[0].address.state %> -
+                                                                <strong >
+                                                                    <%= addresses[0].address.pincode %>
+                                                                </strong>
+                                            </div>
+
+                                        </div>
+                                        <button type="button" onclick="editAddress('<%= addresses[0]._id %>')"
+                                            class="edit-button">EDIT</button>
+                                    </label>
+                                </div>
+                            </div>
+                            <% } else { %>
+                                <p class="no-addres">
+                                    No delivery address found. Please
+                                    <a style="text-decoration: none; color: red;" href="/profile/change-address">add
+                                        your
+                                        address</a> to continue.
+                                </p>
+                                <% } %>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <div class="header-section">
+                        <span class="step-number">3</span>
+                        <h3>ORDER SUMMARY</h3>
+                    </div>
+                    <div class="order-summ">
+                        <div class="order-item">
+                            <p>
+                                Grocery Basket (<%= (cartItem && cartItem.items) ? cartItem.items.length : 0 %>
+                                    items)
+                                    <span class="total-price">₹<%= totalPrice || 0 %></span>
+
+                            </p>
+                            <button type="button" class="btn-open">View Basket</button>
+                        </div>
+                        <div class="basket-overlay" id="popupBasket">
+                            <div class="basket-box">
+                                <% if (cartItem && cartItem.items) { %>
+                                    <% cartItem.items.forEach(item=> { %>
+                                        <% if (item.product_id && item.product_id._id) { %>
+                                            <div class="basket-info">
+                                                <img src="<%= item.product_id.image.url %>" alt="Product Image">
+                                                <div class="item-details">
+                                                    <p><strong>
+                                                            <%= item.product_id.title %>
+                                                        </strong>
+                                                    </p>
+                                                    <p> ₹<%= item.product_id.price %>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <% } %>
+                                                <% }); %>
+                                                    <% } else { %>
+                                                        <p>No items in cart</p>
+                                                        <% } %>
+
+                            </div>
+                            <br>
+                            <button type="button" class="btn-close" id="closeBtn">Close</button>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="content-section">
+                    <div class="header-section">
+                        <span class="step-number">4</span>
+                        <h3>PAYMENT METHOD</h3>
+                    </div>
+
+                    <div class="payment-method">
+                        <div class="payment-method-selection">
+                            <input type="radio" id="cod" name="paymentMethod" value="COD" checked>
+                            <label for="cod">Cash on Delivery</label>
+                        </div>
+                        <div class="payment-method-selection">
+                            <input type="radio" id="online" name="paymentMethod" value="Online">
+                            <label for="online">Online Payment </label>
+                        </div>
+                    </div>
+
+                    <div class="header-section">
+                        <p>Order confirmation email will be sent to <span style="font-weight: bold; color: #333;">
+                                <%= user.email %>
+                            </span></p>
+                        <% if (addresses && addresses.length> 0) { %>
+
+                            <button type="submit" class="continue-button">CONTINUE</button>
+                            <% } else { %>
+                                <button class="continue-button" disabled
+                                    style="background-color: grey; cursor: not-allowed;">CONTINUE</button>
+                                <% } %>
+
+
+                    </div>
+            </form>
+
+
+        </div>
+    </div>
+    <div class="cart-price">
+        <div class="cart-price-title">
+            <h4>PRICE DETAILS</h4>
+        </div>
+        <br>
+        <div class="price-details">
+            <p>Price (<%= (cartItem && cartItem.items) ? cartItem.items.length : 0 %> item)<span>₹<span
+                            class="total-price">
+                            <%= totalPrice || 0 %>
+                        </span></span></p>
+            <p>Delivery Charges: <span class="delivery-charges">₹<span class="delivery-charges">50</span></span></p>
+            <p>Discount :<span class="product-discount" style="color: #28a728;">- ₹<span
+                        class="product-discount">10</span></span></p>
+            <p>Coupon Discount:<span class="coupon-amount">₹<span class="coupon-amount">0</span></span></p>
+            <p>Platform Fee: <span class="platform-fee">₹<span class="platform-amount">0</span></span></p>
+            <hr>
+            <h3>Total Payable: <span class="total-amount">₹<span class="total-amount-value">
+                        <%= (totalPrice || 0) + 50 - 10 %>
+                    </span></span>
+            </h3>
+            <hr>
+            <h5 style="padding: 10px; color: #28a728; display: flex;justify-content: space-between; ">Your Total
+                Saving on this order <span class="total-saving">₹<span class="total-saving-value">
+                        <%= ((totalPrice || 0) + 50 + 10) - ((totalPrice || 0) + 50) %>
+                    </span></span></h5>
+        </div>
+        <div class="security-info">
+            <div class="security-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Safe and Secure Payments. Easy returns.</span>
+            </div>
+            <div class="security-item">
+                <i class="fas fa-check-circle"></i>
+                <span>100% Authentic products.</span>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script>
+        const openBtn = document.querySelector('.btn-open');
+        const modal = document.getElementById('popupBasket');
+        const closeBtn = document.getElementById('closeBtn');
+        openBtn.addEventListener('click', () => {
+            modal.style.display = 'flex'; // Show popup
+        });
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none'; // Hide popup
+        });
+        // Close when clicking outside the box
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>

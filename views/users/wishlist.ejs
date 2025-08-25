@@ -10,8 +10,9 @@
         <% if (wishlistItems && wishlistItems.length> 0) { %>
             <% wishlistItems.forEach(function(product) { %>
                 <div class="wishlist-items">
+                    <a href="/<%=product.slug%>" class="listing-link">
                     <img src="<%= product.image.url %>" alt="<%= product.title %>" class="wishlist-image" />
-
+                    </a>
                     <div class="wishlist-item-details">
                         <h3>
                             <%= product.title %>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to GrocerEase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 18px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+        
+        .btn-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40,167,69,0.4);
+        }
+        
+        .features {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .feature-icon {
+            width: 24px;
+            height: 24px;
+            background: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .disclaimer {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+            
+            .header, .content, .footer {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="logo">🛒 GrocerEase</div>
+            <h1>Welcome to Your Grocery Paradise!</h1>
+            <p>Fresh groceries delivered to your doorstep</p>
+        </div>
+        
+        <div class="content">
+            <div class="greeting">Hello <%= name %>! 👋</div>
+            
+            <div class="message">
+                <p>Welcome to <strong>GrocerEase</strong> - where fresh groceries meet convenience! We're thrilled to have you join our community of smart shoppers.</p>
+            </div>
+            <div class="features">
+                <h3 style="margin-bottom: 20px; color: #28a745;">What awaits you:</h3>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🥬</div>
+                    <div>Fresh fruits and vegetables delivered daily</div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🚚</div>
+                    <div>Free delivery on orders above ₹500</div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">💰</div>
+                    <div>Exclusive deals and member-only discounts</div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">⏰</div>
+                    <div>Same-day delivery in most areas</div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 20px;">If you didn't create this account, you can safely ignore this email.</p>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Need help?</strong> Contact our support team at <a href="mailto:support@grocerease.com" style="color: #28a745;">support@grocerease.com</a></p>
+            
+            <div class="disclaimer">
+                <p>© 2025 GrocerEase. All rights reserved.</p>
+                <p>This email was sent to <%= email %>. If you no longer wish to receive emails, <a href="#" style="color: #28a745;">unsubscribe here</a>.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

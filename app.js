@@ -17,17 +17,20 @@ const flash = require('connect-flash');
 const ExpressError = require("./utils/ExpressError.js");
 const methodOverride = require("method-override");
 const Category = require("./models/category.js");
+const Cart = require('./models/cart.js');
+
 //  routers
 const userRouter = require("./routes/user.js")
 const listingRouter = require("./routes/listing.js");
 const adminRouter = require("./routes/admin.js");
+const authRouter = require("./routes/auth.js");
 // database connection 
 mongoose.set('strictQuery', false);
-// const Mongo_url = process.env.MONGO_URL;
-const AtlasDB_URL = process.env.ATLASDB_URL;
+const Mongo_url = process.env.MONGO_URL;
+// const AtlasDB_URL = process.env.ATLASDB_URL;
 const connectDB = async () => {
     try {
-        await mongoose.connect(AtlasDB_URL);
+        await mongoose.connect(Mongo_url);
         console.log("Connected to MongoDB Atlas successfully");
     } catch (err) {
         console.error("Database connection error:", err);
@@ -45,7 +48,7 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 // MongoDB session store
 const store = MongoStore.create({
-    mongoUrl: AtlasDB_URL,
+    mongoUrl: Mongo_url,
     collectionName: 'sessions',
     crypto: {
         secret: process.env.SECRET_KEY,
@@ -82,8 +85,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// Add cart data to all templates
-const Cart = require('./models/cart.js');
 app.use(async (req, res, next) => {
     if (req.user) {
         try {
@@ -114,6 +115,7 @@ app.use(async (req, res, next) => {
     next();
 });
 // --------ROUTES--------
+app.use("/", authRouter);
 app.use("/", userRouter);
 app.use("/", listingRouter);
 app.use("/", adminRouter);

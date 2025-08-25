@@ -1,8 +1,6 @@
 const Listing = require("../models/products.js");
 const ExpressError = require("../utils/ExpressError.js");
 const Category = require("../models/category.js");
-const Cart = require("../models/cart.js");
-const User = require("../models/user.js")
 module.exports.index = async (req, res, next) => {
     try {
         const products = await Listing.find();

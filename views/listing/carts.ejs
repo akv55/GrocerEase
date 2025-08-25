@@ -26,9 +26,7 @@
                                                 <%= address.address.country || 'India' %>
                             </p>
                             <% } else { %>
-                                <p>Delivery to: <strong>
-                                        <%=user.name.toUpperCase()%>
-                                    </strong></p>
+                                
                                 <p class="no-address">No delivery address found. Please <a
                                         href="/profile/change-address">add your address</a> to continue.</p>
                                 <% } %>
@@ -37,13 +35,14 @@
                     <% cartItem.items.forEach(function(item) { %>
                         <% if (item.product_id && item.product_id._id) { %>
                             <div class="cart-listing-container">
-                                <img src="<%= item.product_id.image && item.product_id.image.url ? item.product_id.image.url : '/assets/img.jpg' %>" class="listing-image"
-                                    alt="<%= item.product_id.title || 'Product' %>" />
+                                <a href="/<%=item.product_id.slug%>" style="text-decoration: none;"><img
+                                        src="<%= item.product_id.image && item.product_id.image.url ? item.product_id.image.url : '/assets/img.jpg' %>"
+                                        class="listing-image" alt="<%= item.product_id.title || 'Product' %>" /></a>
                                 <div class="cart-info">
                                     <p><strong>
                                             <%= item.product_id.title || 'Product name not available' %>
                                         </strong></p>
-                                    
+
                                     <p>₹<span class="product-price">
                                             <%= item.product_id.price || 0 %>
                                         </span>
@@ -58,14 +57,14 @@
                                     </form>
                                 </div>
                             </div>
-                        <% } %>
-                        <% }); %>
-                            <br>
-                            <div class="checkout-action">
-                                <form action="/checkout" method="POST">
-                                    <button type="submit" class="checkout-button">Checkout</button>
-                                </form>
-                            </div>
+                            <% } %>
+                                <% }); %>
+                                    <br>
+                                    <div class="checkout-action">
+                                        <form action="/checkout" method="GET">
+                                            <button type="submit" class="checkout-button">Checkout</button>
+                                        </form>
+                                    </div>
                 </div>
                 <div class="cart-price">
                     <div class="cart-price-title">
@@ -88,6 +87,10 @@
                                 </span></span>
                         </h3>
                         <hr>
+                        <h5 style="padding: 10px; color: #28a728;">Your Total Saving on this order <span
+                                class="total-saving">₹<span class="total-saving-value">
+                                    <%= (totalPrice + 50 - 10) - (totalPrice + 50 - 10) * 0.1 %>
+                                </span></span></h5>
                     </div>
                 </div>
                 <% } %>

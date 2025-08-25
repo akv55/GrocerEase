@@ -4,202 +4,12 @@ const User = require('../models/user.js');
 const Cart = require('../models/cart.js');
 const Listing = require('../models/products.js');
 const Wishlist = require('../models/wishlist.js');
-const crypto = require('crypto');
+const Order = require('../models/order.js');
 const transporter = require('../config/email.js');
-
-// OTP storage (in production, use Redis or similar)
-let otpStore = {};
-
-// User Sign Up Controller
-module.exports.userSignUp = async (req, res) => {
-    try {
-        const exitEmail = await User.findOne({ email: req.body.email });
-        if (exitEmail) {
-            req.flash("error", "Email already exists. Please try another.");
-            return res.redirect("/signup");
-        }
-        const exitPhone = await User.findOne({ phone: req.body.phone });
-        if (exitPhone) {
-            req.flash("error", "Phone number already exists. Please try another.");
-            return res.redirect("/signup");
-        }
-
-        let { name, password, email, phone, role } = req.body;
-        const newUser = new User({
-            username: email,
-            email,
-            phone,
-            name,
-            role
-        });
-        const registeredUser = await User.register(newUser, password);
-        req.login(registeredUser, function (err) {
-            if (err) {
-                req.flash("error", "Login failed after registration");
-                return res.redirect("/signup");
-            }
-            req.flash("success", "Registration successful!");
-            return res.redirect("/");
-        });
-    } catch (err) {
-        req.flash("error", err.message);
-        return res.redirect("/signup");
-    }
-};
-
-module.exports.userLogin = async (req, res) => {
-    if (req.user.role === "admin") {
-        req.flash("success", "Welcome to the admin dashboard!");
-        return res.redirect('/admin/dashboard');
-    }
-
-    req.flash("success", "Welcome To GrocerEase!");
-    return res.redirect('/');
-};
-
-module.exports.userLogout = (req, res, next) => {
-    req.logout(function (err) {
-        if (err) { return next(err); }
-        req.flash("success", "Logged out successfully!");
-        return res.redirect('/');
-    });
-};
-
-// ---------------------FORGOT PASSWORD------------------
-
-module.exports.forgotPassword = (req, res) => {
-    res.render("./users/forgotPassword.ejs");
-};
+const path = require("path");
+const ejs = require("ejs");
 
 
-module.exports.forgotPasswordForm = async (req, res) => {
-    const { email } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) {
-        req.flash("error", "User not found");
-        return res.redirect("/forgot-password");
-    }
-    const otp = crypto.randomInt(100000, 999999);
-    otpStore[email] = { otp, expires: Date.now() + 5 * 60 * 1000 };
-    try {
-        await transporter.sendMail({
-            from: `"GroceEase" <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: "GroceEase - OTP Verification",
-            html: `
-                <div style="font-family: Arial, sans-serif; padding:20px;">
-                    <h2 style="color:#28a728;">GroceEase - OTP Verification</h2>
-                    <p>Hello,</p>
-                    <p>Your One-Time Password (OTP) is: <b>${otp}</b></p>
-                    <p>This OTP is valid for <b>5 minutes</b>. Please do not share it with anyone.</p>
-                    <p>Thank you,<br>Team GroceEase</p>
-                </div>
-                <div style="font-size: 12px; color: #888;">
-                    <p>If you did not request this OTP, please ignore this email.</p>
-                </div>
-            `
-        });
-        req.flash("success", "OTP sent to your email.");
-        req.session.otpEmail = email;
-        res.redirect("/verify-otp");
-    } catch (error) {
-        req.flash("error", "Error sending OTP email");
-        res.redirect("/forgot-password");
-    }
-};
-module.exports.verifyOtpForm = (req, res) => {
-    res.render("./users/verify-otp.ejs")
-}
-module.exports.verifyOtp = async (req, res) => {
-    try {
-        const otpInputs = req.body.otp;
-        const enteredOtp = otpInputs.join("");
-
-        // Get email from session
-        const email = req.session.otpEmail;
-        if (!email) {
-            req.flash("error", "Session expired. Please request OTP again.");
-            return res.redirect("/forgot-password");
-        }
-
-        // Check if OTP exists for this email
-        if (!otpStore[email]) {
-            req.flash("error", "OTP expired or not found. Please request a new OTP.");
-            return res.redirect("/forgot-password");
-        }
-
-        const storedData = otpStore[email];
-
-        // Check if OTP has expired
-        if (Date.now() > storedData.expires) {
-            delete otpStore[email];
-            delete req.session.otpEmail;
-            req.flash("error", "OTP expired. Please request a new OTP.");
-            return res.redirect("/forgot-password");
-        }
-
-        // Convert stored OTP to string for comparison
-        if (enteredOtp !== storedData.otp.toString()) {
-            req.flash("error", "Invalid OTP. Please try again.");
-            return res.redirect("/verify-otp");
-        }
-
-        // OTP verified successfully - find user and get password
-        const user = await User.findOne({ email });
-        if (!user) {
-            delete otpStore[email];
-            delete req.session.otpEmail;
-            req.flash("error", "User not found. Please try again.");
-            return res.redirect("/forgot-password");
-        }
-
-        // Clean up OTP data
-        delete otpStore[email];
-        delete req.session.otpEmail;
-
-        // Generate a temporary password or use existing one
-        // Note: In production, you should implement proper password reset instead of sending existing password
-        const tempPassword = crypto.randomBytes(4).toString('hex');
-
-        // Update user password (you might want to hash this)
-        await user.setPassword(tempPassword);
-        await user.save();
-
-        // Send password recovery email
-        try {
-            await transporter.sendMail({
-                from: `"GroceEase" <${process.env.EMAIL_USER}>`,
-                to: email,
-                subject: "GroceEase - Password Recovery",
-                html: `
-                <div style="font-family: Arial, sans-serif; padding: 20px;">
-                    <h2 style="color: #28a745;">GroceEase - Password Recovery</h2>
-                    <p>Hello,</p>
-                    <p>You requested to recover your password. Your new temporary password is: <b>${tempPassword}</b></p>
-                    <p><strong>Important:</strong> Please change your password immediately after logging in for better security.</p>
-                    <p>Thank you,<br>Team GroceEase</p>
-                </div>
-                <div style="font-size: 12px; color: #888;">
-                    <p>If you did not request this password recovery, please contact our support team immediately.</p>
-                </div>
-                `
-            });
-
-            req.flash("success", "New password has been sent to your email. Please check your inbox.");
-        } catch (emailError) {
-            console.error("Email sending error:", emailError);
-            req.flash("error", "Error sending password recovery email. Please try again.");
-            return res.redirect("/forgot-password");
-        }
-
-        return res.redirect("/login");
-
-    } catch (error) {
-        console.error("OTP verification error:", error);
-        req.flash("error", "An unexpected error occurred. Please try again.");
-        return res.redirect("/forgot-password");
-    }
-};
 
 // User Profile Controller
 module.exports.userProfile = async (req, res) => {
@@ -232,42 +42,6 @@ module.exports.userProfileEdit = async (req, res) => {
     }
     req.flash("success", "Profile updated successfully");
     return res.redirect("/profile");
-};
-
-
-module.exports.userChangePassword = async (req, res) => {
-    res.render("./users/changePassword.ejs", { user: req.user });
-};
-
-module.exports.userPasswordUpdate = async (req, res) => {
-    const { currentPassword, newPassword, confirmPassword } = req.body;
-
-    if (!currentPassword || !newPassword || !confirmPassword) {
-        req.flash("error", "All password fields are required");
-        return res.redirect("/settings");
-    }
-
-    if (newPassword !== confirmPassword) {
-        req.flash("error", "New password and confirm password do not match");
-        return res.redirect("/settings");
-    }
-
-    try {
-        const result = await req.user.authenticate(currentPassword);
-        if (!result.user) {
-            req.flash("error", "Current password is incorrect");
-            return res.redirect("/settings");
-        }
-
-        await req.user.setPassword(newPassword);
-        await req.user.save();
-
-        req.flash("success", "Password changed successfully");
-        return res.redirect("/profile");
-    } catch (err) {
-        req.flash("error", "Something went wrong while changing password");
-        return res.redirect("/settings");
-    }
 };
 
 // User Address Controller
@@ -358,13 +132,13 @@ module.exports.addToWishlist = async (req, res) => {
             await wishlist.save();
             req.flash("success", "Product added to wishlist");
         } else {
-            req.flash("success", "Product already in wishlist");
+            req.flash("error", "Product already in wishlist");
         }
 
-        return res.redirect("back");
+        return res.redirect("/");
     } catch (error) {
         req.flash("error", "Error adding product to wishlist");
-        return res.redirect("back");
+        return res.redirect("/");
     }
 };
 
@@ -382,7 +156,7 @@ module.exports.removeFromWishlist = async (req, res) => {
             req.flash("success", "Product removed from wishlist");
         }
 
-        res.redirect("back");
+        res.redirect("/wishlist");
     } catch (error) {
         console.error(error);
         req.flash("error", "Error removing product from wishlist");
@@ -490,10 +264,215 @@ module.exports.removeFromCart = async (req, res) => {
 
 // ---------------------------------ORDER---------------------
 
-module.exports.userOrders = async (req, res) => {
-    res.render("./users/orders.ejs");
+module.exports.Orders = async (req, res) => {
+    const orders = await Order.find({ userId: req.user._id }).populate('items.product');
+    const ordeeItems=
+    res.render("./users/orders.ejs", { orders });
 };
-module.exports.userOrderDetails = async (req, res) => {
+module.exports.OrderDetails = async (req, res) => {
     const { orderId } = req.params;
-    res.render("./users/orders.ejs", { orderId });
+     const order = await Order.findById(orderId).populate('items.product');
+    if (!order) {
+        req.flash("error", "Order not found");
+        return res.redirect("/orders");
+    }
+    res.render("./users/orders.ejs", { order });
+};
+module.exports.checkoutForm = async (req, res) => {
+    try {
+        const cartItem = await Cart.findOne({ user_id: req.user._id }).populate('items.product_id');
+        const user = req.user;
+        const addresses = await Address.find({ userId: req.user._id });
+
+        let totalPrice = 0;
+        let totalItems = 0;
+
+        // Check if cart exists and has items
+        if (!cartItem || !cartItem.items || cartItem.items.length === 0) {
+            req.flash("error", "Your cart is empty. Please add items before checkout.");
+            return res.redirect("/cart");
+        }
+
+        if (cartItem && cartItem.items) {
+            // Filter out items with null product_id (deleted products)
+            cartItem.items = cartItem.items.filter(item => item.product_id !== null);
+
+            // Check if cart still has items after filtering
+            if (cartItem.items.length === 0) {
+                req.flash("error", "Your cart is empty. Please add items before checkout.");
+                return res.redirect("/cart");
+            }
+
+            cartItem.items.forEach(item => {
+                if (item.product_id && item.product_id.price) {
+                    totalPrice += item.product_id.price * item.quantity;
+                    totalItems += item.quantity;
+                }
+            });
+
+            // Save the cart after filtering out invalid items
+            if (cartItem.isModified()) {
+                await cartItem.save();
+            }
+        }
+
+        res.render("./users/checkout.ejs", {
+            cartItem,
+            user,
+            addresses,
+            totalPrice,
+            totalItems
+        });
+    } catch (err) {
+        req.flash("error", "Error loading checkout page");
+        res.redirect("/cart");
+    }
+};
+
+module.exports.checkoutProcess = async (req, res) => {
+    try {
+        const { addressId, paymentMethod } = req.body;
+        const cartItem = await Cart.findOne({ user_id: req.user._id }).populate('items.product_id');
+        const user = req.user;
+
+        // Validate required fields
+        if (!addressId) {
+            req.flash("error", "Please select a delivery address.");
+            return res.redirect("/checkout");
+        }
+
+        if (!paymentMethod) {
+            req.flash("error", "Please select a payment method.");
+            return res.redirect("/checkout");
+        }
+
+        // Validate that the address exists and belongs to the user
+        const deliveryAddress = await Address.findOne({ _id: addressId, userId: req.user._id });
+        if (!deliveryAddress) {
+            req.flash("error", "Invalid delivery address selected.");
+            return res.redirect("/checkout");
+        }
+
+        // Check if cart exists and has items
+        if (!cartItem || !cartItem.items || cartItem.items.length === 0) {
+            req.flash("error", "Your cart is empty. Please add items before checkout.");
+            return res.redirect("/cart");
+        }
+
+        // Calculate total amount
+
+        const orderItems = cartItem.items.map(item => ({
+            product: item.product_id._id,
+            name: item.product_id.title || item.product_id.name,
+            quantity: item.quantity,
+            price: item.product_id.price
+        }));
+        const totalAmount = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+        // Create an order first
+        const order = new Order({
+            user: user._id,
+            items: orderItems,
+            totalAmount: totalAmount,
+            deliveryAddress: addressId, // Pass the addressId directly as ObjectId
+            paymentMethod,
+            status: 'Pending'
+        });
+        await order.save();
+
+        // Prepare address string for email
+        const addressString = `${deliveryAddress.address.street}, ${deliveryAddress.address.landmark || ''}, ${deliveryAddress.address.city}, ${deliveryAddress.address.state} - ${deliveryAddress.address.pincode}`;
+
+        await Cart.deleteOne({ user_id: req.user._id });
+
+        // Redirect based on payment method
+        if (paymentMethod === "Online") {
+            // Redirect to payment page for online payment
+            return res.redirect(`/users/${user._id}/payment?orderId=${order._id}&amount=${totalAmount}`);
+        } else {
+            // For COD, order is complete
+            req.flash("success", "Order placed successfully! ");
+
+            // Send order confirmation email
+            try {
+                const templatePath = path.join(__dirname, "../templates/order-confirmation.ejs");
+                const html = await ejs.renderFile(templatePath, {
+                    customerName: user.name,
+                    orderId: order.orderId || order._id,
+                    orderItems: orderItems,
+                    orderDate: new Date().toLocaleDateString('en-IN'),
+                    orderStatus: 'Confirmed',
+                    subtotal: totalAmount,
+                    deliveryCharges: 50,
+                    totalAmount: totalAmount + 50,
+                    discount: 0,
+                    deliveryAddress: addressString,
+                    expectedDelivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN'),
+                    paymentMethod,
+                    supportPhone: process.env.SUPPORT_PHONE || '+91-9876543210',
+                    trackOrderLink: `${req.protocol}://${req.get("host")}/orders/${order._id}`,
+                    shopMoreLink: `${req.protocol}://${req.get("host")}/`
+                });
+
+                await transporter.sendMail({
+                    from: `"GrocerEase" <${process.env.EMAIL_USER}>`,
+                    to: user.email,
+                    subject: "Order Confirmed - GrocerEase",
+                    html
+                });
+                console.log("Order confirmation email sent successfully");
+            } catch (emailError) {
+                console.error("Failed to send order confirmation email:", emailError);
+                // Don't fail the order if email fails
+            }
+
+            return res.redirect(`/orders/${order._id}`);
+        }
+
+    } catch (err) {
+        req.flash("error", "Error processing checkout");
+        console.error(err);
+        res.redirect("/checkout");
+    }
+};
+
+//payment
+module.exports.paymentForm = async (req, res) => {
+    try {
+        const { orderId, amount } = req.query;
+        const userId = req.params.id;
+        res.render('./users/payment.ejs', {
+            userId,
+            orderId,
+            amount
+        });
+    } catch (err) {
+        req.flash("error", "Error loading payment page");
+        res.redirect("/cart");
+    }
+};
+
+module.exports.processPayment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { paymentOption, orderId } = req.body;
+
+        // Find the order
+        const order = await Order.findById(orderId || id);
+        if (!order) {
+            req.flash("error", "Order not found");
+            return res.redirect("/cart");
+        }
+
+        // Update order status based on payment completion
+        order.status = 'Processing'; // Payment completed
+        await order.save();
+
+        req.flash("success", "Payment completed successfully! Your order is being processed.");
+        res.redirect(`/orders/${order._id}`);
+    } catch (err) {
+        req.flash("error", "Error processing payment");
+        console.error(err);
+        res.redirect("/cart");
+    }
 };

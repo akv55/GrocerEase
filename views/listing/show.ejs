@@ -1,19 +1,15 @@
 <% layout("/layouts/boilerplate") -%>
     <div class="show-card-container">
-        <div class="show-card-image">
-            <img src="<%= product && product.image && product.image.url ? product.image.url : '/assets/img.jpg' %>"
-                class="show-image" alt="<%= product ? product.title : 'Product Image' %>" />
+        <div class="show-card-image ">
+            <div class=" show-img skeleton">
+                <img src="<%= product && product.image && product.image.url ? product.image.url : '/assets/img.jpg' %>"
+                    class="show-image skeleton" alt="<%= product ? product.title : 'Product Image' %>" />
+            </div>
 
             <div class="show-actions">
-               
-                    <form action="/cart/add/<%= product._id %>" method="POST">
-                        <button type="submit" class="btn-btn-add">Add to Cart</button>
-                    </form>
-                
-                <button class="btn-btn-buy" onclick="">
-                    Buy Now
-                </button>
-
+                <form action="/cart/add/<%= product._id %>" method="POST">
+                    <button type="submit" class="addCart-btn">Add to Cart</button>
+                </form>
             </div>
         </div>
         <div class="show-card-contant">
@@ -91,14 +87,12 @@
         }
 
         .show-actions {
-            display: flex;
-            justify-content: space-between;
             gap: 20px;
             margin-top: 10px;
             width: 100%;
         }
 
-        .btn-btn-add {
+        .addCart-btn {
             width: 100%;
             border: none;
             background: #28a745;
@@ -118,33 +112,10 @@
 
         }
 
-        .btn-btn-buy {
-            width: 50%;
-            border: none;
-            background-color: #fff;
-            border: 1px solid #28a745;
-            border-radius: 6px;
-            font-size: 25px;
-            padding: 6px 12px;
-            color: #28a745;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            white-space: nowrap;
-            margin-right: 10px;
-        }
 
-        .btn-btn-add:hover {
+
+        .addCart-btn:hover {
             background: #218838;
-            transform: translateY(-2px);
-        }
-
-        .btn-btn-buy:hover {
             transform: translateY(-2px);
         }
 
@@ -165,6 +136,8 @@
             }
 
             .show-card-image {
+                display: flex;
+                flex-direction: column;
                 width: 100%;
                 height: 300px;
                 padding: 10px;
@@ -185,11 +158,52 @@
                 margin: 1rem 0 0 0;
             }
 
-            .btn-btn-buy,
-            .btn-btn-add {
+            .addCart-btn {
                 margin-top: 10px;
                 font-size: 25px;
             }
 
         }
+
+        /* Skeleton effect */
+        .skeleton {
+            background: linear-gradient(90deg, #eee 25%, #ddd 50%, #eee 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.2s infinite;
+        }
+
+        @keyframes shimmer {
+            from {
+                background-position: 200% 0;
+            }
+
+            to {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Image container */
+        .show-img {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        /* Hide image until loaded */
+        
+        .show-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            transition: opacity 0.4s ease-in-out;
+        }
     </style>
+    <script>
+        function removeSkeleton(img) {
+            img.style.display = "block"; // Show image
+            img.parentElement.classList.remove("skeleton"); // Remove skeleton shimmer
+        }
+    </script>

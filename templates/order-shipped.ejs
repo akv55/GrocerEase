@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Shipped - GrocerEase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #fd7e14, #e67e22);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .shipped-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .shipping-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #fd7e14;
+            text-align: center;
+        }
+        
+        .tracking-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #fd7e14;
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 10px 0;
+            letter-spacing: 1px;
+        }
+        
+        .delivery-timeline {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .timeline-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 30px;
+            width: 2px;
+            height: 20px;
+            background: #dee2e6;
+        }
+        
+        .timeline-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .timeline-completed {
+            background: #28a745;
+            color: white;
+        }
+        
+        .timeline-current {
+            background: #fd7e14;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+        
+        .timeline-pending {
+            background: #dee2e6;
+            color: #6c757d;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(253, 126, 20, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(253, 126, 20, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(253, 126, 20, 0); }
+        }
+        
+        .delivery-details {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 20px 0;
+        }
+        
+        .driver-info {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .driver-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #fd7e14;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        
+        .driver-details h4 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .driver-contact {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .btn-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #fd7e14;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .tips-box {
+            background: #d4edda;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+            
+            .content, .footer {
+                padding: 20px;
+            }
+            
+            .driver-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .driver-avatar {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="logo">🛒 GrocerEase</div>
+            <h2>Your Order is On the Way! 🚚</h2>
+            <div class="shipped-badge">
+                📦 Order #<%= orderId %> has been shipped
+            </div>
+        </div>
+        
+        <div class="content">
+            <h3>Great news, <%= customerName %>! 🎉</h3>
+            <p>Your fresh groceries have been carefully packed and are now on their way to you!</p>
+            
+            <div class="shipping-box">
+                <h4>📍 Track Your Package</h4>
+                <p>Tracking Number:</p>
+                <div class="tracking-number"><%= trackingNumber %></div>
+                <p style="font-size: 14px; margin-top: 10px;">Use this number to track your delivery</p>
+            </div>
+            
+            <div class="delivery-details">
+                <h4>🚚 Delivery Information</h4>
+                <p><strong>Estimated Delivery:</strong> <%= estimatedDelivery %></p>
+                <p><strong>Delivery Address:</strong> <%= deliveryAddress %></p>
+                <p><strong>Shipping Method:</strong> <%= shippingMethod || "Standard Delivery" %></p>
+            </div>
+            
+            <div class="delivery-timeline">
+                <h4>📦 Delivery Progress</h4>
+                
+                <div class="timeline-item">
+                    <div class="timeline-icon timeline-completed">✓</div>
+                    <div>
+                        <strong>Order Confirmed</strong><br>
+                        <small><%= orderDate %></small>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-icon timeline-completed">✓</div>
+                    <div>
+                        <strong>Order Prepared</strong><br>
+                        <small>Fresh items picked and packed</small>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-icon timeline-current">🚚</div>
+                    <div>
+                        <strong>Out for Delivery</strong><br>
+                        <small>Currently on the way to you</small>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-icon timeline-pending">📍</div>
+                    <div>
+                        <strong>Delivered</strong><br>
+                        <small>Estimated: <%= estimatedDelivery %></small>
+                    </div>
+                </div>
+            </div>
+            
+            <% if (driverInfo) { %>
+            <div class="driver-info">
+                <div class="driver-avatar"><%= driverInfo.name.charAt(0) %></div>
+                <div class="driver-details">
+                    <h4>Your Delivery Partner</h4>
+                    <div class="driver-contact">
+                        <strong><%= driverInfo.name %></strong><br>
+                        📞 <%= driverInfo.phone %><br>
+                        🚛 Vehicle: <%= driverInfo.vehicle %>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            
+            <div class="tips-box">
+                <h4>💡 Delivery Tips</h4>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>Please be available at the delivery address</li>
+                    <li>Keep your phone accessible for delivery updates</li>
+                    <li>Have a person ready to receive perishable items</li>
+                    <li>Check items upon delivery and report any issues immediately</li>
+                </ul>
+            </div>
+            
+            <div class="btn-container">
+                <a href="<%= trackingLink %>" class="btn">Track Live Location</a>
+                <a href="<%= contactLink %>" class="btn btn-secondary">Contact Driver</a>
+            </div>
+            
+            <p style="text-align: center; margin-top: 20px;">
+                <strong>Questions?</strong> We're here to help! Contact our support team anytime.
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Need assistance?</strong><br>
+            Email: <a href="mailto:support@grocerease.com" style="color: #fd7e14;">support@grocerease.com</a><br>
+            Phone: <strong><%= supportPhone || "+91-9876543210" %></strong></p>
+            
+            <p style="margin-top: 15px; font-size: 12px; color: #6c757d;">
+                © 2025 GrocerEase. All rights reserved.<br>
+                Delivering freshness to your doorstep
+            </p>
+        </div>
+    </div>
+</body>
+</html>

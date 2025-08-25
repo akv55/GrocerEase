@@ -9,6 +9,7 @@ const cartSchema = new mongoose.Schema({
     items: [cartItemSchema],
     totalPrice: { type: Number, default: 0 },
     totalItems: { type: Number, default: 0 },
+    totalDiscount: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now }
 });
 

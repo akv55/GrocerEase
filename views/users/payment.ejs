@@ -1,0 +1,145 @@
+<% layout("/layouts/boilerplate") -%>
+   <% layout("/layouts/boilerplate") -%>
+<div class="payment-container">
+    <div class="payment-header">
+        <i onclick="history.back()" style="cursor: pointer;" class="fas fa-arrow-left"></i>
+        <h3>Choose Payment Method</h3>
+        <p><i class="fas fa-lock"></i> 100% Secure payment</p>
+    </div>
+    <br>
+    <hr>
+
+    <!-- Payment Options -->
+    <form action="/users/<%= orderId %>/payment" method="POST" id="payment-form">
+        <input type="hidden" name="amount" value="<%= amount %>">
+        <input type="hidden" name="selectedMethod" id="selectedMethod" value="card">
+
+        <div class="payment-options">
+            <div class="payment-option active" data-option="card"> 
+                <input type="radio" name="paymentOption" value="card" checked hidden>
+                <i class="fa-solid fa-credit-card"></i> Credit / Debit Card
+            </div>
+            <div class="payment-option" data-option="wallet"> 
+                <input type="radio" name="paymentOption" value="wallet" hidden>
+                <i class="fa-solid fa-wallet"></i> Wallets
+            </div>
+            <div class="payment-option" data-option="upi"> 
+                <input type="radio" name="paymentOption" value="upi" hidden>
+                <i class="fa-solid fa-mobile-alt"></i> UPI
+            </div>
+            <div class="payment-option" data-option="netbanking"> 
+                <input type="radio" name="paymentOption" value="netbanking" hidden>
+                <i class="fa-solid fa-university"></i> Net Banking
+            </div>
+            <div class="payment-option" data-option="gift"> 
+                <input type="radio" name="paymentOption" value="gift" hidden>
+                <i class="fa-solid fa-gift"></i> Gift Card
+            </div>
+        </div>
+
+        <!-- Card Payment Form -->
+        <div class="payment-form active" id="card-form">
+            <input type="text" placeholder="Card Number" name="cardNumber" maxlength="16">
+            <input type="text" placeholder="Card Holder Name" name="cardHolder">
+            <div class="card-details">
+                <input type="text" placeholder="Expiry (MM/YY)" name="expiry">
+                <input type="password" placeholder="CVV" name="cvv" maxlength="3">
+            </div>
+            <button type="submit"  class="btn-pay" disabled>Pay ₹<%= amount %></button>
+        </div>
+
+        <!-- UPI Form -->
+        <div class="payment-form" id="upi-form">
+            <input type="text" placeholder="Enter UPI ID (e.g. user@upi)" name="upiId">
+            <br>
+            <button type="button" class="verify-btn">Verify</button>
+            <br>
+            <button type="submit" class="btn-pay" disabled>Pay ₹<%= amount %></button>
+        </div>
+
+        <!-- Net Banking Form -->
+        <div class="payment-form" id="netbanking-form">
+            <p>Choose your bank:</p>
+            <select name="bankName">
+                <option value="">Select Bank</option>
+                <option value="SBI">SBI</option>
+                <option value="HDFC">HDFC</option>
+                <option value="ICICI">ICICI</option>
+                <option value="Axis Bank">Axis Bank</option>
+                <option value="Punjab National Bank">Punjab National Bank</option>
+                <option value="Bank of Baroda">Bank of Baroda</option>
+                <option value="Canara Bank">Canara Bank</option>
+                <option value="Indian Bank">Indian Bank</option>
+                <option value="CBI Bank">CBI Bank</option>
+            </select>
+            <button type="submit" class="btn-pay" disabled>Proceed to Pay</button>
+        </div>
+
+        <!-- Wallet Form -->
+        <div class="payment-form" id="wallet-form">
+            <p>Choose your wallet provider:</p>
+            <select name="walletProvider">
+                <option value="">Select Wallet</option>
+                <option value="Paytm">Paytm</option>
+                <option value="PhonePe">PhonePe</option>
+                <option value="Google Pay">Google Pay</option>
+                <option value="Amazon Pay">Amazon Pay</option>
+            </select>
+            <button type="submit" class="btn-pay" disabled>Pay ₹<%= amount %></button>
+        </div>
+
+        <!-- Gift Card Form -->
+        <div class="payment-form" id="gift-form">
+            <input type="text" name="giftCardNumber" placeholder="Gift Card Number" maxlength="16">
+            <input type="text" name="giftCardPin" placeholder="Gift Card PIN">
+            <button type="submit" class="btn-pay" disabled>Apply & Pay ₹<%= amount %></button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const options = document.querySelectorAll('.payment-option');
+    const forms = document.querySelectorAll('.payment-form');
+    const selectedMethodInput = document.getElementById('selectedMethod');
+
+    options.forEach(option => {
+        option.addEventListener('click', () => {
+            options.forEach(o => o.classList.remove('active'));
+            option.classList.add('active');
+
+            forms.forEach(form => form.classList.remove('active'));
+            const formId = option.dataset.option + '-form';
+            document.getElementById(formId).classList.add('active');
+
+            // Set selected method
+            const selectedOption = option.querySelector('input[name="paymentOption"]');
+            selectedOption.checked = true;
+            selectedMethodInput.value = selectedOption.value;
+        });
+    });
+
+    // Validation before submit
+    document.getElementById('payment-form').addEventListener('submit', function (e) {
+        const method = selectedMethodInput.value;
+
+        // Remove all required attributes first
+        document.querySelectorAll('input[required], select[required]').forEach(input => input.removeAttribute('required'));
+
+        // Add required attributes based on selected payment method
+        if (method === 'card') {
+            document.querySelector('input[name="cardNumber"]').setAttribute('required', 'required');
+            document.querySelector('input[name="cardHolder"]').setAttribute('required', 'required');
+            document.querySelector('input[name="expiry"]').setAttribute('required', 'required');
+            document.querySelector('input[name="cvv"]').setAttribute('required', 'required');
+        } else if (method === 'upi') {
+            document.querySelector('input[name="upiId"]').setAttribute('required', 'required');
+        } else if (method === 'netbanking') {
+            document.querySelector('select[name="bankName"]').setAttribute('required', 'required');
+        } else if (method === 'wallet') {
+            document.querySelector('select[name="walletProvider"]').setAttribute('required', 'required');
+        } else if (method === 'gift') {
+            document.querySelector('input[name="giftCardNumber"]').setAttribute('required', 'required');
+            document.querySelector('input[name="giftCardPin"]').setAttribute('required', 'required');
+        }
+    });
+</script>

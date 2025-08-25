@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { type } = require("os");
 const Schema = mongoose.Schema;
 const slugify = require("slugify");
 
@@ -31,9 +32,8 @@ const listingSchema = new Schema({
     }
   },
   price: {
-    type: Number,
-    required: true,
-    min: 0
+    type:Number,
+    required:true
   },
   location: {
     type: String,
@@ -56,7 +56,11 @@ const listingSchema = new Schema({
     type: Number,
     required: true
   },
-
+  discount: {
+    type: Number,
+    required: true,
+    min: 0
+  },
 
   category: {
     type: mongoose.Schema.Types.ObjectId,

@@ -1,80 +1,118 @@
 <% layout("/layouts/boilerplate") -%>
     <div class="order-container">
-        <div class="order-filter">
-            <div class="filter-title">
-                <h4>Filter Orders</h4>
-            </div>
-            <div class="order-filter-status">
-                <h5 class="order-status-header">ORDERS STATUS</h5>
-            </div>
-            <hr>
-            <div class="filter-option">
-                <div class="filter-checkbox">
-                    <input type="checkbox" id="on-the-way" name="order-status" value="on-the-way" />
-                    <label for="on-the-way">On the way</label>
+        <% if(!orders.length> 0) { %>
+            <div class="order-filter">
+                <div class="filter-title">
+                    <h4>Filter Orders</h4>
                 </div>
-                <div class="filter-checkbox">
-                    <input type="checkbox" id="Delivery" name="order-status" value="Delivery" />
-                    <label for="Delivery">Delivery</label>
+                <div class="order-filter-status">
+                    <h5 class="order-status-header">ORDERS STATUS</h5>
                 </div>
-                <div class="filter-checkbox">
-                    <input type="checkbox" id="Cancelled" name="order-status" value="Cancelled" />
-                    <label for="Cancelled">Cancelled</label>
+                <hr>
+                <div class="filter-option">
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="on-the-way" name="order-status" value="on-the-way" />
+                        <label for="on-the-way">On the way</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="Delivery" name="order-status" value="Delivery" />
+                        <label for="Delivery">Delivery</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="Cancelled" name="order-status" value="Cancelled" />
+                        <label for="Cancelled">Cancelled</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="Returned" name="order-status" value="Returned" />
+                        <label for="Returned">Returned</label>
+                    </div>
                 </div>
-                <div class="filter-checkbox">
-                    <input type="checkbox" id="Returned" name="order-status" value="Returned" />
-                    <label for="Returned">Returned</label>
+                <hr>
+                <div class="order-filter-status">
+                    <h5 class="order-status-header">ORDER TIME</h5>
                 </div>
-            </div>
-            <hr>
-            <div class="order-filter-status">
-                <h5 class="order-status-header">ORDER TIME</h5>
-            </div>
-            <div class="filter-option">
-                <div class="filter-checkbox">
-                    <input type="checkbox" id="last-30-days" name="order-status" value="on-the-way" />
-                    <label for="on-the-way">Last 30 Days</label>
+                <div class="filter-option">
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="last-30-days" name="order-status" value="on-the-way" />
+                        <label for="on-the-way">Last 30 Days</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="2024" name="order-status" value="2024" />
+                        <label for="2024">2024</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="2023" name="order-status" value="2023" />
+                        <label for="2023">2023</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="2022" name="order-status" value="2022" />
+                        <label for="2022">2022</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="2021" name="order-status" value="2021" />
+                        <label for="2021">2021</label>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="older" name="order-status" value="older" />
+                        <label for="older">Older</label>
+                    </div>
                 </div>
-                <div class="filter-checkbox">
-                    <input type="checkbox" id="2024" name="order-status" value="2024" />
-                    <label for="2024">2024</label>
-                </div>
-                <div class="filter-checkbox">
-                    <input type="checkbox" id="2023" name="order-status" value="2023" />
-                    <label for="2023">2023</label>
-                </div>
-                <div class="filter-checkbox">
-                    <input type="checkbox" id="2022" name="order-status" value="2022" />
-                    <label for="2022">2022</label>
-                </div>
-                <div class="filter-checkbox">
-                    <input type="checkbox" id="2021" name="order-status" value="2021" />
-                    <label for="2021">2021</label>
-                </div>
-                <div class="filter-checkbox">
-                    <input type="checkbox" id="older" name="order-status" value="older" />
-                    <label for="older">Older</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="orders-items-container">
-            <div class="orders-items-search">
-                <input type="text" placeholder="Search orders..." />
-                <button class="orders-search-btn">Search</button>
             </div>
 
-            <div class="orders-items">
-                <img src="https://images.unsplash.com/photo-1576045057995-568f588f82fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60"
-                    class="order-image" alt="Product Image" />
-                <div class="order-details">
-                    <h3>Product Name</h3>
-                    <p>Product Category</p>
+            <div class="orders-container">
+                <div class="orders-search">
+                    <input type="text" placeholder="Search orders..." />
+                    <button class="orders-search-btn">Search</button>
                 </div>
-                <div class="order-price"> ₹99.99</div>
-                <div class="order-status">Delivered on 2023-08-15</div>
-            </div>
-            <hr>
 
-        </div>
+                <!-- <div class="orders-items">
+                    <img src="https://images.unsplash.com/photo-1576045057995-568f588f82fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60"
+                        class="order-image" alt="Product Image" />
+                    <div class="order-details">
+                        <h3>Product Name</h3>
+                        <p>Product Category</p>
+                    </div>
+                    <div class="order-price"> ₹99.99</div>
+                    <div class="order-status">Delivered on 2023-08-15</div>
+                </div> -->
+
+                <% orders.forEach(order=> { %>
+                    <div class="order-card">
+                        <h4>Order ID: <%= order.orderId %>
+                        </h4>
+                        <p>Status: <%= order.status %> | Payment: <%= order.paymentStatus %>
+                        </p>
+                        <p>Order Date: <%= order.createdAt.toDateString() %>
+                        </p>
+
+                        <% order.items.forEach(item=> { %>
+                            <div class="orders-items">
+                                <img src="<%= item.product.image %>" class="order-image" alt="Product Image" />
+                                <div class="order-details">
+                                    <h3>
+                                        <%= item.name %>
+                                    </h3>
+                                    <p>Qty: <%= item.quantity %>
+                                    </p>
+                                </div>
+                                <div class="order-price">₹<%= (item.price * item.quantity).toFixed(2) %>
+                                </div>
+                            </div>
+                            <% }); %>
+
+                                <div class="order-total">
+                                    <strong>Total: ₹<%= order.totalAmount.toFixed(2) %></strong>
+                                </div>
+                    </div>
+                    <% }); %>
+
+            </div>
+            <% } else { %>
+                <div class="empty-cart">
+                    <h2>Your Cart</h2>
+                    <i class="fa-solid fa-heart-crack"></i>
+                    <p class="cart-empty-message">Your Order is empty. Please add items to your cart. And buy</p>
+                    <a href="/" class="btn-cart">Continue Shopping</a>
+                </div>
+                <% } %>
     </div>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Delivered - GrocerEase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .celebration {
+            font-size: 60px;
+            margin: 15px 0;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .delivered-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .delivery-confirmation {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #28a745;
+            text-align: center;
+        }
+        
+        .delivery-time {
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+            margin: 10px 0;
+        }
+        
+        .order-summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #dee2e6;
+        }
+        
+        .feedback-section {
+            background: #fff3e0;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border: 2px solid #ff9800;
+            text-align: center;
+        }
+        
+        .star-rating {
+            margin: 15px 0;
+        }
+        
+        .star {
+            font-size: 24px;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+            margin: 0 2px;
+        }
+        
+        .star:hover,
+        .star.active {
+            color: #ffc107;
+        }
+        
+        .btn-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #28a745;
+        }
+        
+        .btn-primary:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #ff9800;
+        }
+        
+        .btn-secondary:hover {
+            background: #e68900;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #6c757d;
+            color: #6c757d;
+        }
+        
+        .btn-outline:hover {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .care-tips {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+            margin: 20px 0;
+        }
+        
+        .rewards-box {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #dc3545;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .points-earned {
+            font-size: 24px;
+            font-weight: bold;
+            color: #dc3545;
+            margin: 10px 0;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .social-proof {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .proof-item {
+            flex: 1;
+        }
+        
+        .proof-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+            
+            .content, .footer {
+                padding: 20px;
+            }
+            
+            .social-proof {
+                flex-direction: column;
+            }
+            
+            .proof-item {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="logo">🛒 GrocerEase</div>
+            <div class="celebration">🎉</div>
+            <h2>Order Delivered Successfully!</h2>
+            <div class="delivered-badge">
+                ✅ Order #<%= orderId %> has been delivered
+            </div>
+        </div>
+        
+        <div class="content">
+            <h3>Congratulations, <%= customerName %>! 🥳</h3>
+            <p>Your fresh groceries have been successfully delivered! We hope you enjoy every bite.</p>
+            
+            <div class="delivery-confirmation">
+                <h4>📦 Delivery Confirmed</h4>
+                <div class="delivery-time">
+                    Delivered on <%= deliveryDate %> at <%= deliveryTime %>
+                </div>
+                <p>📍 <strong>Delivered to:</strong> <%= deliveryAddress %></p>
+                <% if (receivedBy) { %>
+                <p>👤 <strong>Received by:</strong> <%= receivedBy %></p>
+                <% } %>
+            </div>
+            
+            <div class="order-summary">
+                <h4>Your Order Summary</h4>
+                <p><strong>Order ID:</strong> #<%= orderId %></p>
+                <p><strong>Total Items:</strong> <%= totalItems %> items</p>
+                <p><strong>Total Amount:</strong> ₹<%= totalAmount %></p>
+                <p><strong>Payment Method:</strong> <%= paymentMethod %></p>
+            </div>
+            
+            <div class="care-tips">
+                <h4>🌿 Fresh Storage Tips</h4>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>Store vegetables in the refrigerator crisper drawer</li>
+                    <li>Keep fruits at room temperature until ripe, then refrigerate</li>
+                    <li>Store dairy products in the coldest part of your fridge</li>
+                    <li>Check expiry dates and use perishables first</li>
+                </ul>
+            </div>
+            
+            <div class="feedback-section">
+                <h4>⭐ How was your experience?</h4>
+                <p>Your feedback helps us serve you better!</p>
+                
+                <div class="star-rating">
+                    <span class="star" data-rating="1">⭐</span>
+                    <span class="star" data-rating="2">⭐</span>
+                    <span class="star" data-rating="3">⭐</span>
+                    <span class="star" data-rating="4">⭐</span>
+                    <span class="star" data-rating="5">⭐</span>
+                </div>
+                
+                <p style="font-size: 12px; color: #6c757d;">Click to rate your experience</p>
+            </div>
+            
+            <% if (pointsEarned && pointsEarned > 0) { %>
+            <div class="rewards-box">
+                <h4>🎁 Rewards Earned!</h4>
+                <div class="points-earned">+<%= pointsEarned %> Points</div>
+                <p>You've earned <strong><%= pointsEarned %></strong> loyalty points with this order!</p>
+                <p style="font-size: 14px; margin-top: 10px;">Use points for discounts on future orders</p>
+            </div>
+            <% } %>
+            
+            <div class="btn-container">
+                <a href="<%= rateOrderLink %>" class="btn btn-secondary">Rate Your Order</a>
+                <a href="<%= shopAgainLink %>" class="btn btn-primary">Shop Again</a>
+                <a href="<%= reorderLink %>" class="btn btn-outline">Reorder Items</a>
+            </div>
+            
+            <div class="social-proof">
+                <div class="proof-item">
+                    <div class="proof-number">50K+</div>
+                    <div>Happy Customers</div>
+                </div>
+                <div class="proof-item">
+                    <div class="proof-number">99.9%</div>
+                    <div>On-Time Delivery</div>
+                </div>
+                <div class="proof-item">
+                    <div class="proof-number">4.8⭐</div>
+                    <div>Customer Rating</div>
+                </div>
+            </div>
+            
+            <p style="text-align: center; margin-top: 20px;">
+                <strong>Thank you for choosing GrocerEase!</strong><br>
+                We're grateful for your trust and look forward to serving you again.
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Questions or issues with your order?</strong><br>
+            Contact us at <a href="mailto:support@grocerease.com" style="color: #28a745;">support@grocerease.com</a><br>
+            Call us: <strong><%= supportPhone || "+91-9876543210" %></strong></p>
+            
+            <p style="margin-top: 15px; font-size: 12px; color: #6c757d;">
+                © 2025 GrocerEase. All rights reserved.<br>
+                Fresh groceries delivered with love
+            </p>
+        </div>
+    </div>
+</body>
+</html>

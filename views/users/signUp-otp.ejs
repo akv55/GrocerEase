@@ -1,0 +1,36 @@
+<% layout("/layouts/boilerplate") -%>
+    <div class="form-container">
+        <form class="form" action="/verify-signup-otp" method="POST">
+            <h2>Enter OTP</h2>
+            <p class="otpSubheading">We have sent a verification code to <%= email %></p>
+            <input type="hidden" name="email" value="<%= email %>">
+            <div class="inputContainer">
+                <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input1" name="otp[]">
+                <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input2" name="otp[]">
+                <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input3" name="otp[]">
+                <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input4" name="otp[]">
+                <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input5" name="otp[]">
+                <input required="required" maxlength="1" type="text" class="otp-input" id="otp-input6" name="otp[]">
+            </div>
+            <button class="btn" type="submit">Verify & Sign Up</button>
+        </form>
+        <form action="/resend-signup-otp" method="POST" class="form">
+            <input type="hidden" name="email" value="<%= email %>">
+            <p class="resendNote">Didn't receive the code? <button class="resendBtn" type="submit">Resend Code</button></p>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const otpInputs = document.querySelectorAll('.otp-input');
+            otpInputs.forEach((input, index) => {
+                input.addEventListener('input', function () {
+                    if (this.value.length === 1 && index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
+                    } else if (this.value.length === 0 && index > 0) {
+                        otpInputs[index - 1].focus();
+                    }
+                });
+            });
+        });
+    </script>
