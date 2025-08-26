@@ -4,7 +4,7 @@
 
   <div class="user-details" id="users">
     <div class="user-header">
-      <h1> <i class="fa-solid fa-users"></i> User Management</h1>
+      <h2> <i class="fa-solid fa-users"></i> User Management</h2>
       <p>Manage all registered users</p>
     </div>
     <div class="user-stats">
@@ -36,13 +36,11 @@
       <br>
       <div class="user-controls">
         <input type="text" id="searchInput" placeholder="Search...." oninput="resetPaginationAndRender()" />
-
         <select id="roleFilter" onchange="resetPaginationAndRender()">
           <option value="">All Roles</option>
           <option value="admin">Admin</option>
           <option value="user">User</option>
         </select>
-
         <select id="limitSelect" onchange="resetPaginationAndRender()">
           <option value="10" selected>10</option>
           <option value="20">20</option>
@@ -51,7 +49,7 @@
 
       </div>
 
-      <table class="user-table">
+      <table class="user-table desktop-only">
         <thead class="user-table-header">
           <tr>
             <th>Sr. No.</th>
@@ -96,10 +94,46 @@
         </tbody>
       </table>
       <br>
-      <div class="pagination">
+      <div class="pagination desktop-only">
         <button>Prev</button>
         <span>Page</span>
         <button>Next</button>
+      </div>
+      <div class="user-data-mobile mobile-only">
+        <div class="user-info-mobile">
+          <% users.forEach(user=> { %>
+            <div class="user-list-mobile">
+              <h4>
+                <%= user.name %>
+              </h4>
+              <p><strong>Email:</strong>
+                <%= user.email %>
+              </p>
+              <p><strong>Phone:</strong>
+                <%= user.phone %>
+              </p>
+              <p><strong>Role:</strong>
+                <span class="<%= user.role === 'admin' ? 'admin-role-mobile' : 'user-role-mobile' %>">
+                  <%= user.role.toUpperCase() %>
+                </span>
+              </p>
+              <p><strong>Joined:</strong>
+                <%= user.createdAt.toLocaleDateString() %>
+              </p>
+              <br>
+              <div class="user-actions-mobile">
+                <a href="/admin/users/<%= user._id %>/edit" class="user-edit-btn-mobile">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit
+                </a>
+                <a href="/admin/users-info/<%= user._id %>" class="user-view-btn-mobile">
+                  <i class="fa-solid fa-eye"></i> View
+                </a>
+              </div>
+            </div>
+
+
+            <% }) %>
+        </div>
       </div>
     </div>
   </div>

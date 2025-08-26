@@ -7,7 +7,7 @@
         <h1>Product List</h1>
         <div class="user-controls">
             <input type="text" id="searchInput" placeholder="Search...." />
-            <select id="roleFilter" name="category" >
+            <select id="roleFilter" name="category">
                 <option value="">Select Category</option>
                 <% categories.forEach(category=> { %>
                     <option value="<%= category._id %>">
@@ -16,14 +16,14 @@
                     <% }) %>
             </select>
 
-            <select id="limitSelect" >
+            <select id="limitSelect">
                 <option value="10" selected>10</option>
                 <option value="20">20</option>
                 <option value="30">30</option>
             </select>
 
         </div>
-        <table class="productTable" id="productTable">
+        <table class="productTable desktop-only" id="productTable">
             <thead>
                 <tr class="table-header">
                     <th>Sr. No.</th>
@@ -74,10 +74,40 @@
             </tbody>
         </table>
         <br>
-        <div class="pagination">
+        <div class="pagination desktop-only">
             <button>Prev</button>
             <span>Page</span>
             <button>Next</button>
         </div>
+        <% for(let product of products){ %>
+            <div class="mobile-products">
+                <div class="products-header-mobile">
+                    <div class="mobile-product-image">
+                        <img src="<%= product.image && product.image.url ? product.image.url : '/assets/img.jpg' %>"
+                            class="listing-image" />
+                    </div>
+                    <div class="mobile-product-details">
+                        <h4>
+                            <%= product.title %>
+                        </h4>
+                        <p><strong>Price:</strong> <span>₹<%= product.price %>.00</span></p>
+                        <p><strong>Category:</strong> <span><%= categories.find(cat=> cat._id.equals(product.category))?.name || 'Unknown' %></span></p>
+                        <p><strong>Stock:</strong> <span><%= product.inStock || "00" %></span></p>
+                    </div>
+                </div>
+                <div class="mobile-product-dates">
+                    <p><strong>Created At:</strong> <span><%= product.createdAt.toLocaleDateString() %></span>
+                    </p>
+                    <p><strong>Updated At:</strong> <span><%= product.updatedAt.toLocaleDateString() %></span>
+                    </p>
+                </div>
+                <div class="mobile-product-actions">
+                    <a href="/admin/products/edit/<%= product._id %>" class="product-edit-btn">Edit</a>
+                    <form action="/admin/products/<%= product._id %>?_method=DELETE" method="POST"
+                        style="display:inline;">
+                        <button type="submit" class="product-delete-btn">Delete</button>
+                    </form>
+                </div>
+            </div>
+            <% } %>
     </div>
-   

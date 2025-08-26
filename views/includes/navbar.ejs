@@ -95,8 +95,11 @@
             <span>Menu</span>
 
             <% } else { %>
+                <div class="mobile-profile-picture">
+                    <img src="<%= currentUser.profileImage && currentUser.profileImage.url ? currentUser.profileImage.url : 'https://cdn-icons-png.flaticon.com/512/147/147144.png' %>" alt="<%= currentUser.name %>'s Profile Picture">
+                </div>
                 <%= currentUser.name.toUpperCase() %>
-                    <%}%>
+            <% } %>
 
                         <i class="fas fa-times mobile-menu-close"></i>
     </div>

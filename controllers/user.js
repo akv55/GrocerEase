@@ -12,25 +12,35 @@ const ejs = require("ejs");
 
 
 // User Profile Controller
-module.exports.userProfile = async (req, res) => {
+module.exports.Profile = async (req, res) => {
     res.render("./users/profile.ejs", { user: req.user });
 };
 
-module.exports.userProfileForm = async (req, res) => {
+module.exports.ProfileForm = async (req, res) => {
     res.render("./users/profileUpdate.ejs", { user: req.user });
 };
 
-module.exports.userProfileEdit = async (req, res) => {
-    const { id } = req.params;
-    const { user } = req.body;
+module.exports.ProfileEdit = async (req, res, next) => {
+    const userId = req.user._id;
+    const { name, phone } = req.body; // Direct field access instead of req.body.user
+
     try {
-        const updateProfile = await User.findByIdAndUpdate(id, {
-            name: user.name,
-            email: user.email,
-            phone: user.phone
-        }, { new: true });
+        // Prepare update data
+        const updateData = {
+            name: name,
+            phone: phone
+        };
+
+        // Update user profile
+        const updateProfile = await User.findByIdAndUpdate(userId, updateData, { new: true });
+
+        if (!updateProfile) {
+            req.flash("error", "User not found");
+            return res.redirect("/profile/edit");
+        }
+
         if (req.file) {
-            updateProfile.image = {
+            updateProfile.ProfileImage = {
                 filename: req.file.filename,
                 url: req.file.path
             };
@@ -45,17 +55,17 @@ module.exports.userProfileEdit = async (req, res) => {
 };
 
 // User Address Controller
-module.exports.userAddress = async (req, res) => {
+module.exports.Address = async (req, res) => {
     const userAddress = await Address.findOne({ userId: req.user._id });
     res.render("./users/address.ejs", { user: req.user, address: userAddress });
 };
 
-module.exports.userAddressEdit = async (req, res) => {
+module.exports.AddressEditForm = async (req, res) => {
     const userAddress = await Address.findOne({ userId: req.user._id });
     res.render("./users/updateAddress.ejs", { user: req.user, address: userAddress });
 };
 
-module.exports.userAddressUpdate = async (req, res) => {
+module.exports.AddressUpdate = async (req, res) => {
     const { street, landmark, city, state, country, zip, isDefault } = req.body;
 
     if (isDefault === 'on') {
@@ -94,7 +104,7 @@ module.exports.userAddressUpdate = async (req, res) => {
 
 
 // ----------------------------------User Wishlist----------------------------
-module.exports.userWishlist = async (req, res) => {
+module.exports.Wishlist = async (req, res) => {
     try {
         const wishlist = await Wishlist.findOne({ user: req.user._id }).populate("products");
         res.render("./users/wishlist.ejs", {
@@ -168,7 +178,7 @@ module.exports.removeFromWishlist = async (req, res) => {
 
 
 // ----------------------------------------User Cart Controller--------------------
-module.exports.userCart = async (req, res) => {
+module.exports.Cart = async (req, res) => {
     const cartItem = await Cart.findOne({ user_id: req.user._id }).populate('items.product_id');
     let totalPrice = 0;
     let totalItems = 0;
@@ -266,12 +276,12 @@ module.exports.removeFromCart = async (req, res) => {
 
 module.exports.Orders = async (req, res) => {
     const orders = await Order.find({ userId: req.user._id }).populate('items.product');
-    const ordeeItems=
-    res.render("./users/orders.ejs", { orders });
+    const ordeeItems =
+        res.render("./users/orders.ejs", { orders });
 };
 module.exports.OrderDetails = async (req, res) => {
     const { orderId } = req.params;
-     const order = await Order.findById(orderId).populate('items.product');
+    const order = await Order.findById(orderId).populate('items.product');
     if (!order) {
         req.flash("error", "Order not found");
         return res.redirect("/orders");
