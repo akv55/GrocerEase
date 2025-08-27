@@ -96,10 +96,11 @@
 
             <% } else { %>
                 <div class="mobile-profile-picture">
-                    <img src="<%= currentUser.profileImage && currentUser.profileImage.url ? currentUser.profileImage.url : 'https://cdn-icons-png.flaticon.com/512/147/147144.png' %>" alt="<%= currentUser.name %>'s Profile Picture">
+                    <img src="<%= currentUser.profileImage && currentUser.profileImage.url ? currentUser.profileImage.url : 'https://cdn-icons-png.flaticon.com/512/147/147144.png' %>"
+                        alt="<%= currentUser.name %>'s Profile Picture">
                 </div>
                 <%= currentUser.name.toUpperCase() %>
-            <% } %>
+                    <% } %>
 
                         <i class="fas fa-times mobile-menu-close"></i>
     </div>
@@ -139,7 +140,10 @@
                         <a href="/profile/edit"><i class="fa-solid fa-user-edit"></i> Edit Profile</a>
                     </div>
                 </div>
-                <div><a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
-                <% } %>
+                <% if(currentUser.role==='admin' ) { %>
+                    <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</a>
+                    <% } %>
+                        <div><a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></div>
+                        <% } %>
     </div>
 </div>
