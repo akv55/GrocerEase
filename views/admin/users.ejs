@@ -74,7 +74,7 @@
               <td>
                 <%= user.phone %>
               </td>
-              <td class="<%= user.role === 'admin' ? 'admin-role' : 'user-role' %>">
+              <td class="role-badge role-<%= user.role %>">
                 <%= user.role.toUpperCase() %>
               </td>
               <td>
@@ -113,7 +113,7 @@
                 <%= user.phone %>
               </p>
               <p><strong>Role:</strong>
-                <span class="<%= user.role === 'admin' ? 'admin-role-mobile' : 'user-role-mobile' %>">
+                <span class="role-badge role-<%= user.role %>">
                   <%= user.role.toUpperCase() %>
                 </span>
               </p>

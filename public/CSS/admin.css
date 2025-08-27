@@ -400,6 +400,26 @@ body {
 
 }
 
+.role-badge {
+    margin-top: 5px;
+    display: inline-block;
+    padding: 4px 6px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.role-user {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.role-admin {
+    background-color: #fff3e0;
+    color: #f57c00;
+}
+
 .user-info:hover {
     background-color: #f8f9fa;
 }
@@ -415,7 +435,7 @@ body {
 
 }
 
-.user-actions a,
+
 .user-delete-form button,
 .product-action a,
 .product-delete-btn {
@@ -425,32 +445,15 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
-
-.admin-role {
-    background-color: #e74c3c;
-    color: white;
-    padding: 5px 15px;
-    border-radius: 50px;
-    text-align: center;
-    display: inline-block;
-    height: 20px;
-    line-height: .5px;
-    font-size: 13px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.user-actions a{
+    text-decoration: none;
+    transition: color 0.3s ease;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+   margin: 0 5px;
 }
 
-.user-role {
-    background-color: #27ae60;
-    color: white;
-    padding: 5px 15px;
-    border-radius: 50px;
-    text-align: center;
-    display: inline-block;
-    height: 20px;
-    line-height: .5px;
-    font-size: 13px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
 
 
 .user-edit-btn,
@@ -1086,9 +1089,13 @@ select option {
         padding: 10px;
         gap: 10px;
     }
+    .user-img{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
     .user-img img {
-        margin-left: 60px;
         width: 60%;
         height: 60%;
         border-radius: 50%;

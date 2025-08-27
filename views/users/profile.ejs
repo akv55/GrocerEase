@@ -1,17 +1,8 @@
 <% layout("/layouts/boilerplate") -%>
     <div class="forms-container">
-        <!-- <h2>User Profile Information</h2>
-        <img src=" <%= currentUser.profileImage && currentUser.profileImage.url ? currentUser.profileImage.url : 'https://cdn-icons-png.flaticon.com/512/147/147144.png' %>"
-            alt="Profile" class="profile-image">
-        <div class="details">
-            <p><strong>Name:</strong> <%= currentUser.name.toUpperCase() %></p>
-            <p><strong>Email:</strong> <%= currentUser.email %></p>
-            <p><strong>Phone:</strong> <%= currentUser.phone %></p>
-            <p><strong>Joined:</strong> <%= currentUser.createdAt.toLocaleDateString() %></p>
-        </div> -->
 
         <div class="profile-header">
-            <form action="/profile/edit" method="GET">
+            <form action="/profile-edit" method="GET">
                 <button class="edit-btn"><i class="fas fa-edit"></i> Edit Profile</button>
             </form>
         </div>

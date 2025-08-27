@@ -24,7 +24,9 @@
                     <%= user.phone %>
                 </p>
                 <p><strong>Role:</strong>
-                    <%= user.role %>
+                    <span class="role-badge role-<%= user.role %>">
+                        <%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %>
+                    </span>
                 </p>
                 <p><strong>Member Since:</strong>
                     <%= user.createdAt.toDateString() %>
@@ -62,25 +64,27 @@
                 <p class="no-address" style="color: red;">No address found.</p>
                 <% } %>
                     <br>
-                    <hr>
 
-                    <h2>Order Information</h2>
-                    <div class="order-details">
-                        <!--  -->
-                    </div>
-                    <div class="user-info-actions">
-                        <a href="/admin/users" class="back-btn">Back to Users</a>
-                        <% if (user.role !=='admin' ) { %>
-                            <form action="/admin/users/<%= user._id %>?_method=DELETE" method="POST"
-                                class="user-delete-form">
-                                <button type="submit" class="user-delete-btn"
-                                    onclick="return confirm('⚠️ WARNING: This will permanently delete this user and ALL associated data including:\\n\\n• Profile information\\n• Profile images from Cloudinary\\n• Address details\\n• Cart items\\n• Wishlist items\\n• Order history\\n• Reviews\\n\\nThis action cannot be undone. Are you absolutely sure you want to proceed?');">
-                                    <i class="fa-solid fa-trash"></i> Delete User & All Data
-                                </button>
-                            </form>
-                            <% } %>
+                    <% if(user.role==='user' ) { %>
+                        <hr>
+                        <h2>Order Information</h2>
+                        <div class="order-details">
+                            <!--  -->
+                        </div>
+                    <% } %>
+                            <div class="user-info-actions">
+                                <a href="/admin/users" class="back-btn">Back to Users</a>
+                                <% if (user.role !=='admin' ) { %>
+                                    <form action="/admin/users/<%= user._id %>?_method=DELETE" method="POST"
+                                        class="user-delete-form">
+                                        <button type="submit" class="user-delete-btn"
+                                            onclick="return confirm('⚠️ WARNING: This will permanently delete this user and ALL associated data including:\\n\\n• Profile information\\n• Profile images from Cloudinary\\n• Address details\\n• Cart items\\n• Wishlist items\\n• Order history\\n• Reviews\\n\\nThis action cannot be undone. Are you absolutely sure you want to proceed?');">
+                                            <i class="fa-solid fa-trash"></i> Delete User & All Data
+                                        </button>
+                                    </form>
+                                    <% } %>
 
-                    </div>
+                            </div>
 
 
     </div>

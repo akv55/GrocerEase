@@ -9,16 +9,14 @@ const userController = require('../controllers/user.js');
 
 // Profile Route
 router.get("/profile", isLogined, wrapAsync(userController.Profile));
-router.get("/profile/edit", isLogined, wrapAsync(userController.ProfileForm));
-router.post("/profile/edit", upload.single("profileImage"), isLogined, wrapAsync(userController.ProfileEdit));
-router.get("/profile/change_password", isLogined, wrapAsync(userController.ChangePassword));
-router.post("/profile/update-password", isLogined, wrapAsync(userController.UpdatePassword));
-router.get("/profile/address", isLogined, wrapAsync(userController.Address));
-router.get("/profile/change-address", isLogined, wrapAsync(userController.AddressEditForm));
-router.post("/profile/change-address", isLogined, wrapAsync(userController.AddressUpdate));
+router.get("/profile-edit", isLogined, wrapAsync(userController.ProfileForm));
+router.post("/profile-edit", upload.single("profileImage"), isLogined, wrapAsync(userController.ProfileEdit));
+router.get("/user-address", isLogined, wrapAsync(userController.Address));
+router.get("/user-address/edit", isLogined, wrapAsync(userController.AddressEditForm));
+router.post("/user-address/edit", isLogined, wrapAsync(userController.AddressUpdate));
 // User Orders Route
-router.get("/my-orders", isLogined, wrapAsync(userController.Orders));
-router.get("/orders/:orderId", isLogined, wrapAsync(userController.OrderDetails));
+router.get("/my-orders/:id", isLogined, wrapAsync(userController.Orders));
+router.get("/my-orders/:id/:orderId", isLogined, wrapAsync(userController.OrderDetails));
 // Checkout Routes
 router.get("/checkout", isLogined, wrapAsync(userController.checkoutForm));
 router.post("/checkout", isLogined, wrapAsync(userController.checkoutProcess));

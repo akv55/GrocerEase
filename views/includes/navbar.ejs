@@ -60,12 +60,11 @@
                             </a>
                             <div class="dropdown-menu">
                                 <a href="/profile"> <i class="fa-solid fa-user"></i> Profile</a>
-                                <a href="/my-orders"> <i class="fa-solid fa-box"></i> Orders</a>
+                                <a href="/my-orders/<%= currentUser._id %>"> <i class="fa-solid fa-box"></i> Orders</a>
                                 <!-- <a href="/settings">Settings</a> -->
                                 <a href="/wishlist"><i class="fa-solid fa-heart"></i> Wishlist</a>
-                                <a href="/profile/address"><i class="fa-solid fa-location-dot"></i> Address</a>
-                                <a href="/profile/change_password"><i class="fa-solid fa-lock"></i> Change password</a>
-                                <a href="/profile/edit"><i class="fa-solid fa-user-edit"></i> Edit Profile</a>
+                                <a href="/user-address"><i class="fa-solid fa-location-dot"></i> Address</a>
+                                <a href="/change-password"><i class="fa-solid fa-lock"></i> Change password</a>
                                 <% if(currentUser.role==='admin' ) { %>
                                     <a href="/admin/dashboard"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</a>
                                     <% } %>
@@ -127,7 +126,7 @@
             <div><a href="/signup"><i class="fa-solid fa-user-plus"></i> Sign Up</a></div>
             <% } else { %>
                 <div><a href="/profile"><i class="fa-solid fa-user"></i> Profile</a></div>
-                <div><a href="/my-orders"><i class="fas fa-box"></i> Orders</a></div>
+                <div><a href="/my-orders/<%= currentUser._id %>"><i class="fas fa-box"></i> Orders</a></div>
                 <div><a href="/wishlist"><i class="fa-solid fa-heart"></i> Wishlist</a></div>
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle">
@@ -135,9 +134,8 @@
                         <i class="fas fa-chevron-down"></i>
                     </a>
                     <div class="dropdown-menu mobile-dropdown-menu">
-                        <a href="/profile/address"><i class="fa-solid fa-location-dot"></i> Address</a>
-                        <a href="/profile/change_password"><i class="fa-solid fa-lock"></i> Change password</a>
-                        <a href="/profile/edit"><i class="fa-solid fa-user-edit"></i> Edit Profile</a>
+                        <a href="/user-address"><i class="fa-solid fa-location-dot"></i> Address</a>
+                        <a href="/change-password"><i class="fa-solid fa-lock"></i> Change password</a>
                     </div>
                 </div>
                 <% if(currentUser.role==='admin' ) { %>

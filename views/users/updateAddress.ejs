@@ -2,7 +2,7 @@
 
     <div class="form-container">
         <h2>Update Address</h2>
-        <form action="/profile/change-address" method="POST" class="form">
+        <form action="/user-address/edit" method="POST" class="form">
             <div class="form-group">
                 <label for="street">Street:</label>
                 <input type="text" id="street" name="street" placeholder="Enter your street address" minlength="3"
@@ -28,7 +28,7 @@
                 <input type="text" id="zip" name="zip" placeholder="Enter your PIN code" minlength="6" maxlength="6"
                     value="<%= address && address.address ? address.address.pincode : '' %>" required>
             </div>
-            <button type="submit" class="btn">Update Address</button>
+            <button type="submit" class="btn"> <i class="fa-solid fa-address-card"></i> Update Address</button>
         </form>
     </div>
     <!-- <style>

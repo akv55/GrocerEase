@@ -1,0 +1,126 @@
+<% layout("/layouts/boilerplate") -%>
+    <div class="order-details-container">
+        <div class="order-header-section">
+            <div class="header-content">
+                <h1>Order Details</h1>
+                <div class="orderId-and-date">
+                    <span class="order-id">Order ID: <%= order.orderId %></span>
+                    <span class="order-date">Placed on: <%= order.createdAt.toLocaleDateString() %></span>
+                </div>
+            </div>
+            <div class="order-status-section">
+                <span class="status-badge">
+                    <%= order.status.toUpperCase() %>
+                </span>
+            </div>
+        </div>
+
+
+        <div class="order-content">
+            <!-- Order Items Section -->
+            <div class="order-items-section">
+                <h2>Items Ordered</h2>
+                <div class="items-list">
+                    <% order.items.forEach(function(item) { %>
+                        <div class="order-item-card">
+                            <div class="item-image">
+                                <img src="<%= item.product && item.product.image ? item.product.image : '/assets/file.svg' %>"
+                                    alt="<%= item.name %>" onerror="this.src='/assets/file.svg'">
+                            </div>
+                            <div class="order-item-details">
+                                <h3>
+                                    <%= item.name %>
+                                </h3>
+                                <div class="item-info">
+                                    <span class="quantity">
+                                        <%= item.quantity %>
+                                            <%= item.product.unit %>
+                                    </span>/
+                                    <span class="unit-price"> ₹<%= item.price.toFixed(2) %></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="item-total">
+                            <strong>₹<%= (item.price * item.quantity).toFixed(2) %></strong>
+                        </div>
+                        <% }); %>
+                </div>
+            </div>
+
+            <!-- Order Summary Section -->
+            <div class="order-summary-section">
+                <div class="summary-card">
+                    <h2>Order Summary</h2>
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span>₹<%= order.totalAmount.toFixed(2) %></span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery Charges:</span>
+                        <span>Free</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span><strong>Total Amount:</strong></span>
+                        <span><strong>₹<%= order.totalAmount.toFixed(2) %></strong></span>
+                    </div>
+                </div>
+
+                <!-- Payment Information -->
+                <div class="payment-info-card">
+                    <h3>Payment Information</h3>
+                    <div class="order-payment-details">
+                        <div class="payment-row">
+                            <span>Payment Method:</span>
+                            <span>
+                                <%= order.paymentMethod %>
+                            </span>
+                        </div>
+                        <div class="payment-row">
+                            <span>Payment Status:</span>
+                            <span class="payment-status <%= order.paymentStatus.toLowerCase() %>">
+                                <%= order.paymentStatus %>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Information -->
+                <% if (order.deliveryAddress) { %>
+                    <div class="delivery-info-card">
+                        <h3>Delivery Details</h3>
+                        <div class="address-details">
+                            <% const a=order.deliveryAddress; %>
+                                <% if (typeof a==='object' && a.address && a.address.street) { %>
+                                    <div class="Delivery-address">
+
+                                        <p><i class="fa-solid fa-house-user"></i>
+                                            <%= a.address.street %>
+                                                <%= a.address.city %>
+                                                    <%= a.address.landmark %>
+                                                        <%= a.address.state %>
+                                                            <%= a.address.country %>
+                                                                <%= a.address.pincode %>
+                                        </p>
+                                        <hr>
+                                        <% if (order.user) { %>
+                                            <p><i class="fa-solid fa-user"></i>
+                                                <%= order.user.name || '' %>
+                                            </p>
+                                            <p><i class="fa-solid fa-phone"></i>
+                                                <%= order.user.phone || '' %>
+                                            </p>
+                                            <% } %>
+                                    </div>
+
+
+
+
+                                    <% } %>
+                        </div>
+                    </div>
+                    <% } %>
+            </div>
+        </div>
+    </div>

@@ -13,7 +13,8 @@ module.exports.admindashboard = async (req, res, next) => {
     try {
         const users = await User.find();
         const products = await Listing.find();
-        return res.render("./admin/dashboard.ejs", { users, products });
+        const orders = await Order.find();
+        return res.render("./admin/dashboard.ejs", { users, products, orders });
     } catch (err) {
         return next(err); // Pass to global error handler
     }

@@ -54,7 +54,7 @@ module.exports.ProfileEdit = async (req, res, next) => {
     return res.redirect("/profile");
 };
 
-// User Address Controller
+//-------------------------------------------- User Address Controller
 module.exports.Address = async (req, res) => {
     const userAddress = await Address.findOne({ userId: req.user._id });
     res.render("./users/address.ejs", { user: req.user, address: userAddress });
@@ -99,7 +99,7 @@ module.exports.AddressUpdate = async (req, res) => {
     }
 
     req.flash("success", "Address updated successfully");
-    return res.redirect("/profile/address");
+    return res.redirect("/user-address");
 };
 
 
@@ -275,19 +275,51 @@ module.exports.removeFromCart = async (req, res) => {
 // ---------------------------------ORDER---------------------
 
 module.exports.Orders = async (req, res) => {
-    const orders = await Order.find({ userId: req.user._id }).populate('items.product');
-    const ordeeItems =
-        res.render("./users/orders.ejs", { orders });
+    try {
+        const orderItems = await Order.find({ user: req.user._id })
+            .populate('items.product')
+            .populate('deliveryAddress') // populate delivery address details   
+            .sort({ createdAt: -1 }); // latest orders first
+
+        console.log(orderItems); // Debug log
+        res.render("./users/orders.ejs", { orderItems });
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+        res.status(500).send("Internal Server Error");
+    }
 };
+
 module.exports.OrderDetails = async (req, res) => {
     const { orderId } = req.params;
-    const order = await Order.findById(orderId).populate('items.product');
-    if (!order) {
-        req.flash("error", "Order not found");
+
+    try {
+        let order;
+        if (/^[0-9a-fA-F]{24}$/.test(orderId)) {
+            order = await Order.findById(orderId)
+                .populate('items.product')
+                .populate('user')
+                .populate('deliveryAddress');
+        }
+
+        if (!order) {
+            order = await Order.findOne({ orderId })
+                .populate('items.product')
+                .populate('user')
+                .populate('deliveryAddress');
+        }
+        if (!order) {
+            req.flash("error", "Order not found");
+            return res.redirect("/orders");
+        }
+        res.render("./users/ordersDetails.ejs", { order });
+
+    } catch (error) {
+        console.error("Error fetching order details:", error);
+        req.flash("error", "Something went wrong while fetching the order");
         return res.redirect("/orders");
     }
-    res.render("./users/orders.ejs", { order });
 };
+
 module.exports.checkoutForm = async (req, res) => {
     try {
         const cartItem = await Cart.findOne({ user_id: req.user._id }).populate('items.product_id');
@@ -436,7 +468,7 @@ module.exports.checkoutProcess = async (req, res) => {
                 // Don't fail the order if email fails
             }
 
-            return res.redirect(`/orders/${order._id}`);
+            return res.redirect(`/orders/${order.orderId}`);
         }
 
     } catch (err) {

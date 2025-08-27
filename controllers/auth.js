@@ -377,11 +377,11 @@ module.exports.verifyOtp = async (req, res) => {
 };
 
 // ----------------------CHANGE PASSWORD---------------
-module.exports.userChangePassword = async (req, res) => {
+module.exports.ChangePassword = async (req, res) => {
     res.render("./users/changePassword.ejs", { user: req.user });
 };
 
-module.exports.userPasswordUpdate = async (req, res) => {
+module.exports.PasswordUpdate = async (req, res) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
 
     if (!currentPassword || !newPassword || !confirmPassword) {

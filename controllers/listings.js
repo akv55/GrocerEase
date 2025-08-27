@@ -3,7 +3,7 @@ const ExpressError = require("../utils/ExpressError.js");
 const Category = require("../models/category.js");
 module.exports.index = async (req, res, next) => {
     try {
-        const products = await Listing.find();
+        const products = await Listing.find().sort({ createdAt: -1 });
         const categories = await Category.find();
         return res.render("./listing/index.ejs", { products, categories });
     } catch (err) {

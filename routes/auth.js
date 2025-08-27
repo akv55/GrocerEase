@@ -41,6 +41,7 @@ router.get("/forgot-password", isNotLogined, wrapAsync(authController.forgotPass
 router.post("/forgot-password", isNotLogined, wrapAsync(authController.forgotPasswordForm));
 router.get("/verify-otp", isNotLogined, wrapAsync(authController.verifyOtpForm));
 router.post("/verify-otp", isNotLogined, wrapAsync(authController.verifyOtp));
-
+router.get("/change-password", isLogined, wrapAsync(authController.ChangePassword));
+router.post("/change-password", isLogined, wrapAsync(authController.UpdatePassword));
 module.exports = router;
 
