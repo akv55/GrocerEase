@@ -281,7 +281,7 @@ module.exports.Orders = async (req, res) => {
             .populate('deliveryAddress') // populate delivery address details   
             .sort({ createdAt: -1 }); // latest orders first
 
-        console.log(orderItems); // Debug log
+      
         res.render("./users/orders.ejs", { orderItems });
     } catch (error) {
         console.error("Error fetching orders:", error);
