@@ -8,8 +8,8 @@
                     <span class="order-date">Placed on: <%= order.createdAt.toLocaleDateString() %></span>
                 </div>
             </div>
-            <div class="order-status-section">
-                <span class="status-badge">
+            <div class="<% if (order.status) { %> status-<%= order.status.toLowerCase() %> <% } %>">
+                <span >
                     <%= order.status.toUpperCase() %>
                 </span>
             </div>
@@ -24,19 +24,19 @@
                     <% order.items.forEach(function(item) { %>
                         <div class="order-item-card">
                             <div class="item-image">
-                                <img src="<%= item.product && item.product.image ? item.product.image : '/assets/file.svg' %>"
+                                <img src="<%= item.product && item.product.image && item.product.image.url ? item.product.image.url : '/assets/file.svg' %>"
                                     alt="<%= item.name %>" onerror="this.src='/assets/file.svg'">
                             </div>
                             <div class="order-item-details">
-                                <h3>
+                                <h4>
                                     <%= item.name %>
-                                </h3>
+                                </h4>
+                                <span>Qty: <%= item.quantity %></span>
                                 <div class="item-info">
-                                    <span class="quantity">
-                                        <%= item.quantity %>
-                                            <%= item.product.unit %>
-                                    </span>/
-                                    <span class="unit-price"> ₹<%= item.price.toFixed(2) %></span>
+                                    <span class="quantity"> 
+                                             <%= item.product && item.product.weight ? item.product.weight.value : 'N/A' %><%= item.product && item.product.weight ? item.product.weight.unit : '' %>
+                                    </span>
+                                     <span class="unit-price"> ₹<%= item.price.toFixed(2) %></span>
                                 </div>
                             </div>
 

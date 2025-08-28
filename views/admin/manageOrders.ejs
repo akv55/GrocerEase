@@ -1,0 +1,123 @@
+<% layout("/layouts/adminboilerplate") -%>
+    <div class="user-details" id="orders">
+        <div class="user-header">
+            <h2> <i class="fas fa-shopping-cart"></i> Manage Orders</h2>
+            <p>View and manage all customer orders from this page.</p>
+        </div>
+        <table class="user-table desktop-only">
+            <thead class="user-table-header">
+                <tr>
+                    <th>#</th>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+            <tbody class="table-body">
+                <% orders.forEach(order=> { %>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <%= order.orderId %>
+                        </td>
+                        <td>
+                            <%= order.user.name %>
+                        </td>
+                        <td>₹<%= order.totalAmount %>
+                        </td>
+                        <td>
+                            <span class="badge 
+                            <% if(order.status === 'Pending'){ %> status-pending <% } %>
+                            <% if(order.status === 'Confirmed'){ %> status-confirmed <% } %>
+                            <% if(order.status === 'Processing'){ %> status-processing <% } %>
+                            <% if(order.status === 'Ready for Pickup'){ %> status-ready <% } %>
+                            <% if(order.status === 'Out for Delivery'){ %> status-out-for-delivery <% } %>
+                            <% if(order.status === 'Delivered'){ %> status-delivered <% } %>
+                            <% if(order.status === 'Cancelled'){ %> status-cancelled <% } %>
+                            <% if(order.status === 'Returned'){ %> status-returned <% } %>
+                        ">
+                                <%= order.status %>
+                            </span>
+                        </td>
+                        <td>
+                            <form action="/admin/orders/<%= order._id %>/status?_method=PUT" method="POST"
+                                class="d-flex">
+                                <select name="status" class="select-status" required>
+                                    <option value="Pending" <%=order.status==="Pending" ? "selected" : "" %>>Pending
+                                    </option>
+                                    <option value="Confirmed" <%=order.status==="Confirmed" ? "selected" : "" %>
+                                        >Confirmed</option>
+                                    <option value="Processing" <%=order.status==="Processing" ? "selected" : "" %>
+                                        >Processing</option>
+                                    <option value="Ready for Pickup" <%=order.status==="Ready for Pickup" ? "selected"
+                                        : "" %>>Ready for Pickup</option>
+                                    <option value="Out for Delivery" <%=order.status==="Out for Delivery" ? "selected"
+                                        : "" %>>Out for Delivery</option>
+                                    <option value="Delivered" <%=order.status==="Delivered" ? "selected" : "" %>
+                                        >Delivered</option>
+                                    <option value="Cancelled" <%=order.status==="Cancelled" ? "selected" : "" %>
+                                        >Cancelled</option>
+                                    <option value="Returned" <%=order.status==="Returned" ? "selected" : "" %>
+                                        >Returned</option>
+                                </select>
+                                <button class="status-update-btn">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+        <div class="mobile-only orders-mobile-view">
+            
+            <% orders.forEach(order=> { %>
+                
+                <div class="order-card">
+                    <p><strong>Order ID:</strong>
+                        <%= order.orderId %>
+                    </p>
+                    <p><strong>Customer:</strong>
+                        <%= order.user.name %>
+                    </p>
+                    <p><strong>Total:</strong> ₹<%= order.totalAmount %>
+                    </p>
+                    <p><strong>Status:</strong>
+                        <%= order.status %>
+                    </p>
+
+                    <br>
+
+                    <form action="/admin/orders/<%= order.orderId %>?_method=PUT">
+                        <select name="status" class="select-status" required>
+                            <option value="Pending" <%=order.status==="Pending" ? "selected" : "" %>>Pending</option>
+                            <option value="Confirmed" <%=order.status==="Confirmed" ? "selected" : "" %>>Confirmed
+                            </option>
+                            <option value="Processing" <%=order.status==="Processing" ? "selected" : "" %>>Processing
+                            </option>
+                            <option value="Ready for Pickup" <%=order.status==="Ready for Pickup" ? "selected" : "" %>
+                                >Ready for Pickup</option>
+                            <option value="Out for Delivery" <%=order.status==="Out for Delivery" ? "selected" : "" %>
+                                >Out for Delivery</option>
+                            <option value="Delivered" <%=order.status==="Delivered" ? "selected" : "" %>>Delivered
+                            </option>
+                            <option value="Cancelled" <%=order.status==="Cancelled" ? "selected" : "" %>>Cancelled
+                            </option>
+                            <option value="Returned" <%=order.status==="Returned" ? "selected" : "" %>>Returned</option>
+                        </select>
+                        <button class="status-update-btn">Update</button>
+                    </form>
+                </div>
+                <% }) %>
+        </div>
+    </div>
+
+   
+
+
+    <script>
+        const rows = document.querySelectorAll(".user-table tbody tr");
+        rows.forEach((row, index) => {
+            row.cells[0].textContent = index + 1;
+        });
+    </script>

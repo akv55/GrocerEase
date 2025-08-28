@@ -80,7 +80,7 @@
             <button>Next</button>
         </div>
         <% for(let product of products){ %>
-            <div class="mobile-products">
+            <div class="mobile-products mobile-only">
                 <div class="products-header-mobile">
                     <div class="mobile-product-image">
                         <img src="<%= product.image && product.image.url ? product.image.url : '/assets/img.jpg' %>"

@@ -162,29 +162,52 @@
                             <%= totalPrice || 0 %>
                         </span></span></p>
             <p>Delivery Charges: <span class="delivery-charges">₹<span class="delivery-charges">50</span></span></p>
+            <% let totalDiscount = 0; %>
+            <% if (cartItem && cartItem.items) { %>
+                <% cartItem.items.forEach(function(item) { %>
+                    <% if (item.product_id && item.product_id.discount) { %>
+                        <% totalDiscount += (item.product_id.price * item.product_id.discount / 100) * item.quantity; %>
+                    <% } %>
+                <% }); %>
+            <% } %>
             <p>Discount :<span class="product-discount" style="color: #28a728;">- ₹<span
-                        class="product-discount">10</span></span></p>
+                        class="product-discount"><%= totalDiscount.toFixed(2) %></span></span></p>
             <p>Coupon Discount:<span class="coupon-amount">₹<span class="coupon-amount">0</span></span></p>
             <p>Platform Fee: <span class="platform-fee">₹<span class="platform-amount">0</span></span></p>
             <hr>
             <h3>Total Payable: <span class="total-amount">₹<span class="total-amount-value">
-                        <%= (totalPrice || 0) + 50 - 10 %>
+                        <%= ((totalPrice || 0) + 50 - totalDiscount).toFixed(2) %>
                     </span></span>
             </h3>
             <hr>
             <h5 style="padding: 10px; color: #28a728; display: flex;justify-content: space-between; ">Your Total
                 Saving on this order <span class="total-saving">₹<span class="total-saving-value">
-                        <%= ((totalPrice || 0) + 50 + 10) - ((totalPrice || 0) + 50) %>
+                        <%= totalDiscount.toFixed(2) %>
                     </span></span></h5>
         </div>
         <div class="security-info">
+            <h5 style="color: #28a745; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+                <i class="fas fa-shield-alt"></i> Why Choose Us?
+            </h5>
             <div class="security-item">
-                <i class="fas fa-shield-alt"></i>
-                <span>Safe and Secure Payments. Easy returns.</span>
+                <i class="fas fa-shield-alt" style="color: #28a745;"></i>
+                <span>Safe and Secure Payments</span>
             </div>
             <div class="security-item">
-                <i class="fas fa-check-circle"></i>
-                <span>100% Authentic products.</span>
+                <i class="fas fa-undo-alt" style="color: #28a745;"></i>
+                <span>Easy Returns & Refunds</span>
+            </div>
+            <div class="security-item">
+                <i class="fas fa-check-circle" style="color: #28a745;"></i>
+                <span>100% Authentic Products</span>
+            </div>
+            <div class="security-item">
+                <i class="fas fa-truck" style="color: #28a745;"></i>
+                <span>Fast & Fresh Delivery</span>
+            </div>
+            <div class="security-item">
+                <i class="fas fa-headset" style="color: #28a745;"></i>
+                <span>24/7 Customer Support</span>
             </div>
         </div>
     </div>

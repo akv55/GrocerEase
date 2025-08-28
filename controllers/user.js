@@ -281,7 +281,6 @@ module.exports.Orders = async (req, res) => {
             .populate('deliveryAddress') // populate delivery address details   
             .sort({ createdAt: -1 }); // latest orders first
 
-        console.log(orderItems); // Debug log
         res.render("./users/orders.ejs", { orderItems });
     } catch (error) {
         console.error("Error fetching orders:", error);
@@ -316,7 +315,7 @@ module.exports.OrderDetails = async (req, res) => {
     } catch (error) {
         console.error("Error fetching order details:", error);
         req.flash("error", "Something went wrong while fetching the order");
-        return res.redirect("/orders");
+        return res.redirect("/my-orders");
     }
 };
 
@@ -462,7 +461,6 @@ module.exports.checkoutProcess = async (req, res) => {
                     subject: "Order Confirmed - GrocerEase",
                     html
                 });
-                console.log("Order confirmation email sent successfully");
             } catch (emailError) {
                 console.error("Failed to send order confirmation email:", emailError);
                 // Don't fail the order if email fails

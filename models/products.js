@@ -1,87 +1,33 @@
 const mongoose = require("mongoose");
-const { type } = require("os");
 const Schema = mongoose.Schema;
 const slugify = require("slugify");
 
 const listingSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  slug: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
+  title: { type: String, required: true, trim: true },
+  slug: { type: String, unique: true, lowercase: true, trim: true },
+  description: { type: String, required: true },
   image: {
-    filename: {
-      type: String,
-      default: "productimage"
-    },
+    filename: { type: String, default: "productimage" },
     url: {
       type: String,
       required: true,
-      default: "https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60"
+      default: "https://images.unsplash.com/photo-1586201375761-83865001e31c"
     }
   },
-  price: {
-    type:Number,
-    required:true
+  price: { type: Number, required: true, min: 0 },
+  location: { type: String, required: true },
+  country: { type: String, required: true },
+  inStock: { type: Number, required: true, min: 0 },
+  weight: {
+    value: { type: Number, required: true, min: 0 },
+    unit: { type: String, enum: ['g', 'kg', 'ml', 'l', 'piece', 'box', 'pt', 'qt', 'oz', 'fl oz','gal','lb'], required: true }
   },
-  location: {
-    type: String,
-    required: true
-  },
-  country: {
-    type: String,
-    required: true
-  },
-  inStock: {
-    type: Number,
-    required: true,
-    min: 0
-  },
-  unit: {
-    type: String,
-    required: true
-  },
-  quantity: {
-    type: Number,
-    required: true
-  },
-  discount: {
-    type: Number,
-    required: true,
-    min: 0
-  },
-
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
-    required: true
-  },
-  created_by: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Admin'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  }
-
-
-});
+  discount: { type: Number, default: 0, min: 0, max: 100 },
+  category: { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
+  created_by: { type: mongoose.Schema.Types.ObjectId, ref: "Admin" },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+}, { timestamps: true });
 
 // Automatically generate slug from title before saving
 listingSchema.pre('save', function (next) {

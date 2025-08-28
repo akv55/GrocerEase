@@ -33,7 +33,7 @@ module.exports.deleteUser = async (req, res, next) => {
     try {
         const userId = req.params.id;
         const user = await User.findById(userId);
-        
+
         if (!user) {
             req.flash("error", "User not found.");
             return res.redirect("/admin/users");
@@ -112,15 +112,18 @@ module.exports.createProduct = async (req, res, next) => {
         // Create new product object
         const newProduct = new Listing({
             title: product.title,
-            slug: product.slug, // Ensure slug is included
             description: product.description,
             price: product.price,
+            discount: product.discount,
             inStock: product.inStock,
-            quantity: product.quantity,
+            weight: {
+                value: product.weight.value,
+                unit: product.weight.unit
+            },
             unit: product.unit,
-            location: product.location,
+            category: product.category,
             country: product.country,
-            category: product.category
+            location: product.location,
         });
 
         // Handle image upload
@@ -167,9 +170,12 @@ module.exports.editProduct = async (req, res, next) => {
             title: product.title,
             description: product.description,
             price: product.price,
+            discount: product.discount,
             inStock: product.inStock,
-            quantity: product.quantity,
-            unit: product.unit,
+            weight: {
+                value: product.weight.value,
+                unit: product.weight.unit
+            },
             location: product.location,
             country: product.country,
             category: product.category
@@ -201,14 +207,42 @@ module.exports.userInfo = async (req, res, next) => {
     try {
         const { id } = req.params;
         const user = await User.findById(id);
-    const userAddress = await Address.findOne({ userId: req.user._id });
+        const userAddress = await Address.findOne({ userId: req.user._id });
         if (!user) {
             req.flash("error", "User not found.");
             return res.redirect("/admin/users");
         }
 
-        return res.render("./admin/userInfo.ejs", { user, address:userAddress });
+        return res.render("./admin/userInfo.ejs", { user, address: userAddress });
     } catch (err) {
         return next(err);
     }
-}; 
+};
+
+// --------------------------------manage orders----------------
+module.exports.manageOrders = async (req, res, next) => {
+    try {
+        const orders = await Order.find().populate('user');
+        return res.render("./admin/manageOrders.ejs", { orders });
+    } catch (err) {
+        return next(err);
+    }
+};
+module.exports.updateOrderStatus = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        const order = await Order.findByIdAndUpdate(id, { status }, { new: true });
+        if (!order) {
+            req.flash("error", "Order not found.");
+            return res.redirect("/admin/orders");
+        }
+
+        req.flash("success", "Order status updated successfully!");
+        return res.redirect("/admin/orders");
+    } catch (err) {
+        req.flash("error", "Failed to update order status. Please try again.");
+        return next(err);
+    }
+};

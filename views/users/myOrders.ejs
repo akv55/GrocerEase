@@ -65,21 +65,20 @@
 
             <div class="orders-container">
                 <div class="orders-search">
-                    <input type="text"  class="search-input" placeholder="Search orders..."
-                        >
+                    <input type="text" class="search-input" placeholder="Search orders...">
                     <button type="submit" class="orders-search-btn">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
                 <br>
                 <% orderItems.forEach(function(orderItem) { %>
-                    <div class="order-card">
-
+                    <div class="order-card ">
+                        
                         <% if (orderItem.items && orderItem.items.length> 0) { %>
                             <% orderItem.items.forEach(function(item) { %>
                                 <a href="/my-orders/<%= orderItem.user %>/<%= orderItem.orderId %>">
                                     <div class="orders-items">
-                                        <img src="<%= item.product && item.product.image ? item.product.image : (item.product && item.product.url ? item.product.url : '/assets/file.svg') %>"
+                                        <img src="<%= item.product && item.product.image && item.product.image.url ? item.product.image.url : '/assets/file.svg' %>"
                                             class="order-image" alt="<%= item.name %>"
                                             onerror="this.src='/assets/file.svg'" />
                                         <div class="order-details">
@@ -95,8 +94,9 @@
                                         </div>
                                         <div class="order-price">₹<%= (item.price * item.quantity).toFixed(2) %>
                                         </div>
-                                        <div class="user-order-status ">
-                                            <span class="status-badge <%= orderItem.status.toLowerCase() %>">
+                                        <div
+                                            class="<% if (orderItem.status) { %> status-<%= orderItem.status.toLowerCase() %> <% } %>">
+                                            <span>
                                                 <%= orderItem.status %>
                                             </span>
 

@@ -3,34 +3,48 @@
         <div class="breadcrumb">
             <a href="/admin/dashboard">Admin Dashboard</a> &gt;
             <a href="/admin/products">Products</a> &gt;
-            <span>Add New Product</span>
+            <span>Add Product</span>
         </div>
-        <h1>Add New Product</h1>
-        <p>Fill in the details below to add a new product.</p>
+        <h1>Add Product</h1>
+        <p>Fill in the details below to add a product.</p>
         <br>
+
         <form action="/admin/products/new-product" method="POST" enctype="multipart/form-data">
+            <!-- Title -->
             <div class="form-group">
                 <label for="title">Product Title:</label>
                 <input type="text" id="title" name="product[title]" required placeholder="Enter product title">
             </div>
-            <div class="form-group">
-                <label for="slug">Slug:</label>
-                <input type="text" id="slug" name="product[slug]" required placeholder="Enter product slug">
-            </div>
+            <!-- Description -->
             <div class="form-group full-width">
                 <label for="description">Description:</label>
                 <textarea id="description" name="product[description]" required
                     placeholder="Enter detailed product description"></textarea>
             </div>
+            <!-- Price & Discount &stock -->
             <div class="form-select-group">
-                <div class="select-group">
-                    <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="product[quantity]" step="1" required
-                        placeholder="Enter product quantity">
+                <div class="price-quantity">
+                    <label for="price">Price (₹):</label>
+                    <input type="number" id="price" name="product[price]" step="0.01" required placeholder="0.00">
+                </div>
+                <div class="price-quantity">
+                    <label for="discount">Discount (₹):</label>
+                    <input type="number" id="discount" name="product[discount]" step="1" min="0" value="0">
+                </div>
+                <div class="price-quantity">
+                    <label for="inStock">Stock Quantity:</label>
+                    <input type="number" id="inStock" name="product[inStock]" required placeholder="Available quantity">
                 </div>
                 <div class="select-group">
+                    <label for="weightValue">Weight:</label>
+                    <input type="number" id="weightValue" name="product[weight][value]" step="0.01" required
+                        placeholder="Enter weight">
+                </div>
+            </div>
+            <div class="form-select-group">
+                <div class="select-group">
                     <label for="unit">Unit:</label>
-                    <select id="unit" name="product[unit]" required>
+                    <select id="unit" name="product[weight][unit]" required>
                         <option value="">Select Unit</option>
                         <option value="g">Grams (g)</option>
                         <option value="kg">Kilograms (kg)</option>
@@ -42,13 +56,14 @@
                         <option value="pt">Pints (pt)</option>
                         <option value="qt">Quarts (qt)</option>
                         <option value="gal">Gallons (gal)</option>
-                        <option value="pcs">Pieces (pcs)</option>
+                        <option value="piece">Pieces (piece)</option>
                         <option value="box">Boxes (box)</option>
                     </select>
                 </div>
-                <div class="select-group">
+                <!-- Category -->
+                <div class="form-group">
                     <label for="category">Category:</label>
-                    <select id="category" colspan="2" name="product[category]" required>
+                    <select id="category" name="product[category]" required>
                         <option value="">Select Category</option>
                         <% categories.forEach(category=> { %>
                             <option value="<%= category._id %>">
@@ -57,34 +72,24 @@
                             <% }) %>
                     </select>
                 </div>
-                <div class="price-quantity">
-                    <label for="price">Price (₹):</label>
-                    <input type="number" id="price" name="product[price]" step="1" required placeholder="0.00">
-                </div>
-            </div>
-            <div class="form-select-group">
-                <div class="price-quantity">
-                    <label for="inStock">Stock Quantity:</label>
-                    <input type="number" id="inStock" name="product[inStock]" required
-                        placeholder="Available quantity">
-                </div>
-
+                <!-- Location -->
                 <div class="location-group">
                     <label for="country">Country:</label>
-                    <input type="text" id="country" name="product[country]" required
-                        placeholder="Product origin country">
+                    <input type="text" id="country" name="product[country]" required placeholder="Origin country">
                 </div>
                 <div class="location-group">
                     <label for="location">Location:</label>
-                    <input type="text" id="location" name="product[location]" required
-                        placeholder="Product location/region">
+                    <input type="text" id="location" name="product[location]" required placeholder="Region / City">
                 </div>
-            </div>
 
+            </div>
+            <!-- Image -->
             <div class="form-group full-width">
                 <label for="image">Product Image:</label>
-                <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png, .gif">
+                <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png">
             </div>
+
+            <!-- Submit -->
             <button type="submit" class="add-btn">Add Product</button>
         </form>
     </div>

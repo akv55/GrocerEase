@@ -32,4 +32,6 @@ router.get("/admin/products/new-product", isLogined, isAdmin, wrapAsync(adminCon
 router.post("/admin/products/new-product", isLogined, isAdmin, upload.single("image"), handleMulterError, wrapAsync(adminController.createProduct));
 router.get("/admin/products/edit/:id", isLogined, isAdmin, wrapAsync(adminController.editProductForm));
 router.post("/admin/products/edit/:id", isLogined, isAdmin, upload.single("image"), handleMulterError, wrapAsync(adminController.editProduct));
+router.get("/admin/orders", isLogined, isAdmin, wrapAsync(adminController.manageOrders));
+router.put("/admin/orders/:id/status", isLogined, isAdmin, wrapAsync(adminController.updateOrderStatus));
 module.exports = router;

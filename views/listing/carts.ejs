@@ -26,7 +26,7 @@
                                                 <%= address.address.country || 'India' %>
                             </p>
                             <% } else { %>
-                                
+
                                 <p class="no-address">No delivery address found. Please <a
                                         href="/profile/change-address">add your address</a> to continue.</p>
                                 <% } %>
@@ -46,7 +46,12 @@
                                     <p>₹<span class="product-price">
                                             <%= item.product_id.price || 0 %>
                                         </span>
-                                        <%= item.product_id.weight || '' %>
+                                        <span class="quantity">
+                                            <%= item.product_id.weight && item.product_id.weight.value ?
+                                                item.product_id.weight.value : 'N/A' %>
+                                                <%= item.product_id.weight && item.product_id.weight.unit ? ' ' +
+                                                    item.product_id.weight.unit : '' %>
+                                        </span>
                                     </p>
                                     <p>Quantity: <%= item.quantity %>
                                     </p>
@@ -78,18 +83,32 @@
                         <p>Delivery Charges: <span class="delivery-charges">₹<span
                                     class="delivery-charges">50</span></span></p>
                         <p>Discount :<span class="product-discount" style="color: #28a728;">- ₹<span
-                                    class="product-discount">10</span></span></p>
+                                    class="product-discount">
+                                    <% let totalDiscount = 0; %>
+                                    <% cartItem.items.forEach(function(item) { %>
+                                        <% if (item.product_id && item.product_id.discount) { %>
+                                            <% totalDiscount += (item.product_id.price * item.product_id.discount / 100) * item.quantity; %>
+                                        <% } %>
+                                    <% }); %>
+                                    <%= totalDiscount.toFixed(2) %>
+                                </span></span></p>
                         <p>Coupon Discount:<span class="coupon-amount">₹<span class="coupon-amount">0</span></span></p>
                         <p>Platform Fee: <span class="platform-fee">₹<span class="platform-amount">0</span></span></p>
                         <hr>
+                        <% let finalTotalDiscount = 0; %>
+                        <% cartItem.items.forEach(function(item) { %>
+                            <% if (item.product_id && item.product_id.discount) { %>
+                                <% finalTotalDiscount += (item.product_id.price * item.product_id.discount / 100) * item.quantity; %>
+                            <% } %>
+                        <% }); %>
                         <h3>Total Amount: <span class="total-amount">₹<span class="total-amount-value">
-                                    <%= totalPrice + 50 - 10 %>
+                                    <%= (totalPrice + 50 - finalTotalDiscount).toFixed(2) %>
                                 </span></span>
                         </h3>
                         <hr>
                         <h5 style="padding: 10px; color: #28a728;">Your Total Saving on this order <span
                                 class="total-saving">₹<span class="total-saving-value">
-                                    <%= (totalPrice + 50 - 10) - (totalPrice + 50 - 10) * 0.1 %>
+                                    <%= finalTotalDiscount.toFixed(2) %>
                                 </span></span></h5>
                     </div>
                 </div>

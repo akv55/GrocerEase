@@ -187,7 +187,8 @@ body {
 .product,
 .category-container,
 .admin-settings,
-.new-product {
+.new-product,
+.admin-orders {
     margin: 5px 25px 25px 270px;
     padding: 20px;
     background-color: #fff;
@@ -445,13 +446,14 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
-.user-actions a{
+
+.user-actions a {
     text-decoration: none;
     transition: color 0.3s ease;
     padding: 5px;
     border-radius: 5px;
     cursor: pointer;
-   margin: 0 5px;
+    margin: 0 5px;
 }
 
 
@@ -702,6 +704,10 @@ select option {
     background-clip: text; */
 }
 
+.mobile-only {
+    display: none;
+}
+
 .productTable,
 .categoryTable {
     border-collapse: collapse;
@@ -772,6 +778,10 @@ select option {
         border-left: 5px solid #28a745;
         border-radius: 10px;
         margin-bottom: 10px;
+    }
+
+    .mobile-only {
+        display: block;
     }
 
     .products-header-mobile {
@@ -934,7 +944,7 @@ select option {
     color: #495057;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     outline: none;
-    width: 300px;
+    width: 250px;
 }
 
 .form-select-group select:focus {
@@ -1006,6 +1016,18 @@ select option {
     color: #28a745;
     transition: background-color 0.3s ease;
     border: 2px solid #28a745;
+}
+
+@media (max-width: 480px) {
+    .form-select-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .form-select-group select,
+    .form-select-group input {
+        width: 100%;
+    }
 }
 
 /* -------------------------------USER INFO PAGE------------------------------- */
@@ -1089,7 +1111,8 @@ select option {
         padding: 10px;
         gap: 10px;
     }
-    .user-img{
+
+    .user-img {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -1240,4 +1263,114 @@ select option {
         font-size: 16px;
         /* Prevent zoom on iOS */
     }
+}
+
+/* STATUS COLOR  */
+.status-pending {
+    color: #6c757d;
+    background-color: #e9ecef;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+.status-confirmed {
+    color: #fff;
+    background-color: #0d6efd;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+.status-processing {
+    color: #fff;
+    background-color: #fd7e14;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+.status-ready {
+    color: #fff;
+    background-color: #6f42c1;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+.status-outfordelivery {
+    color: #fff;
+    background-color: #20c997;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+.status-delivered {
+    color: #fff;
+    background-color: #28a745;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+.status-cancelled {
+    color: #fff;
+    background-color: #dc3545;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+.status-returned {
+    color: #fff;
+    background-color: #a52a2a;
+    padding: 6px 12px;
+    border-radius: 8px;
+}
+
+/* -------------------------------ORDER PAGE_______________ */
+.select-status {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 6px 12px;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.select-status:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+.status-update-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.status-update-btn:hover {
+    background-color: #0056b3;
+}
+
+.mobile-orders {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.order-card {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+.order-card p{
+    margin: 5px 0;
+    line-height: 1.5;
+    color: #333;
+
+}
+
+.order-card strong {
+    color: #555;
 }

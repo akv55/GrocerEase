@@ -9,79 +9,90 @@
         <p>Update the product details below.</p>
         <br>
         <form action="/admin/products/edit/<%= product._id %>" method="POST" enctype="multipart/form-data">
+            <!-- Title -->
             <div class="form-group">
                 <label for="title">Product Title:</label>
                 <input type="text" id="title" name="product[title]" value="<%= product.title %>" required
                     placeholder="Enter product title">
             </div>
+            <!-- Description -->
             <div class="form-group full-width">
                 <label for="description">Description:</label>
                 <textarea id="description" name="product[description]" required
                     placeholder="Enter detailed product description"><%= product.description %></textarea>
             </div>
+            <!-- Price & Discount &stock -->
+            <div class="form-select-group">
+                <div class="price-quantity">
+                    <label for="price">Price (₹):</label>
+                    <input type="number" id="price" name="product[price]" step="1" required placeholder="0.00"
+                        value="<%= product.price %>">
+                </div>
+                <div class="price-quantity">
+                    <label for="discount">Discount (%):</label>
+                    <input type="number" id="discount" name="product[discount]" step="1" min="0" max="100"
+                        value="<%= product.discount %>">
+                </div>
+                <div class="price-quantity">
+                    <label for="inStock">Stock Quantity:</label>
+                    <input type="number" id="inStock" name="product[inStock]" required placeholder="Available quantity"
+                        value="<%= product.inStock %>">
+                </div>
+                <div class="select-group">
+                    <label for="weightValue">Weight:</label>
+                    <input type="number" id="weightValue" name="product[weight][value]" step="1" required
+                        placeholder="Enter weight" value="<%= product.weight.value %>">
+                </div>
+            </div>
             <div class="form-select-group">
                 <div class="select-group">
-                    <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="product[quantity]" value="<%= product.quantity %>" step="1" required
-                        placeholder="Enter product quantity">
-                </div>
-                <div class="select-group">
                     <label for="unit">Unit:</label>
-                    <select id="unit" name="product[unit]" required>
+                    <select id="unit" name="product[weight][unit]" required>
                         <option value="">Select Unit</option>
-                        <option value="g" <%=product.unit==='g' ? 'selected' : '' %>>Grams (g)</option>
-                        <option value="kg" <%=product.unit==='kg' ? 'selected' : '' %>>Kilograms (kg)</option>
-                        <option value="oz" <%=product.unit==='oz' ? 'selected' : '' %>>Ounces (oz)</option>
-                        <option value="lb" <%=product.unit==='lb' ? 'selected' : '' %>>Pounds (lb)</option>
-                        <option value="ml" <%=product.unit==='ml' ? 'selected' : '' %>>Milliliters (ml)</option>
-                        <option value="l" <%=product.unit==='l' ? 'selected' : '' %>>Liters (l)</option>
-                        <option value="fl oz" <%=product.unit==='fl oz' ? 'selected' : '' %>>Fluid Ounces (fl oz)</option>
-                        <option value="pt" <%=product.unit==='pt' ? 'selected' : '' %>>Pints (pt)</option>
-                        <option value="qt" <%=product.unit==='qt' ? 'selected' : '' %>>Quarts (qt)</option>
-                        <option value="gal" <%=product.unit==='gal' ? 'selected' : '' %>>Gallons (gal)</option>
-                        <option value="pcs" <%=product.unit==='pcs' ? 'selected' : '' %>>Pieces (pcs)</option>
-                        <option value="box" <%=product.unit==='box' ? 'selected' : '' %>>Boxes (box)</option>
+                        <option value="g" <%=product.weight.unit==='g' ? 'selected' : '' %>>Grams (g)</option>
+                        <option value="kg" <%=product.weight.unit==='kg' ? 'selected' : '' %>>Kilograms (kg)</option>
+                        <option value="oz" <%=product.weight.unit==='oz' ? 'selected' : '' %>>Ounces (oz)</option>
+                        <option value="lb" <%=product.weight.unit==='lb' ? 'selected' : '' %>>Pounds (lb)</option>
+                        <option value="ml" <%=product.weight.unit==='ml' ? 'selected' : '' %>>Milliliters (ml)</option>
+                        <option value="l" <%=product.weight.unit==='l' ? 'selected' : '' %>>Liters (l)</option>
+                        <option value="fl oz" <%=product.weight.unit==='fl oz' ? 'selected' : '' %>>Fluid Ounces (fl oz)</option>
+                        <option value="pt" <%=product.weight.unit==='pt' ? 'selected' : '' %>>Pints (pt)</option>
+                        <option value="qt" <%=product.weight.unit==='qt' ? 'selected' : '' %>>Quarts (qt)</option>
+                        <option value="gal" <%=product.weight.unit==='gal' ? 'selected' : '' %>>Gallons (gal)</option>
+                        <option value="pcs" <%=product.weight.unit==='pcs' ? 'selected' : '' %>>Pieces (pcs)</option>
+                        <option value="box" <%=product.weight.unit==='box' ? 'selected' : '' %>>Boxes (box)</option>
                     </select>
                 </div>
-                <div class="select-group">
+                <!-- Category -->
+                <div class="form-group">
                     <label for="category">Category:</label>
-                    <select id="category" colspan="2" name="product[category]" required>
+                    <select id="category" name="product[category]" required>
                         <option value="">Select Category</option>
                         <% categories.forEach(category=> { %>
-                            <option value="<%= category._id %>" <%=product.category_id &&
-                                product.category_id.toString()===category._id.toString() ? 'selected' : '' %>>
+                            <option value="<%= category._id %>" <%=product.category.toString()===category._id.toString()
+                                ? 'selected' : '' %>>
                                 <%= category.name %>
                             </option>
                             <% }) %>
                     </select>
                 </div>
-                <div class="price-quantity">
-                    <label for="price">Price (₹):</label>
-                    <input type="number" id="price" name="product[price]" value="<%= product.price %>" step="1" required
-                        placeholder="0.00">
-                </div>
-            </div>
-            <div class="form-select-group">
-                <div class="price-quantity">
-                    <label for="inStock">Stock Quantity:</label>
-                    <input type="number" id="inStock" name="product[inStock]" value="<%= product.inStock %>" required
-                        placeholder="Available quantity">
-                </div>
-
+                <!-- Location -->
                 <div class="location-group">
                     <label for="country">Country:</label>
-                    <input type="text" id="country" name="product[country]" value="<%= product.country %>" required
-                        placeholder="Product origin country">
+                    <input type="text" id="country" name="product[country]" required placeholder="Origin country"
+                        value="<%= product.country %>">
                 </div>
                 <div class="location-group">
                     <label for="location">Location:</label>
-                    <input type="text" id="location" name="product[location]" value="<%= product.location %>" required
-                        placeholder="Product location/region">
+                    <input type="text" id="location" name="product[location]" required placeholder="Region / City"
+                        value="<%= product.location %>">
                 </div>
-            </div>
 
+            </div>
+            <!-- Image -->
             <div class="form-group full-width">
-                <label for="image">Product Image:</label>
+
+
                 <% if (product.image && product.image.url) { %>
                     <p>Current image: <img src="<%= product.image.url %>" alt="Current product image"
                             style="max-width: 100px; height: auto;"></p>
@@ -89,6 +100,7 @@
                         <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png, .gif">
                         <small>Leave empty to keep current image</small>
             </div>
-            <button type="submit" class="add-btn">Update Product</button>
+            <!-- Submit -->
+            <button type="submit" class="add-btn">Edit Product</button>
         </form>
     </div>

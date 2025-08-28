@@ -1,9 +1,20 @@
 <% layout("/layouts/boilerplate") -%>
     <div class="show-card-container">
         <div class="show-card-image ">
-            <div class=" show-img skeleton">
+            <div class="show-img skeleton">
                 <img src="<%= product && product.image && product.image.url ? product.image.url : '/assets/img.jpg' %>"
-                    class="show-image skeleton" alt="<%= product ? product.title : 'Product Image' %>" />
+                    class="show-image skeleton" alt="<%= product ? product.title : 'Product Image' %>"
+                    onload="removeSkeleton(this)" />
+                <form action="/wishlist/add/<%= product._id %>" method="POST" class="wishlist-form">
+                    <button type="submit" class="wishlist-btn" title="Add to Wishlist">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </form>
+                <form class="share-form">
+                    <button type="submit" class="share-btn" title="Compare">
+                        <i class="fa-solid fa-share"></i>
+                    </button>
+                </form>
             </div>
 
             <div class="show-actions">
@@ -33,7 +44,8 @@
 
                 <div class="listing-details">
                     <div class="listing-weight">
-                        <%= product.weight || '1 kg' %>
+                        <%= product.weight.value || '1 kg' %>
+                            <%= product.weight.unit || 'kg' %>
                     </div>
                     <div class="listing-location">
                         <i class="fas fa-map-marker-alt"></i>
@@ -127,6 +139,7 @@
             margin-left: 1rem;
         }
 
+    
         @media (max-width:495px) {
             .show-card-container {
                 display: flex;
@@ -139,14 +152,14 @@
                 display: flex;
                 flex-direction: column;
                 width: 100%;
-                height: 300px;
+                height: 350px;
                 padding: 10px;
             }
 
             .show-card-image img {
                 border-radius: 10px;
                 /* width: 100%; */
-                height: 200px;
+                height: 250px;
             }
 
             .show-card-contant {
@@ -192,7 +205,7 @@
         }
 
         /* Hide image until loaded */
-        
+
         .show-image {
             width: 100%;
             height: 100%;
