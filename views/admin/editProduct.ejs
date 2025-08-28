@@ -55,7 +55,8 @@
                         <option value="lb" <%=product.weight.unit==='lb' ? 'selected' : '' %>>Pounds (lb)</option>
                         <option value="ml" <%=product.weight.unit==='ml' ? 'selected' : '' %>>Milliliters (ml)</option>
                         <option value="l" <%=product.weight.unit==='l' ? 'selected' : '' %>>Liters (l)</option>
-                        <option value="fl oz" <%=product.weight.unit==='fl oz' ? 'selected' : '' %>>Fluid Ounces (fl oz)</option>
+                        <option value="fl oz" <%=product.weight.unit==='fl oz' ? 'selected' : '' %>>Fluid Ounces (fl oz)
+                        </option>
                         <option value="pt" <%=product.weight.unit==='pt' ? 'selected' : '' %>>Pints (pt)</option>
                         <option value="qt" <%=product.weight.unit==='qt' ? 'selected' : '' %>>Quarts (qt)</option>
                         <option value="gal" <%=product.weight.unit==='gal' ? 'selected' : '' %>>Gallons (gal)</option>
@@ -69,8 +70,8 @@
                     <select id="category" name="product[category]" required>
                         <option value="">Select Category</option>
                         <% categories.forEach(category=> { %>
-                            <option value="<%= category._id %>" <%=product.category.toString()===category._id.toString()
-                                ? 'selected' : '' %>>
+                            <option value="<%= category._id %>" <%=(product.category &&
+                                product.category.toString()===category._id.toString()) ? 'selected' : '' %>>
                                 <%= category.name %>
                             </option>
                             <% }) %>

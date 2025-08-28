@@ -3,10 +3,9 @@ if (process.env.NODE_ENV !== "production") {
 }
 const express = require('express');
 const app = express();
-exports.app = app;
 const mongoose = require('mongoose');
 const path = require('path');
-const port = 8080;
+const port = process.env.PORT || 4000;
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
