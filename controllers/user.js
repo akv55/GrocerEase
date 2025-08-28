@@ -466,7 +466,7 @@ module.exports.checkoutProcess = async (req, res) => {
                 // Don't fail the order if email fails
             }
 
-            return res.redirect(`/orders/${order.orderId}`);
+            return res.redirect(`/my-orders/${order.id}/${order.orderId}`);
         }
 
     } catch (err) {
