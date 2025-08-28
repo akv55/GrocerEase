@@ -25,9 +25,10 @@ const orderSchema = new mongoose.Schema({
 // Auto-generate orderId and calculate totalAmount
 orderSchema.pre('save', async function (next) {
     if (!this.orderId) {
-        const count = await mongoose.model('Order').countDocuments() + 1;
-        this.orderId = `ORD${new Date().getFullYear()}${String(count).padStart(5, '0')}`;
-    }
+    const randomNum = Math.floor(10000 + Math.random() * 90000); // 5 digit random
+    const today = new Date().toISOString().slice(0,10).replace(/-/g, ""); 
+    this.orderId = `ORD${today}${randomNum}`;  
+  }
     // Calculate totalAmount from items
     this.totalAmount = this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     next();

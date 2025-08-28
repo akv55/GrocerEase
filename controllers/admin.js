@@ -234,7 +234,10 @@ module.exports.userInfo = async (req, res, next) => {
 // --------------------------------manage orders----------------
 module.exports.manageOrders = async (req, res, next) => {
     try {
-        const orders = await Order.find().populate('user');
+        const orders = await Order.find()
+        .populate('items.product')
+        .populate('user');
+
         return res.render("./admin/manageOrders.ejs", { orders });
     } catch (err) {
         return next(err);

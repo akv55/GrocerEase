@@ -3,645 +3,371 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Order Confirmed - GrocerEase</title>
+    <title>Order Confirmation - GrocerEase</title>
     <style>
-        /* CSS Variables for consistent theming */
-        :root {
-            --primary-color: #28a745;
-            --primary-light: #20c997;
-            --secondary-color: #6c757d;
-            --success-color: #28a745;
-            --info-color: #007bff;
-            --light-bg: #f8f9fa;
-            --white: #ffffff;
-            --dark-text: #333333;
-            --muted-text: #6c757d;
-            --border-color: #dee2e6;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            --border-radius: 8px;
-            --border-radius-lg: 12px;
-            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --transition: all 0.3s ease;
-        }
-
-        /* Reset and base styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: var(--font-family);
-            background-color: #f4f4f4;
-            color: var(--dark-text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
             line-height: 1.6;
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
         }
-
-        /* Email container */
+        
         .email-container {
-            max-width: 650px;
+            max-width: 600px;
             margin: 20px auto;
-            background: var(--white);
-            border-radius: var(--border-radius-lg);
-            box-shadow: var(--shadow);
+            background-color: #ffffff;
+            border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
-        /* Header section */
-        .header {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-            color: var(--white);
+        
+        .email-header {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
             padding: 30px;
             text-align: center;
         }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
+        
+        .email-header h1 {
+            font-size: 28px;
             margin-bottom: 10px;
-            letter-spacing: 0.5px;
         }
-
-        .header h2 {
-            margin: 15px 0;
-            font-weight: 600;
+        
+        .email-header p {
+            font-size: 16px;
+            opacity: 0.9;
         }
-
-        .success-badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 25px;
-            display: inline-block;
-            margin-top: 10px;
-            font-size: 14px;
+        
+        .order-success-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
         }
-
-        /* Content section */
-        .content {
+        
+        .email-body {
             padding: 30px;
         }
-
-        .content h3 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-
-        .content p {
+        
+        .greeting {
+            font-size: 18px;
             margin-bottom: 20px;
-            color: var(--dark-text);
+            color: #2c3e50;
         }
-
-        /* Order summary */
-        .order-summary {
-            background: var(--light-bg);
-            padding: 25px;
-            border-radius: var(--border-radius);
+        
+        .order-info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 20px;
             margin: 20px 0;
-            border: 1px solid var(--border-color);
+            border-radius: 5px;
         }
-
-        .order-header {
+        
+        .order-details {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--primary-color);
+            margin-bottom: 10px;
         }
-
-        .order-info h4 {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 5px;
-        }
-
-        .order-date {
-            color: var(--muted-text);
-            font-size: 14px;
-        }
-
-        .order-status {
-            background: var(--primary-color);
-            color: var(--white);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
+        
+        .order-details span:first-child {
             font-weight: 600;
-            text-transform: uppercase;
+            color: #495057;
         }
-
-        /* Order items */
-        .item-list {
-            margin: 20px 0;
+        
+        .items-section {
+            margin: 30px 0;
         }
-
-        .item {
+        
+        .items-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        
+        .item-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 0;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #e9ecef;
         }
-
-        .item:last-child {
+        
+        .item-row:last-child {
             border-bottom: none;
         }
-
+        
         .item-details {
             flex: 1;
         }
-
+        
         .item-name {
             font-weight: 600;
+            color: #2c3e50;
             margin-bottom: 5px;
-            color: var(--dark-text);
         }
-
-        .item-quantity {
-            color: var(--muted-text);
+        
+        .item-meta {
             font-size: 14px;
+            color: #6c757d;
         }
-
+        
         .item-price {
-            font-weight: bold;
-            color: var(--primary-color);
+            font-weight: 600;
+            color: #28a745;
             font-size: 16px;
         }
-
-        /* Total section */
-        .total-section {
-            background: var(--white);
+        
+        .summary-section {
+            background-color: #f8f9fa;
             padding: 20px;
-            border-radius: var(--border-radius);
-            border: 2px solid var(--primary-color);
+            border-radius: 8px;
             margin: 20px 0;
         }
-
-        .total-row {
+        
+        .summary-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
-            font-size: 15px;
+            padding: 5px 0;
         }
-
-        .total-row.discount {
-            color: var(--primary-color);
-            font-weight: 600;
-        }
-
-        .total-final {
+        
+        .summary-row.total {
+            border-top: 2px solid #28a745;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-weight: 700;
             font-size: 18px;
-            font-weight: bold;
-            color: var(--primary-color);
-            border-top: 2px solid var(--border-color);
-            padding-top: 10px;
-            margin-top: 10px;
+            color: #28a745;
         }
-
-        /* Info sections */
-        .info-section {
+        
+        .delivery-section {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
             padding: 20px;
-            border-radius: var(--border-radius);
             margin: 20px 0;
         }
-
-        .delivery-info {
-            background: #e7f3ff;
-            border-left: 4px solid var(--info-color);
-        }
-
-        .status-tracker {
-            background: var(--light-bg);
-            border: 1px solid var(--border-color);
-        }
-
-        .info-section h4 {
-            color: var(--dark-text);
-            margin-bottom: 15px;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .info-section p {
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-
-        .info-section strong {
-            color: var(--dark-text);
-        }
-
-        /* Status tracker */
-        .status-step {
-            display: flex;
-            align-items: center;
+        
+        .delivery-section h4 {
+            color: #856404;
             margin-bottom: 15px;
         }
-
-        .status-step:last-child {
-            margin-bottom: 0;
+        
+        .address-block {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
         }
-
-        .status-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-weight: bold;
-            font-size: 14px;
+        
+        .next-steps {
+            background-color: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
         }
-
-        .status-current {
-            background: var(--primary-color);
-            color: var(--white);
+        
+        .next-steps h4 {
+            color: #0056b3;
+            margin-bottom: 15px;
         }
-
-        .status-pending {
-            background: var(--border-color);
-            color: var(--muted-text);
+        
+        .next-steps ul {
+            padding-left: 20px;
         }
-
-        .status-text strong {
-            display: block;
-            color: var(--dark-text);
-            margin-bottom: 2px;
+        
+        .next-steps li {
+            margin-bottom: 8px;
+            color: #495057;
         }
-
-        .status-text small {
-            color: var(--muted-text);
-            font-size: 13px;
-        }
-
-        /* Buttons */
-        .btn-container {
+        
+        .cta-section {
             text-align: center;
             margin: 30px 0;
         }
-
-        .btn {
-            display: inline-block;
-            padding: 14px 28px;
-            background: var(--primary-color);
-            color: var(--white);
+        
+        .track-button {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 15px 30px;
             text-decoration: none;
             border-radius: 25px;
             font-weight: 600;
-            margin: 0 10px 10px 0;
-            transition: var(--transition);
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
+            display: inline-block;
+            margin: 10px;
         }
-
-        .btn:hover {
-            background: #218838;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--secondary-color);
-        }
-
-        .btn-secondary:hover {
-            background: #545b62;
-            box-shadow: 0 6px 12px rgba(108, 117, 125, 0.3);
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--light-bg);
-            padding: 30px;
+        
+        .support-info {
+            background-color: #f8f9fa;
+            padding: 20px;
             text-align: center;
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid #e9ecef;
         }
-
-        .footer p {
-            margin-bottom: 15px;
-            line-height: 1.6;
+        
+        .support-info p {
+            margin-bottom: 10px;
+            color: #6c757d;
         }
-
-        .footer a {
-            color: var(--primary-color);
-            text-decoration: none;
+        
+        .contact-info {
             font-weight: 600;
+            color: #28a745;
         }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        .footer-note {
-            font-size: 12px;
-            color: var(--muted-text);
-            margin-top: 20px;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
+        
+        @media (max-width: 600px) {
             .email-container {
-                margin: 0;
-                width: 100%;
-                border-radius: 0;
-                box-shadow: none;
-                min-width: 320px;
-            }
-
-            .header {
-                padding: 20px 15px;
-            }
-
-            .logo {
-                font-size: 20px;
-            }
-
-            .header h2 {
-                font-size: 20px;
-            }
-
-            .success-badge {
-                padding: 8px 15px;
-                font-size: 12px;
-            }
-
-            .content {
-                padding: 20px 15px;
-            }
-
-            .content h3 {
-                font-size: 18px;
-            }
-
-            .order-summary,
-            .info-section {
-                padding: 20px 15px;
-                margin: 15px 0;
-            }
-
-            .order-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .order-info h4 {
-                font-size: 16px;
-            }
-
-            .item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .item-price {
-                align-self: flex-end;
-            }
-
-            .btn-container {
-                padding: 0 15px;
-            }
-
-            .btn {
-                display: block;
-                width: 100%;
-                max-width: 300px;
-                margin: 10px auto;
-                padding: 16px 20px;
-                font-size: 14px;
-            }
-
-            .footer {
-                padding: 20px 15px;
-            }
-
-            .footer p {
-                font-size: 14px;
-            }
-
-            .footer-note {
-                font-size: 11px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header {
-                padding: 15px 10px;
-            }
-
-            .logo {
-                font-size: 18px;
-            }
-
-            .header h2 {
-                font-size: 18px;
-            }
-
-            .content {
-                padding: 15px 10px;
-            }
-
-            .order-summary,
-            .info-section {
-                padding: 15px 10px;
-            }
-
-            .order-info h4 {
-                font-size: 14px;
-            }
-
-            .item-name {
-                font-size: 14px;
-            }
-
-            .item-quantity {
-                font-size: 12px;
-            }
-
-            .item-price {
-                font-size: 14px;
-            }
-
-            .status-icon {
-                width: 28px;
-                height: 28px;
-                font-size: 12px;
-            }
-
-            .btn {
-                padding: 14px 16px;
-                font-size: 13px;
-            }
-        }
-
-        /* Email client compatibility */
-        table {
-            border-collapse: collapse;
-        }
-
-        /* Accessibility improvements */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* Print styles */
-        @media print {
-            .btn-container {
-                display: none;
+                margin: 10px;
+                border-radius: 5px;
             }
             
-            .email-container {
-                box-shadow: none;
-                border: 1px solid var(--border-color);
+            .email-header, .email-body {
+                padding: 20px;
+            }
+            
+            .order-details, .item-row, .summary-row {
+                flex-direction: column;
+                text-align: left;
+            }
+            
+            .item-price {
+                text-align: left;
+                margin-top: 5px;
             }
         }
     </style>
 </head>
-
 <body>
     <div class="email-container">
-        <!-- Header Section -->
-        <header class="header">
-            <div class="logo">🛒 GrocerEase</div>
-            <h2>Order Confirmed!</h2>
-            <div class="success-badge">
-                <span class="sr-only">Success: </span>✅ Your order has been successfully placed
+        <!-- Header -->
+        <div class="email-header">
+            <div class="order-success-icon">✅</div>
+            <h1>Order Confirmed!</h1>
+            <p>Thank you for shopping with GrocerEase</p>
+        </div>
+        
+        <!-- Body -->
+        <div class="email-body">
+            <div class="greeting">
+                Hello <%= customerName %>!
             </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="content">
-            <h3>Thank you, <%= customerName %>! 🎉</h3>
-            <p>We've received your order and are preparing your fresh groceries. Here are your order details:</p>
-
-            <!-- Order Summary Section -->
-            <section class="order-summary">
-                <div class="order-header">
-                    <div class="order-info">
-                        <h4>Order #<%= orderId %></h4>
-                        <div class="order-date">Placed on <%= orderDate %></div>
-                    </div>
-                    <div class="order-status">
-                        <%= orderStatus %>
-                    </div>
+            
+            <p>Great news! Your order has been confirmed and is being prepared for delivery.</p>
+            
+            <!-- Order Information -->
+            <div class="order-info-box">
+                <div class="order-details">
+                    <span>Order ID:</span>
+                    <span><strong><%= orderId %></strong></span>
                 </div>
-
-                <!-- Order Items -->
-                <div class="item-list">
-                    <% orderItems.forEach(item => { %>
-                        <div class="item">
-                            <div class="item-details">
-                                <div class="item-name"><%= item.name %></div>
-                                <div class="item-quantity">
-                                    Quantity: <%= item.quantity %> × ₹<%= item.price %>
-                                </div>
-                            </div>
-                            <div class="item-price">₹<%= item.quantity * item.price %></div>
+                <div class="order-details">
+                    <span>Order Date:</span>
+                    <span><%= orderDate %></span>
+                </div>
+                <div class="order-details">
+                    <span>Payment Method:</span>
+                    <span><%= paymentMethod %></span>
+                </div>
+                <div class="order-details">
+                    <span>Order Status:</span>
+                    <span style="color: #28a745; font-weight: 600;"><%= orderStatus %></span>
+                </div>
+            </div>
+            
+            <!-- Items Ordered -->
+            <div class="items-section">
+                <h3>📦 Items Ordered</h3>
+                <% orderItems.forEach(function(item) { %>
+                <div class="item-row">
+                    <div class="item-details">
+                        <div class="item-name"><%= item.name %></div>
+                        <div class="item-meta">
+                            Quantity: <%= item.quantity %> | 
+                            Weight: <%= item.weight || 'N/A' %> | 
+                            Unit Price: ₹<%= item.price.toFixed(2) %>
                         </div>
-                    <% }) %>
-                </div>
-
-                <!-- Order Total -->
-                <div class="total-section">
-                    <div class="total-row">
-                        <span>Subtotal:</span>
-                        <span>₹<%= subtotal %></span>
                     </div>
-                    <div class="total-row">
-                        <span>Delivery Charges:</span>
-                        <span>₹<%= deliveryCharges %></span>
-                    </div>
-                    <% if (discount > 0) { %>
-                        <div class="total-row discount">
-                            <span>Discount:</span>
-                            <span>- ₹<%= discount %></span>
-                        </div>
-                    <% } %>
-                    <div class="total-row total-final">
-                        <span>Total Paid:</span>
-                        <span>₹<%= totalAmount %></span>
+                    <div class="item-price">
+                        ₹<%= (item.price * item.quantity).toFixed(2) %>
                     </div>
                 </div>
-            </section>
-
+                <% }); %>
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="summary-section">
+                <h4>💰 Order Summary</h4>
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>₹<%= subtotal.toFixed(2) %></span>
+                </div>
+                <% if (discount && discount > 0) { %>
+                <div class="summary-row">
+                    <span>Discount:</span>
+                    <span style="color: #dc3545;">-₹<%= discount.toFixed(2) %></span>
+                </div>
+                <% } %>
+                <div class="summary-row">
+                    <span>Delivery Charges:</span>
+                    <span>₹<%= deliveryCharges.toFixed(2) %></span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total Amount:</span>
+                    <span>₹<%= totalAmount.toFixed(2) %></span>
+                </div>
+            </div>
+            
             <!-- Delivery Information -->
-            <section class="info-section delivery-info">
-                <h4>📍 Delivery Information</h4>
-                <p><strong>Address:</strong> <%= deliveryAddress %></p>
-                <p><strong>Expected Delivery:</strong> <%= expectedDelivery %></p>
-                <p><strong>Payment Method:</strong> <%= paymentMethod %></p>
-            </section>
-
-            <!-- Order Status Tracker -->
-            <section class="info-section status-tracker">
-                <h4>📦 Order Status</h4>
-                <div class="status-step">
-                    <div class="status-icon status-current">1</div>
-                    <div class="status-text">
-                        <strong>Order Confirmed</strong>
-                        <small>We've received your order</small>
-                    </div>
+            <% if (deliveryAddress) { %>
+            <div class="delivery-section">
+                <h4>🚚 Delivery Information</h4>
+                <p><strong>Estimated Delivery:</strong> <%= expectedDelivery %></p>
+                <div class="address-block">
+                    <strong>Delivery Address:</strong><br>
+                    <%= deliveryAddress %>
+                    <br><br>
+                    <strong>Contact:</strong><br>
+                    <%= customerName %><br>
+                    📞 <%= supportPhone %>
                 </div>
-                <div class="status-step">
-                    <div class="status-icon status-pending">2</div>
-                    <div class="status-text">
-                        <strong>Preparing</strong>
-                        <small>Picking fresh items for you</small>
-                    </div>
-                </div>
-                <div class="status-step">
-                    <div class="status-icon status-pending">3</div>
-                    <div class="status-text">
-                        <strong>Out for Delivery</strong>
-                        <small>On the way to you</small>
-                    </div>
-                </div>
-                <div class="status-step">
-                    <div class="status-icon status-pending">4</div>
-                    <div class="status-text">
-                        <strong>Delivered</strong>
-                        <small>Enjoy your groceries!</small>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Action Buttons -->
-            <div class="btn-container">
-                <a href="<%= trackOrderLink %>" class="btn" role="button">Track Your Order</a>
-                <a href="<%= shopMoreLink %>" class="btn btn-secondary" role="button">Continue Shopping</a>
             </div>
-        </main>
-
-        <!-- Footer Section -->
-        <footer class="footer">
-            <p>
-                <strong>Questions about your order?</strong><br>
-                Contact us at <a href="mailto:support@grocerease.com">support@grocerease.com</a>
-                or call <strong><%= supportPhone || "+91-9876543210" %></strong>
+            <% } %>
+            
+            <!-- Next Steps -->
+            <div class="next-steps">
+                <h4>📋 What's Next?</h4>
+                <ul>
+                    <li>Our team is preparing your order for shipment</li>
+                    <li>You'll receive a tracking notification once your order is dispatched</li>
+                    <li>Keep your phone handy for delivery updates</li>
+                    <li>Ensure someone is available at the delivery address</li>
+                </ul>
+            </div>
+            
+            <!-- Call to Action -->
+            <div class="cta-section">
+                <a href="<%= trackOrderLink %>" class="track-button">
+                    🔍 Track Your Order
+                </a>
+                <a href="<%= shopMoreLink %>" class="track-button" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                    🛒 Continue Shopping
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="support-info">
+            <p>Need help with your order?</p>
+            <p class="contact-info">📧 support@grocerease.com | 📞 <%= supportPhone %></p>
+            <p style="font-size: 12px; margin-top: 15px; color: #6c757d;">
+                This is an automated email. Please do not reply to this email.
             </p>
-
-            <div class="footer-note">
-                © 2025 GrocerEase. All rights reserved.<br>
-                Fresh groceries delivered to your doorstep
-            </div>
-        </footer>
+        </div>
     </div>
 </body>
 </html>

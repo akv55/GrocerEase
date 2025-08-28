@@ -23,7 +23,7 @@
                             <%= order.orderId %>
                         </td>
                         <td>
-                            <%= order.user ? order.user.name : 'Deleted User' %>
+                            <%= order.user && order.user.name ? order.user.name : "Guest User" %>
                         </td>
                         <td>₹<%= order.totalAmount %>
                         </td>
@@ -70,15 +70,16 @@
             </tbody>
         </table>
         <div class="mobile-only orders-mobile-view">
-            
+
             <% orders.forEach(order=> { %>
-                
+
                 <div class="order-card">
                     <p><strong>Order ID:</strong>
                         <%= order.orderId %>
                     </p>
                     <p><strong>Customer:</strong>
-                        <%= order.user.name %>
+                        <%= order.user && order.user.name ? order.user.name : "Guest User" %>
+
                     </p>
                     <p><strong>Total:</strong> ₹<%= order.totalAmount %>
                     </p>
@@ -112,7 +113,7 @@
         </div>
     </div>
 
-   
+
 
 
     <script>

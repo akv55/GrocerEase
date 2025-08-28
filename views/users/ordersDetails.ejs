@@ -4,12 +4,16 @@
             <div class="header-content">
                 <h1>Order Details</h1>
                 <div class="orderId-and-date">
-                    <span class="order-id"><strong>Order ID:</strong> <%= order.orderId %></span>
-                    <span class="order-date"><strong>Placed on:</strong> <%= order.createdAt.toLocaleDateString() %></span>
+                    <span class="order-id"><strong>Order ID:</strong>
+                        <%= order.orderId %>
+                    </span>
+                    <span class="order-date"><strong>Placed on:</strong>
+                        <%= order.createdAt.toLocaleDateString() %>
+                    </span>
                 </div>
             </div>
             <div class="<% if (order.status) { %> status-<%= order.status.toLowerCase() %> <% } %>">
-                <span >
+                <span>
                     <%= order.status.toUpperCase() %>
                 </span>
             </div>
@@ -33,18 +37,19 @@
                                 </h4>
                                 <span>Qty: <%= item.quantity %></span>
                                 <div class="item-info">
-                                    <span class="quantity"> 
-                                             <%= item.product && item.product.weight ? item.product.weight.value : 'N/A' %><%= item.product && item.product.weight ? item.product.weight.unit : '' %>
+                                    <span class="quantity">
+                                        <%= item.product && item.product.weight ? item.product.weight.value : 'N/A' %>
+                                            <%= item.product && item.product.weight ? item.product.weight.unit : '' %>
                                     </span>
-                                     <span class="unit-price"> ₹<%= item.price.toFixed(2) %></span>
+                                    <span class="unit-price"> ₹<%= item.price.toFixed(2) %></span>
                                 </div>
                             </div>
 
+                            <div class="item-total">
+                                <strong>₹<%= (item.price * item.quantity).toFixed(2) %></strong>
+                            </div>
+                        </div>
 
-                        </div>
-                        <div class="item-total">
-                            <strong>₹<%= (item.price * item.quantity).toFixed(2) %></strong>
-                        </div>
                         <% }); %>
                 </div>
             </div>
@@ -59,11 +64,11 @@
                     </div>
                     <div class="summary-row">
                         <span>Delivery Charges:</span>
-                        <span>Free</span>
+                        <span>₹50.00</span>
                     </div>
                     <div class="summary-row total">
                         <span><strong>Total Amount:</strong></span>
-                        <span><strong>₹<%= order.totalAmount.toFixed(2) %></strong></span>
+                        <span><strong>₹<%= (order.totalAmount + 50).toFixed(2) %></strong></span>
                     </div>
                 </div>
 
@@ -122,5 +127,11 @@
                     </div>
                     <% } %>
             </div>
+        </div>
+        <div class="orders-actions">
+            <button onclick="window.history.back();" class="btn-back"><i class="fas fa-arrow-left"></i> BACK TO
+                ORDERS</button>
+            <button class="btn-cancel"><i class="fas fa-times"></i> CANCEL ORDER</button>
+            <button class="btn-track"><i class="fas fa-truck"></i> TRACK ORDER</button>
         </div>
     </div>
