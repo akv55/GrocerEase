@@ -1,5 +1,18 @@
 <% layout("/layouts/boilerplate") -%>
-    <h2 style="margin-left: 50px; color: #666;">Search results for "<%= query %>"</h2>
+    <% if (typeof filterType !== 'undefined' && filterType === 'category') { %>
+        <h2 style="margin-left: 50px; color: #666;">Products in "<%= query %>" category</h2>
+    <% } else if (typeof filterType !== 'undefined' && filterType === 'all') { %>
+        <h2 style="margin-left: 50px; color: #666;"><%= query %></h2>
+    <% } else { %>
+        <h2 style="margin-left: 50px; color: #666;">Search results for "<%= query %>"</h2>
+    <% } %>
+    
+    <% if (results && results.length > 0) { %>
+        <p style="margin-left: 50px; color: #888;">Found <%= results.length %> product(s)</p>
+    <% } else { %>
+        <p style="margin-left: 50px; color: #888;">No products found</p>
+    <% } %>
+    
     <div class="listing-card-container">
         <% for(let product of results){ %>
             <a href="/<%=product.slug%>" class="listing-link">

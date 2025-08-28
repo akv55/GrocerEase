@@ -82,7 +82,7 @@
                                             class="order-image" alt="<%= item.name %>"
                                             onerror="this.src='/assets/file.svg'" />
                                         <div class="order-details">
-                                            <h3>
+                                            <h3 class="order-item-name">
                                                 <%= item.name %>
                                             </h3>
                                             <p>
@@ -95,7 +95,7 @@
                                         <div class="order-price">₹<%= (item.price * item.quantity).toFixed(2) %>
                                         </div>
                                         <div
-                                            class="<% if (orderItem.status) { %> status-<%= orderItem.status.toLowerCase() %> <% } %>">
+                                            class=" desktop-only<% if (orderItem.status) { %> status-<%= orderItem.status.toLowerCase() %> <% } %>">
                                             <span>
                                                 <%= orderItem.status %>
                                             </span>

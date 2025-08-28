@@ -95,7 +95,19 @@ module.exports.newProductForm = async (req, res, next) => {
     }
 };
 
-
+module.exports.deleteListing = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const deletedProduct = await Listing.findByIdAndDelete(id);
+        if (!deletedProduct) {
+            return next(new ExpressError("Product not found", 404));
+        }
+        req.flash("success", "Product deleted successfully");
+        return res.redirect("/admin/products");
+    } catch (err) {
+        return next(err);  // Handle DB errors or invalid ID
+    }
+};
 module.exports.categories = async (req, res, next) => {
     try {
         const categories = await Category.find();

@@ -4,8 +4,8 @@
             <div class="header-content">
                 <h1>Order Details</h1>
                 <div class="orderId-and-date">
-                    <span class="order-id">Order ID: <%= order.orderId %></span>
-                    <span class="order-date">Placed on: <%= order.createdAt.toLocaleDateString() %></span>
+                    <span class="order-id"><strong>Order ID:</strong> <%= order.orderId %></span>
+                    <span class="order-date"><strong>Placed on:</strong> <%= order.createdAt.toLocaleDateString() %></span>
                 </div>
             </div>
             <div class="<% if (order.status) { %> status-<%= order.status.toLowerCase() %> <% } %>">

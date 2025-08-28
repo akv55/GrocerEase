@@ -25,19 +25,7 @@ module.exports.showIndex = async (req, res, next) => {
     }
 };
 
-module.exports.deleteListing = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const deletedProduct = await Listing.findByIdAndDelete(id);
-        if (!deletedProduct) {
-            return next(new ExpressError("Product not found", 404));
-        }
-        req.flash("success", "Product deleted successfully");
-        return res.redirect("/admin/products");
-    } catch (err) {
-        return next(err);  // Handle DB errors or invalid ID
-    }
-};
+
 
 module.exports.searchListings = async (req, res) => {
     try {
@@ -59,5 +47,43 @@ module.exports.searchListings = async (req, res) => {
     } catch (error) {
         console.error("Search error:", error);
         res.status(500).send({ message: "Server error" });
+    }
+};
+
+module.exports.filterByCategory = async (req, res, next) => {
+    try {
+        const { category } = req.query;
+        let products;
+        let allCategories = await Category.find();
+        if (category) {
+            const categoryDoc = await Category.findOne({ 
+                name: { $regex: new RegExp(category, 'i') } 
+            });
+            if (categoryDoc) {
+                products = await Listing.find({ category: categoryDoc._id }).populate("category", "name");
+            } else {
+                products = [];
+            }
+            
+            // Render search results page with category filter
+            return res.render("./listing/search-results.ejs", { 
+                results: products, 
+                query: category,
+                categories: allCategories,
+                filterType: 'category'
+            });
+        } else {
+            // If no category specified, show all products
+            products = await Listing.find().populate("category", "name");
+            return res.render("./listing/search-results.ejs", { 
+                results: products, 
+                query: 'All Products',
+                categories: allCategories,
+                filterType: 'all'
+            });
+        }
+    } catch (error) {
+        console.error("Error filtering by category:", error);
+        return next(error);
     }
 };
