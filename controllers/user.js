@@ -281,7 +281,7 @@ module.exports.Orders = async (req, res) => {
             .populate('deliveryAddress') // populate delivery address details   
             .sort({ createdAt: -1 }); // latest orders first
 
-        res.render("./users/orders.ejs", { orderItems });
+        res.render("./users/myOrders.ejs", { orderItems });
     } catch (error) {
         console.error("Error fetching orders:", error);
         res.status(500).send("Internal Server Error");
