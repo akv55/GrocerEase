@@ -451,7 +451,7 @@ module.exports.checkoutProcess = async (req, res) => {
                     expectedDelivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN'),
                     paymentMethod,
                     supportPhone: process.env.SUPPORT_PHONE || '+91-9876543210',
-                    trackOrderLink: `${req.protocol}://${req.get("host")}/my-orders/${order.id}/${orderId}`,
+                    trackOrderLink: `${req.protocol}://${req.get("host")}/my-orders/${order.id}/${order.orderId}`,
                     shopMoreLink: `${req.protocol}://${req.get("host")}/`
                 });
 
