@@ -1,25 +1,28 @@
 <% layout("/layouts/adminboilerplate") -%>
-  
   <!-- Main Dashboard Content -->
   <div class="admin-dashboard">
     <div class="dashboard-header">
       <h2>Admin Dashboard</h2>
       <p>Welcome to GrocerEase Admin Panel</p>
     </div>
-
-    <!-- Dashboard Statistics -->
     <!-- Dashboard Statistics -->
     <div class="dashboard-stats">
       <div class="stat-card">
-        <h3><%= users.length %></h3>
+        <h3>
+          <%= users.length %>
+        </h3>
         <p>Total Users</p>
       </div>
       <div class="stat-card">
-        <h3><%= products.length %></h3>
+        <h3>
+          <%= products.length %>
+        </h3>
         <p>Total Products</p>
       </div>
       <div class="stat-card">
-        <h3><%= orders.length %></h3>
+        <h3>
+          <%= orders.length %>
+        </h3>
         <p>Total Orders</p>
       </div>
       <div class="stat-card">
@@ -59,7 +62,7 @@
   </div>
 
 
-  
+
 
   <!-- Chart.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

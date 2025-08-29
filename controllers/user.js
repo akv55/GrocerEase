@@ -8,16 +8,17 @@ const Order = require('../models/order.js');
 const transporter = require('../config/email.js');
 const path = require("path");
 const ejs = require("ejs");
+const { title } = require('process');
 
 
 
 // User Profile Controller
 module.exports.Profile = async (req, res) => {
-    res.render("./users/profile.ejs", { user: req.user });
+    res.render("./users/profile.ejs", { user: req.user,title:"Profile" });
 };
 
 module.exports.ProfileForm = async (req, res) => {
-    res.render("./users/profileUpdate.ejs", { user: req.user });
+    res.render("./users/profileUpdate.ejs", { user: req.user,title:"Update Profile" });
 };
 
 module.exports.ProfileEdit = async (req, res, next) => {
@@ -57,12 +58,12 @@ module.exports.ProfileEdit = async (req, res, next) => {
 //-------------------------------------------- User Address Controller
 module.exports.Address = async (req, res) => {
     const userAddress = await Address.findOne({ userId: req.user._id });
-    res.render("./users/address.ejs", { user: req.user, address: userAddress });
+    res.render("./users/address.ejs", { user: req.user, address: userAddress,title:"User Address" });
 };
 
 module.exports.AddressEditForm = async (req, res) => {
     const userAddress = await Address.findOne({ userId: req.user._id });
-    res.render("./users/updateAddress.ejs", { user: req.user, address: userAddress });
+    res.render("./users/updateAddress.ejs", { user: req.user, address: userAddress,title:"Update Address" });
 };
 
 module.exports.AddressUpdate = async (req, res) => {
@@ -109,7 +110,8 @@ module.exports.Wishlist = async (req, res) => {
         const wishlist = await Wishlist.findOne({ user: req.user._id }).populate("products");
         res.render("./users/wishlist.ejs", {
             user: req.user,
-            wishlistItems: wishlist ? wishlist.products : []
+            wishlistItems: wishlist ? wishlist.products : [],
+            title: "User Wishlist"
         });
     } catch (error) {
         console.error("Error fetching wishlist:", error);
@@ -201,7 +203,7 @@ module.exports.Cart = async (req, res) => {
     }
 
     const userAddress = await Address.findOne({ userId: req.user._id });
-    res.render("./listing/carts.ejs", { cartItem, user: req.user, address: userAddress, totalPrice, totalItems });
+    res.render("./listing/carts.ejs", { cartItem, user: req.user, address: userAddress, totalPrice, totalItems ,title:"Shopping Cart"});
 };
 
 module.exports.addToCart = async (req, res) => {
@@ -281,7 +283,7 @@ module.exports.Orders = async (req, res) => {
             .populate('deliveryAddress') // populate delivery address details   
             .sort({ createdAt: -1 }); // latest orders first
 
-        res.render("./users/myOrders.ejs", { orderItems });
+        res.render("./users/myOrders.ejs", { orderItems, title: "My Orders" });
     } catch (error) {
         console.error("Error fetching orders:", error);
         res.status(500).send("Internal Server Error");
@@ -310,7 +312,7 @@ module.exports.OrderDetails = async (req, res) => {
             req.flash("error", "Order not found");
             return res.redirect("/orders");
         }
-        res.render("./users/ordersDetails.ejs", { order });
+        res.render("./users/ordersDetails.ejs", { order, title: "Order Details" });
 
     } catch (error) {
         console.error("Error fetching order details:", error);
@@ -362,7 +364,8 @@ module.exports.checkoutForm = async (req, res) => {
             user,
             addresses,
             totalPrice,
-            totalItems
+            totalItems,
+            title: "Checkout"
         });
     } catch (err) {
         req.flash("error", "Error loading checkout page");
@@ -406,7 +409,9 @@ module.exports.checkoutProcess = async (req, res) => {
             product: item.product_id._id,
             name: item.product_id.title || item.product_id.name,
             quantity: item.quantity,
-            price: item.product_id.price
+            price: item.product_id.price,
+            discount: item.product_id.discount || 0,
+            weight: item.product_id.weight || { value: 1, unit: 'piece' }
         }));
         const totalAmount = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -439,6 +444,7 @@ module.exports.checkoutProcess = async (req, res) => {
                 const templatePath = path.join(__dirname, "../templates/order-confirmation.ejs");
                 const html = await ejs.renderFile(templatePath, {
                     customerName: user.name,
+                    customerPhone:user.phone,
                     orderId: order.orderId || order._id,
                     orderItems: orderItems,
                     orderDate: new Date().toLocaleDateString('en-IN'),
@@ -446,12 +452,12 @@ module.exports.checkoutProcess = async (req, res) => {
                     subtotal: totalAmount,
                     deliveryCharges: 50,
                     totalAmount: totalAmount + 50,
-                    discount: 0,
+                    discount: orderItems.discount,
                     deliveryAddress: addressString,
                     expectedDelivery: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN'),
                     paymentMethod,
                     supportPhone: process.env.SUPPORT_PHONE || '+91-9876543210',
-                    trackOrderLink: `${req.protocol}://${req.get("host")}/my-orders/${order.id}/${orderId}`,
+                    trackOrderLink: `${req.protocol}://${req.get("host")}/my-orders/${order.id}/${order.orderId}`,
                     shopMoreLink: `${req.protocol}://${req.get("host")}/`
                 });
 
@@ -484,7 +490,8 @@ module.exports.paymentForm = async (req, res) => {
         res.render('./users/payment.ejs', {
             userId,
             orderId,
-            amount
+            amount,
+            title: "Payment"
         });
     } catch (err) {
         req.flash("error", "Error loading payment page");

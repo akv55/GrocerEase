@@ -7,7 +7,7 @@ const authController = require('../controllers/auth.js');
 
 // Signup Route - GET
 router.get('/signup', isNotLogined, wrapAsync((req, res) => {
-    res.render("users/signup.ejs");
+    res.render("users/signup.ejs",{title:"Sign Up"});
 }));
 
 // Send OTP for signup
@@ -23,7 +23,7 @@ router.post("/verify-signup-otp", isNotLogined, wrapAsync(authController.verifyS
 router.post('/signup', isNotLogined, wrapAsync(authController.signUp));
 // Login Route - GET
 router.get('/login', isNotLogined, wrapAsync((req, res) => {
-    res.render("users/login.ejs");
+    res.render("users/login.ejs",{title:"Login"});
 }));
 // Login Route - POST
 router.post("/login",

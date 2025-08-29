@@ -114,6 +114,9 @@ app.use(async (req, res, next) => {
     next();
 });
 // --------ROUTES--------
+app.get("/health", (req, res) => {
+    res.status(200).send("OK");
+});
 app.use("/", authRouter);
 app.use("/", userRouter);
 app.use("/", listingRouter);

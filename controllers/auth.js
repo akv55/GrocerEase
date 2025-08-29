@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const transporter = require('../config/email.js');
 const path = require("path");
 const ejs = require("ejs");
+const { title } = require('process');
 
 let otpStore = {};
 module.exports.sendOtp = async (req, res) => {
@@ -52,7 +53,7 @@ module.exports.sendOtp = async (req, res) => {
         });
 
         req.flash("success", "OTP sent to your email!");
-        return res.render("./users/signUp-otp.ejs", { email }); // Render OTP page
+        return res.render("./users/signUp-otp.ejs", { email,title:"Verify OTP" }); // Render OTP page
     } catch (err) {
         console.error("Send OTP error:", err);
         req.flash("error", err.message || "Failed to send OTP. Please try again.");
@@ -104,7 +105,7 @@ module.exports.resendSignupOtp = async (req, res) => {
         });
 
         req.flash("success", "New OTP sent to your email!");
-        return res.render("./users/signUp-otp.ejs", { email });
+        return res.render("./users/signUp-otp.ejs", { email,title:"Verify-OTP" });
         
     } catch (err) {
         console.error("Resend signup OTP error:", err);
@@ -145,7 +146,7 @@ module.exports.verifySignupOtp = async (req, res) => {
         // Convert stored OTP to string for comparison
         if (enteredOtp !== storedData.otp.toString()) {
             req.flash("error", "Invalid OTP. Please try again.");
-            return res.render("./users/signUp-otp.ejs", { email });
+            return res.render("./users/signUp-otp.ejs", { email,title:"Verify-OTP" });
         }
 
         // OTP verified successfully - get user data and create user
@@ -240,7 +241,7 @@ module.exports.logout = (req, res, next) => {
 // ---------------------FORGOT PASSWORD------------------
 
 module.exports.forgotPassword = (req, res) => {
-    res.render("./users/forgotPassword.ejs");
+    res.render("./users/forgotPassword.ejs",{title:"Forgot Password"});
 };
 
 
@@ -284,7 +285,7 @@ module.exports.forgotPasswordForm = async (req, res) => {
     }
 };
 module.exports.verifyOtpForm = (req, res) => {
-    res.render("./users/verify-otp.ejs")
+    res.render("./users/verify-otp.ejs",{title:"Verify OTP"});
 }
 module.exports.verifyOtp = async (req, res) => {
     try {
@@ -378,7 +379,7 @@ module.exports.verifyOtp = async (req, res) => {
 
 // ----------------------CHANGE PASSWORD---------------
 module.exports.ChangePassword = async (req, res) => {
-    res.render("./users/changePassword.ejs", { user: req.user });
+    res.render("./users/changePassword.ejs", { user: req.user, title: "Change Password" });
 };
 
 module.exports.PasswordUpdate = async (req, res) => {

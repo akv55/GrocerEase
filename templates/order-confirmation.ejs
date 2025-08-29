@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +11,14 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
             color: #333;
             line-height: 1.6;
         }
-        
+
         .email-container {
             max-width: 600px;
             margin: 20px auto;
@@ -26,39 +27,39 @@
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        
+
         .email-header {
             background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
             padding: 30px;
             text-align: center;
         }
-        
+
         .email-header h1 {
             font-size: 28px;
             margin-bottom: 10px;
         }
-        
+
         .email-header p {
             font-size: 16px;
             opacity: 0.9;
         }
-        
+
         .order-success-icon {
             font-size: 48px;
             margin-bottom: 15px;
         }
-        
+
         .email-body {
             padding: 30px;
         }
-        
+
         .greeting {
             font-size: 18px;
             margin-bottom: 20px;
             color: #2c3e50;
         }
-        
+
         .order-info-box {
             background-color: #f8f9fa;
             border-left: 4px solid #28a745;
@@ -66,29 +67,29 @@
             margin: 20px 0;
             border-radius: 5px;
         }
-        
+
         .order-details {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
         }
-        
+
         .order-details span:first-child {
             font-weight: 600;
             color: #495057;
         }
-        
+
         .items-section {
             margin: 30px 0;
         }
-        
+
         .items-section h3 {
             color: #2c3e50;
             margin-bottom: 15px;
             border-bottom: 2px solid #e9ecef;
             padding-bottom: 10px;
         }
-        
+
         .item-row {
             display: flex;
             justify-content: space-between;
@@ -96,46 +97,47 @@
             padding: 15px 0;
             border-bottom: 1px solid #e9ecef;
         }
-        
+
         .item-row:last-child {
             border-bottom: none;
         }
-        
+
         .item-details {
             flex: 1;
         }
-        
+
         .item-name {
+            font-size:16px ;
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 5px;
         }
-        
+
         .item-meta {
             font-size: 14px;
             color: #6c757d;
         }
-        
+
         .item-price {
             font-weight: 600;
             color: #28a745;
             font-size: 16px;
         }
-        
+
         .summary-section {
             background-color: #f8f9fa;
             padding: 20px;
             border-radius: 8px;
             margin: 20px 0;
         }
-        
+
         .summary-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
             padding: 5px 0;
         }
-        
+
         .summary-row.total {
             border-top: 2px solid #28a745;
             padding-top: 15px;
@@ -144,7 +146,7 @@
             font-size: 18px;
             color: #28a745;
         }
-        
+
         .delivery-section {
             background-color: #fff3cd;
             border: 1px solid #ffeaa7;
@@ -152,19 +154,19 @@
             padding: 20px;
             margin: 20px 0;
         }
-        
+
         .delivery-section h4 {
             color: #856404;
             margin-bottom: 15px;
         }
-        
+
         .address-block {
             background-color: white;
             padding: 15px;
             border-radius: 5px;
             margin-top: 10px;
         }
-        
+
         .next-steps {
             background-color: #e7f3ff;
             border-left: 4px solid #007bff;
@@ -172,26 +174,26 @@
             margin: 20px 0;
             border-radius: 5px;
         }
-        
+
         .next-steps h4 {
             color: #0056b3;
             margin-bottom: 15px;
         }
-        
+
         .next-steps ul {
             padding-left: 20px;
         }
-        
+
         .next-steps li {
             margin-bottom: 8px;
             color: #495057;
         }
-        
+
         .cta-section {
             text-align: center;
             margin: 30px 0;
         }
-        
+
         .track-button {
             background: linear-gradient(135deg, #007bff, #0056b3);
             color: white;
@@ -202,46 +204,55 @@
             display: inline-block;
             margin: 10px;
         }
-        
+
         .support-info {
             background-color: #f8f9fa;
             padding: 20px;
             text-align: center;
             border-top: 1px solid #e9ecef;
         }
-        
+
         .support-info p {
             margin-bottom: 10px;
             color: #6c757d;
         }
-        
+
         .contact-info {
             font-weight: 600;
             color: #28a745;
         }
-        
+
         @media (max-width: 600px) {
             .email-container {
                 margin: 10px;
                 border-radius: 5px;
             }
-            
-            .email-header, .email-body {
+
+            .email-header,
+            .email-body {
                 padding: 20px;
             }
-            
-            .order-details, .item-row, .summary-row {
-                flex-direction: column;
-                text-align: left;
+
+            .order-details,
+            .item-row,
+            .summary-row {
+                display: flex;
+                justify-content: space-between;
             }
-            
+
+            .summary-row {
+                display: flex;
+                justify-content: space-between;
+            }
+
             .item-price {
-                text-align: left;
+                text-align: right;
                 margin-top: 5px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="email-container">
         <!-- Header -->
@@ -250,55 +261,67 @@
             <h1>Order Confirmed!</h1>
             <p>Thank you for shopping with GrocerEase</p>
         </div>
-        
+
         <!-- Body -->
         <div class="email-body">
             <div class="greeting">
-                Hello <%= customerName %>!
+                Thank you, <%= customerName %>! 🎉
             </div>
-            
+
             <p>Great news! Your order has been confirmed and is being prepared for delivery.</p>
-            
+
             <!-- Order Information -->
             <div class="order-info-box">
                 <div class="order-details">
                     <span>Order ID:</span>
-                    <span><strong><%= orderId %></strong></span>
+                    <span><strong>
+                            <%= orderId %>
+                        </strong></span>
                 </div>
                 <div class="order-details">
                     <span>Order Date:</span>
-                    <span><%= orderDate %></span>
+                    <span>
+                        <%= orderDate %>
+                    </span>
                 </div>
                 <div class="order-details">
                     <span>Payment Method:</span>
-                    <span><%= paymentMethod %></span>
+                    <span>
+                        <%= paymentMethod %>
+                    </span>
                 </div>
                 <div class="order-details">
                     <span>Order Status:</span>
-                    <span style="color: #28a745; font-weight: 600;"><%= orderStatus %></span>
+                    <span style="color: #28a745; font-weight: 600;">
+                        <%= orderStatus %>
+                    </span>
                 </div>
             </div>
-            
+
             <!-- Items Ordered -->
             <div class="items-section">
                 <h3>📦 Items Ordered</h3>
                 <% orderItems.forEach(function(item) { %>
-                <div class="item-row">
-                    <div class="item-details">
-                        <div class="item-name"><%= item.name %></div>
-                        <div class="item-meta">
-                            Quantity: <%= item.quantity %> | 
-                            Weight: <%= item.weight || 'N/A' %> | 
-                            Unit Price: ₹<%= item.price.toFixed(2) %>
+                    <div class="item-row">
+                        <div class="item-details">
+                            <div class="item-name">
+                                <%= item.name %>
+                            </div>
+                            <div class="item-meta">
+                                Qty: <%= item.quantity %> x ₹<%= item.price.toFixed(2) %>
+                                        <% if (item.weight && item.weight.value && item.weight.unit) { %>
+                                            / <%= item.weight.value %>
+                                                <%= item.weight.unit %>
+                                                    <% } %>
+                            </div>
+                        </div>
+                        <div class="item-price">
+                            ₹<%= (item.price * item.quantity).toFixed(2) %>
                         </div>
                     </div>
-                    <div class="item-price">
-                        ₹<%= (item.price * item.quantity).toFixed(2) %>
-                    </div>
-                </div>
-                <% }); %>
+                    <% }); %>
             </div>
-            
+
             <!-- Order Summary -->
             <div class="summary-section">
                 <h4>💰 Order Summary</h4>
@@ -306,68 +329,77 @@
                     <span>Subtotal:</span>
                     <span>₹<%= subtotal.toFixed(2) %></span>
                 </div>
-                <% if (discount && discount > 0) { %>
-                <div class="summary-row">
-                    <span>Discount:</span>
-                    <span style="color: #dc3545;">-₹<%= discount.toFixed(2) %></span>
-                </div>
-                <% } %>
-                <div class="summary-row">
-                    <span>Delivery Charges:</span>
-                    <span>₹<%= deliveryCharges.toFixed(2) %></span>
-                </div>
-                <div class="summary-row total">
-                    <span>Total Amount:</span>
-                    <span>₹<%= totalAmount.toFixed(2) %></span>
-                </div>
+                <% if (discount && discount> 0) { %>
+                    <div class="summary-row">
+                        <span>Discount:</span>
+                        <span style="color: #dc3545;">-₹<%= discount.toFixed(2) %></span>
+                    </div>
+                    <% } %>
+                        <div class="summary-row">
+                            <span>Delivery Charges:</span>
+                            <span>₹<%= deliveryCharges.toFixed(2) %></span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total Amount:</span>
+                            <span>₹<%= totalAmount.toFixed(2) %></span>
+                        </div>
             </div>
-            
+
             <!-- Delivery Information -->
             <% if (deliveryAddress) { %>
-            <div class="delivery-section">
-                <h4>🚚 Delivery Information</h4>
-                <p><strong>Estimated Delivery:</strong> <%= expectedDelivery %></p>
-                <div class="address-block">
-                    <strong>Delivery Address:</strong><br>
-                    <%= deliveryAddress %>
-                    <br><br>
-                    <strong>Contact:</strong><br>
-                    <%= customerName %><br>
-                    📞 <%= supportPhone %>
+                <div class="delivery-section">
+                    <h4>🚚 Delivery Information</h4>
+                    <p><strong>Estimated Delivery:</strong>
+                        <%= expectedDelivery %>
+                    </p>
+                    <div class="address-block">
+                        <strong>Delivery Address:</strong><br>
+                        <%= deliveryAddress %>
+                            <br><br>
+                            <strong>Contact:</strong><br>
+                            <%= customerName %><br>
+                                📞 <%= customerPhone %>
+                    </div>
                 </div>
-            </div>
-            <% } %>
-            
-            <!-- Next Steps -->
-            <div class="next-steps">
-                <h4>📋 What's Next?</h4>
-                <ul>
-                    <li>Our team is preparing your order for shipment</li>
-                    <li>You'll receive a tracking notification once your order is dispatched</li>
-                    <li>Keep your phone handy for delivery updates</li>
-                    <li>Ensure someone is available at the delivery address</li>
-                </ul>
-            </div>
-            
-            <!-- Call to Action -->
-            <div class="cta-section">
-                <a href="<%= trackOrderLink %>" class="track-button">
-                    🔍 Track Your Order
-                </a>
-                <a href="<%= shopMoreLink %>" class="track-button" style="background: linear-gradient(135deg, #28a745, #20c997);">
-                    🛒 Continue Shopping
-                </a>
-            </div>
+                <% } %>
+
+                    <!-- Next Steps -->
+                    <div class="next-steps">
+                        <h4>📋 What's Next?</h4>
+                        <ul>
+                            <li>Our team is preparing your order for shipment</li>
+                            <li>You'll receive a tracking notification once your order is dispatched</li>
+                            <li>Keep your phone handy for delivery updates</li>
+                            <li>Ensure someone is available at the delivery address</li>
+                        </ul>
+                    </div>
+
+                    <!-- Call to Action -->
+                    <div class="cta-section">
+                        <a href="<%= trackOrderLink %>" class="track-button">
+                            🔍 Track Your Order
+                        </a>
+                        <a href="<%= shopMoreLink %>" class="track-button"
+                            style="background: linear-gradient(135deg, #28a745, #20c997);">
+                            🛒 Continue Shopping
+                        </a>
+                    </div>
         </div>
-        
+
         <!-- Footer -->
         <div class="support-info">
             <p>Need help with your order?</p>
-            <p class="contact-info">📧 support@grocerease.com | 📞 <%= supportPhone %></p>
+            <p class="contact-info">📧 support@grocerease.com | 📞 <%= supportPhone %>
+            </p>
             <p style="font-size: 12px; margin-top: 15px; color: #6c757d;">
                 This is an automated email. Please do not reply to this email.
             </p>
         </div>
+        <div style="text-align: center; padding: 15px; background-color: #f1f1f1; font-size: 12px; color: #6c757d;">
+            &copy; <%= new Date().getFullYear() %> GrocerEase. All rights reserved. Fresh groceries delivered to your
+                doorstep.
+        </div>
     </div>
 </body>
+
 </html>
