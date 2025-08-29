@@ -219,7 +219,7 @@ module.exports.userInfo = async (req, res, next) => {
     try {
         const { id } = req.params;
         const user = await User.findById(id);
-        const userAddress = await Address.findOne({ userId: req.user._id });
+        const userAddress = await Address.findOne({ userId: id});
         if (!user) {
             req.flash("error", "User not found.");
             return res.redirect("/admin/users");
