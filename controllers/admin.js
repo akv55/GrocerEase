@@ -12,9 +12,40 @@ const { cloudinary } = require('../config/cloudinary.js');
 module.exports.admindashboard = async (req, res, next) => {
     try {
         const users = await User.find();
-        const products = await Listing.find();
-        const orders = await Order.find();
-        return res.render("./admin/dashboard.ejs", { users, products, orders });
+        const orders = await Order.find().populate('items.product');
+        const products = await Listing.find().populate('category');
+        const totalRevenue = orders.reduce((acc, order) => acc + order.totalAmount, 0);
+        const categoryData = {};
+        products.forEach(product => {
+            const categoryName = product.category ? product.category.name : 'Uncategorized';
+            if (categoryData[categoryName]) {
+                categoryData[categoryName] += 1;
+            } else {
+                categoryData[categoryName] = 1;
+            }
+        });
+        const orderStatusData = orders.reduce((acc, order) => {
+            acc[order.status] = (acc[order.status] || 0) + 1;
+            return acc;
+        }, {});
+
+        const monthlyRevenue = {};
+        const now = new Date();
+        for (let i = 5; i >= 0; i--) {
+            const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            const monthKey = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            monthlyRevenue[monthKey] = 0;
+        }
+
+        return res.render("./admin/dashboard.ejs", {
+            users,
+            products,
+            orders,
+            totalRevenue,
+            orderStatusData: JSON.stringify(orderStatusData),
+            monthlyRevenue: JSON.stringify(monthlyRevenue),
+            categoryData: JSON.stringify(categoryData)
+        });
     } catch (err) {
         return next(err); // Pass to global error handler
     }
@@ -219,13 +250,14 @@ module.exports.userInfo = async (req, res, next) => {
     try {
         const { id } = req.params;
         const user = await User.findById(id);
-        const userAddress = await Address.findOne({ userId: req.user._id });
+        const userAddress = await Address.findOne({ userId: id });
+        const userOrders = await Order.find({ user: id });
         if (!user) {
             req.flash("error", "User not found.");
             return res.redirect("/admin/users");
         }
 
-        return res.render("./admin/userInfo.ejs", { user, address: userAddress });
+        return res.render("./admin/userInfo.ejs", { user, address: userAddress, orders: userOrders });
     } catch (err) {
         return next(err);
     }
@@ -235,8 +267,8 @@ module.exports.userInfo = async (req, res, next) => {
 module.exports.manageOrders = async (req, res, next) => {
     try {
         const orders = await Order.find()
-        .populate('items.product')
-        .populate('user');
+            .populate('items.product')
+            .populate('user');
 
         return res.render("./admin/manageOrders.ejs", { orders });
     } catch (err) {

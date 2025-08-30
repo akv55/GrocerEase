@@ -69,9 +69,41 @@
                         <hr>
                         <h2>Order Information</h2>
                         <div class="order-details">
-                            <!--  -->
+                            <% if (orders && orders.length> 0) { %>
+                                <table class="user-table desktop-only">
+                                    <thead class="user-table-header">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Order ID</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Total Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-body">
+                                        <% orders.forEach(order=> { %>
+                                            <tr>
+                                                <td></td>
+                                                <td><a href="/orders/<%= order._id %>" class="order-link">
+                                                        <%= order.orderId %>
+                                                    </a></td>
+                                                <td>
+                                                    <%= new Date(order.createdAt).toLocaleDateString() %>
+                                                </td>
+                                                <td>
+                                                    <%= order.status %>
+                                                </td>
+                                                <td>₹<%= order.totalAmount.toFixed(2) %>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                    </tbody>
+                                </table>
+                                <% } else { %>
+                                    <p class="no-orders" style="color: red;">No orders found for this user.</p>
+                                    <% } %>
                         </div>
-                    <% } %>
+                        <% } %>
                             <div class="user-info-actions">
                                 <a href="/admin/users" class="back-btn">Back to Users</a>
                                 <% if (user.role !=='admin' ) { %>
@@ -88,3 +120,9 @@
 
 
     </div>
+    <script>
+        const rows = document.querySelectorAll(".user-table tbody tr");
+        rows.forEach((row, index) => {
+            row.cells[0].textContent = index + 1;
+        });
+    </script>

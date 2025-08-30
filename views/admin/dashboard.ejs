@@ -26,13 +26,14 @@
         <p>Total Orders</p>
       </div>
       <div class="stat-card">
-        <h3>$0</h3>
+        <h3>$<%= totalRevenue.toFixed(2) %>
+        </h3>
         <p>Total Revenue</p>
       </div>
     </div>
 
     <!-- Charts Section -->
-    <!-- <div class="dashboard-charts">
+    <div class="dashboard-charts">
       <div class="chart-container">
         <h3>Sales Overview</h3>
         <canvas id="salesChart"></canvas>
@@ -49,8 +50,26 @@
         <h3>Monthly Revenue</h3>
         <canvas id="revenueChart"></canvas>
       </div>
-    </div> -->
-
+    </div>
+    <!-- Additional Charts Section -->
+    <div class="dashboard-charts">
+      <div class="chart-container">
+        <h3>Payment Methods</h3>
+        <canvas id="paymentMethodChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>Payment Status</h3>
+        <canvas id="paymentStatusChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>Top Selling Products</h3>
+        <canvas id="topProductsChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h3>User Registrations</h3>
+        <canvas id="userRegistrationChart"></canvas>
+      </div>
+    </div>
     <!-- Quick Actions -->
     <div class="quick-actions">
       <h2>Quick Actions</h2>
@@ -68,3 +87,128 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Dashboard Charts JavaScript -->
+  <script>
+    // Chart colors
+    const chartColors = {
+      primary: '#4F46E5',
+      secondary: '#10B981',
+      warning: '#F59E0B',
+      danger: '#EF4444',
+      info: '#06B6D4',
+      purple: '#8B5CF6'
+    };
+    // -------------------SALES LINE CHART-------------------
+    const monthlyRevenue = <%-monthlyRevenue %>;
+     const salesCtx = document.getElementById('salesChart').getContext('2d');
+    new Chart(salesCtx, {
+      type: 'line',
+      data: {
+        labels: Object.keys(monthlyRevenue),
+        datasets: [{
+          label: 'Monthly Sales',
+          data: Object.values(monthlyRevenue),
+          borderColor: chartColors.primary,
+          backgroundColor: chartColors.primary + '20',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return '$' + value.toFixed(0);
+              }
+            }
+          }
+        }
+      }
+    });
+    // -------------------CATEGORY PIE CHARTS-----------------
+      const categoryData = <%- categoryData %>;
+      const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+      new Chart(categoryCtx, {
+        type: 'pie',
+        data: {
+          labels: Object.keys(categoryData),
+          datasets: [{
+            label: 'Products',
+            data: Object.values(categoryData),
+            backgroundColor: [
+              chartColors.primary,
+              chartColors.secondary,
+              chartColors.warning,
+              chartColors.danger,
+              chartColors.info,
+              chartColors.purple
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top'
+            }
+          }
+        }
+      });
+
+    // --------------------ORDERS STATUS BAR CHART--------------------
+    const orderStatusData = <%- orderStatusData %>;
+    if (Object.keys(orderStatusData).length > 0) {
+      const orderCtx = document.getElementById('orderChart').getContext('2d');
+      new Chart(orderCtx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(orderStatusData),
+          datasets: [{
+            label: 'Orders',
+            data: Object.values(orderStatusData),
+            backgroundColor: [
+              chartColors.warning,
+              chartColors.info,
+              chartColors.primary,
+              chartColors.secondary,
+              chartColors.danger
+            ],
+            borderWidth: 1,
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              }
+            }
+          }
+        }
+      });
+    } else {
+      // If no data, show a message
+      document.getElementById('orderChart').parentElement.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">No order data available</div>';
+    }
+
+    
+  </script>
