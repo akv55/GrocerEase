@@ -4,18 +4,39 @@
         <div class="address-info">
             <% if (address && address.address) { %>
                 <div class="details">
-                    <p><strong>Street:</strong> <%= address.address.street %></p>
-                    <p><strong>Landmark:</strong> <%= address.address.landmark || 'Not provided' %></p>
-                    <p><strong>City:</strong> <%= address.address.city %></p>
-                    <p><strong>State:</strong> <%= address.address.state %></p>
-                    <p><strong>Country:</strong> <%= address.address.country || 'India' %></p>
-                    <p><strong>PIN Code:</strong> <%= address.address.pincode %></p>
+                    <p><strong>Street:</strong>
+                        <%= address.address.street %>
+                    </p>
+                    <p><strong>Landmark:</strong>
+                        <%= address.address.landmark || 'Not provided' %>
+                    </p>
+                    <p><strong>City:</strong>
+                        <%= address.address.city %>
+                    </p>
+                    <p><strong>State:</strong>
+                        <%= address.address.state %>
+                    </p>
+                    <p><strong>Country:</strong>
+                        <%= address.address.country || 'India' %>
+                    </p>
+                    <p><strong>PIN Code:</strong>
+                        <%= address.address.pincode %>
+                    </p>
+
+
                 </div>
-            <% } else { %>
-                <p class="no-address">No address found. Please add your address.</p>
-            <% } %>
+                <br>
+                <div class="profile-links">
+                    <a href="/user-address/edit" class="btn"> <i class="fa-solid fa-pen-to-square"></i> Edit
+                        Address</a>
+                </div>
+                <% } else { %>
+                    <p class="no-address">No address found. Please add your address.</p>
+                    <br>
+                    <div class="profile-links">
+                        <a href="/user-address/edit" class="btn"> <i class="fa-solid fa-pen-to-square"></i> Add</a>
+                    </div>
+                    <% } %>
         </div>
-        <div class="profile-links">
-            <a href="/user-address/edit" class="btn"> <i class="fa-solid fa-pen-to-square"></i> Update Address</a>
-        </div>
+
     </div>

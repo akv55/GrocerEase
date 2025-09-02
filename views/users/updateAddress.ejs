@@ -28,56 +28,7 @@
                 <input type="text" id="zip" name="zip" placeholder="Enter your PIN code" minlength="6" maxlength="6"
                     value="<%= address && address.address ? address.address.pincode : '' %>" required>
             </div>
-            <button type="submit" class="btn"> <i class="fa-solid fa-address-card"></i> Update Address</button>
+            <button type="submit" class="btn"> <i class="fa-solid fa-address-card"></i> Save</button>
         </form>
     </div>
-    <!-- <style>
-        .address-update-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            /* text-align: center; */
-        }
-
-        .address-update-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #28a745;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            display: block;
-            color: #333;
-        }
-        .form-group input {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            outline: none;
-            margin-bottom: 15px;
-            transition: border-color 0.3s ease;
-        }
-        .form-group input:focus {
-            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
-            border-color: #28a745;
-        }
-        .address-update-btn {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        } -->
-    </style>
+   

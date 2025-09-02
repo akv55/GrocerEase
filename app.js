@@ -1,6 +1,7 @@
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
+const compression = require('compression');
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -37,6 +38,8 @@ const connectDB = async () => {
     }
 };
 connectDB();
+// Enable compression middleware
+app.use(compression());
 // Middleware
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
