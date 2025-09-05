@@ -168,11 +168,11 @@ module.exports.removeFromWishlist = async (req, res) => {
             req.flash("success", "Product removed from wishlist");
         }
 
-        res.redirect("/wishlist");
+        return res.redirect("/wishlist");
     } catch (error) {
         console.error(error);
         req.flash("error", "Error removing product from wishlist");
-        res.redirect("back");
+        return res.redirect("back");
     }
 };
 
@@ -283,10 +283,10 @@ module.exports.Orders = async (req, res) => {
             .populate('deliveryAddress') // populate delivery address details   
             .sort({ createdAt: -1 }); // latest orders first
 
-        res.render("./users/myOrders.ejs", { orderItems, title: "My Orders" });
+        return res.render("./users/myOrders.ejs", { orderItems, title: "My Orders" });
     } catch (error) {
         console.error("Error fetching orders:", error);
-        res.status(500).send("Internal Server Error");
+        return res.status(500).send("Internal Server Error");
     }
 };
 
@@ -312,7 +312,7 @@ module.exports.OrderDetails = async (req, res) => {
             req.flash("error", "Order not found");
             return res.redirect("/orders");
         }
-        res.render("./users/ordersDetails.ejs", { order, title: "Order Details" });
+        return res.render("./users/ordersDetails.ejs", { order, title: "Order Details" });
 
     } catch (error) {
         console.error("Error fetching order details:", error);
@@ -487,7 +487,7 @@ module.exports.paymentForm = async (req, res) => {
     try {
         const { orderId, amount } = req.query;
         const userId = req.params.id;
-        res.render('./users/payment.ejs', {
+        return res.render('./users/payment.ejs', {
             userId,
             orderId,
             amount,
@@ -495,7 +495,7 @@ module.exports.paymentForm = async (req, res) => {
         });
     } catch (err) {
         req.flash("error", "Error loading payment page");
-        res.redirect("/cart");
+        return res.redirect("/cart");
     }
 };
 
@@ -516,10 +516,10 @@ module.exports.processPayment = async (req, res) => {
         await order.save();
 
         req.flash("success", "Payment completed successfully! Your order is being processed.");
-        res.redirect(`/orders/${order._id}`);
+        return res.redirect(`/orders/${order._id}`);
     } catch (err) {
         req.flash("error", "Error processing payment");
         console.error(err);
-        res.redirect("/cart");
+        return res.redirect("/cart");
     }
 };

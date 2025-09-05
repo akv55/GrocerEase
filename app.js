@@ -112,8 +112,13 @@ app.use(async (req, res, next) => {
     next();
 });
 app.use(async (req, res, next) => {
-    const categories = await Category.find({});
-    res.locals.categories = categories;
+    try {
+        const categories = await Category.find({});
+        res.locals.categories = categories;
+    } catch (err) {
+        console.error('Error fetching categories:', err);
+        res.locals.categories = [];
+    }
     next();
 });
 // --------ROUTES--------

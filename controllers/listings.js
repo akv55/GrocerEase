@@ -43,7 +43,7 @@ module.exports.searchListings = async (req, res) => {
         }).populate("category", "name");
 
         const allCategories = await Category.find();
-        res.render("./listing/search-results.ejs", { results: products, query, categories: allCategories });
+        return res.render("./listing/search-results.ejs", { results: products, query, categories: allCategories });
     } catch (error) {
         console.error("Search error:", error);
         res.status(500).send({ message: "Server error" });
