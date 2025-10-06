@@ -26,14 +26,29 @@
                         </h3>
 
                         <div class="rating">
+                            <% 
+                            const productRating = ratingsMap[product._id.toString()];
+                            const rating = productRating ? productRating.average : 0;
+                            const reviewCount = productRating ? productRating.count : 0;
+                            %>
                             <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
+                                <% for(let i = 1; i <= 5; i++) { %>
+                                    <% if(i <= Math.floor(rating)) { %>
+                                        <i class="fas fa-star"></i>
+                                    <% } else if(i === Math.ceil(rating) && rating % 1 !== 0) { %>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    <% } else { %>
+                                        <i class="far fa-star"></i>
+                                    <% } %>
+                                <% } %>
                             </div>
-                            <span class="rating-count">(4.5)</span>
+                            <span class="rating-count">
+                                <% if(reviewCount > 0) { %>
+                                    (<%= rating.toFixed(1) %>)
+                                <% } else { %>
+                                    (No reviews)
+                                <% } %>
+                            </span>
                         </div>
 
                         <div class="listing-details">

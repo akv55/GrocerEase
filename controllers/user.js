@@ -5,6 +5,7 @@ const Cart = require('../models/cart.js');
 const Listing = require('../models/products.js');
 const Wishlist = require('../models/wishlist.js');
 const Order = require('../models/order.js');
+const Review = require('../models/reviews.js');
 const transporter = require('../config/email.js');
 const path = require("path");
 const ejs = require("ejs");
@@ -521,5 +522,101 @@ module.exports.processPayment = async (req, res) => {
         req.flash("error", "Error processing payment");
         console.error(err);
         return res.redirect("/cart");
+    }
+};
+
+// ---------------------------------REVIEWS---------------------
+
+module.exports.ReviewForm = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const product = await Listing.findById(productId);
+        if (!product) {
+            req.flash("error", "Product not found");
+            return res.redirect("/my-orders/" + req.user._id);
+        }
+
+        // Check if user has purchased this product and order is delivered
+        const hasDeliveredOrder = await Order.findOne({
+            user: req.user._id,
+            status: 'Delivered',
+            'items.product': productId
+        });
+
+        if (!hasDeliveredOrder) {
+            req.flash("error", "You can only review products from delivered orders");
+            return res.redirect("/my-orders/" + req.user._id);
+        }
+
+        // Check if user already reviewed this product
+        const existingReview = await Review.findOne({
+            user_id: req.user._id,
+            product_id: productId
+        });
+
+        res.render("./users/review.ejs", { 
+            product, 
+            existingReview,
+            title: "Write Review" 
+        });
+    } catch (error) {
+        console.error("Error loading review form:", error);
+        req.flash("error", "Something went wrong");
+        return res.redirect("/my-orders/" + req.user._id);
+    }
+};
+
+module.exports.SubmitReview = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const { rating, comment } = req.body;
+
+        const product = await Listing.findById(productId);
+        if (!product) {
+            req.flash("error", "Product not found");
+            return res.redirect("/my-orders/" + req.user._id);
+        }
+
+        // Check if user has purchased this product and order is delivered
+        const hasDeliveredOrder = await Order.findOne({
+            user: req.user._id,
+            status: 'Delivered',
+            'items.product': productId
+        });
+
+        if (!hasDeliveredOrder) {
+            req.flash("error", "You can only review products from delivered orders");
+            return res.redirect("/my-orders/" + req.user._id);
+        }
+
+        // Check if user already reviewed this product
+        const existingReview = await Review.findOne({
+            user_id: req.user._id,
+            product_id: productId
+        });
+
+        if (existingReview) {
+            // Update existing review
+            existingReview.rating = rating;
+            existingReview.comment = comment;
+            await existingReview.save();
+            req.flash("success", "Review updated successfully");
+        } else {
+            // Create new review
+            const newReview = new Review({
+                user_id: req.user._id,
+                product_id: productId,
+                rating: rating,
+                comment: comment
+            });
+            await newReview.save();
+            req.flash("success", "Review submitted successfully");
+        }
+
+        return res.redirect("/" + product.slug);
+    } catch (error) {
+        console.error("Error submitting review:", error);
+        req.flash("error", "Something went wrong while submitting review");
+        return res.redirect("/review/" + req.params.productId);
     }
 };

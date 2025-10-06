@@ -26,7 +26,7 @@
         <p>Total Orders</p>
       </div>
       <div class="stat-card">
-        <h3>$<%= totalRevenue.toFixed(2) %>
+        <h3>₹<%= totalRevenue.toFixed(2) %>
         </h3>
         <p>Total Revenue</p>
       </div>
@@ -210,5 +210,191 @@
       document.getElementById('orderChart').parentElement.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">No order data available</div>';
     }
 
+    // -------------------MONTHLY REVENUE BAR CHART-------------------
+    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(revenueCtx, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(monthlyRevenue),
+        datasets: [{
+          label: 'Revenue ($)',
+          data: Object.values(monthlyRevenue),
+          backgroundColor: chartColors.secondary,
+          borderColor: chartColors.secondary,
+          borderWidth: 1,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return '$' + value.toFixed(0);
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // -------------------PAYMENT METHODS PIE CHART-------------------
+    const paymentMethodData = <%- paymentMethodData %>;
+    if (Object.keys(paymentMethodData).length > 0) {
+      const paymentMethodCtx = document.getElementById('paymentMethodChart').getContext('2d');
+      new Chart(paymentMethodCtx, {
+        type: 'pie',
+        data: {
+          labels: Object.keys(paymentMethodData),
+          datasets: [{
+            label: 'Orders',
+            data: Object.values(paymentMethodData),
+            backgroundColor: [
+              chartColors.primary,
+              chartColors.secondary,
+              chartColors.warning,
+              chartColors.danger
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top'
+            }
+          }
+        }
+      });
+    } else {
+      document.getElementById('paymentMethodChart').parentElement.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">No payment method data available</div>';
+    }
+
+    // -------------------PAYMENT STATUS BAR CHART-------------------
+    const paymentStatusData = <%- paymentStatusData %>;
+    if (Object.keys(paymentStatusData).length > 0) {
+      const paymentStatusCtx = document.getElementById('paymentStatusChart').getContext('2d');
+      new Chart(paymentStatusCtx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(paymentStatusData),
+          datasets: [{
+            label: 'Payments',
+            data: Object.values(paymentStatusData),
+            backgroundColor: [
+              chartColors.warning,
+              chartColors.secondary,
+              chartColors.danger
+            ],
+            borderWidth: 1,
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              }
+            }
+          }
+        }
+      });
+    } else {
+      document.getElementById('paymentStatusChart').parentElement.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">No payment status data available</div>';
+    }
+
+    // -------------------TOP SELLING PRODUCTS HORIZONTAL BAR CHART-------------------
+    const topProductsData = <%- topProductsData %>;
+    if (Object.keys(topProductsData).length > 0) {
+      const topProductsCtx = document.getElementById('topProductsChart').getContext('2d');
+      new Chart(topProductsCtx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(topProductsData),
+          datasets: [{
+            label: 'Units Sold',
+            data: Object.values(topProductsData),
+            backgroundColor: chartColors.purple,
+            borderColor: chartColors.purple,
+            borderWidth: 1,
+            borderRadius: 4
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              }
+            }
+          }
+        }
+      });
+    } else {
+      document.getElementById('topProductsChart').parentElement.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">No product sales data available</div>';
+    }
+
+    // -------------------USER REGISTRATIONS LINE CHART-------------------
+    const userRegistrationData = <%- userRegistrationData %>;
+    const userRegCtx = document.getElementById('userRegistrationChart').getContext('2d');
+    new Chart(userRegCtx, {
+      type: 'line',
+      data: {
+        labels: Object.keys(userRegistrationData),
+        datasets: [{
+          label: 'New Users',
+          data: Object.values(userRegistrationData),
+          borderColor: chartColors.info,
+          backgroundColor: chartColors.info + '20',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
     
   </script>

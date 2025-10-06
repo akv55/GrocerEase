@@ -1848,6 +1848,30 @@ body {
     text-align: right;
 }
 
+.item-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-width: 120px;
+}
+
+.btn-review {
+    background: #f39c12;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.btn-review:hover {
+    background: #e67e22;
+    color: white;
+}
+
 .Delivery-address {
     border: 1px solid #eee;
     color: #666;

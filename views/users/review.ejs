@@ -1,0 +1,226 @@
+<% layout("/layouts/boilerplate") -%>
+<div class="review-container">
+    <div class="review-form-card">
+        <h1>Write a Review</h1>
+        <div class="product-info">
+            <img src="<%= product && product.image && product.image.url ? product.image.url : '/assets/file.svg' %>"
+                 alt="<%= product.title %>" class="review-product-image">
+            <div class="product-details">
+                <h2><%= product.title %></h2>
+                <p class="product-price">₹<%= product.price ? product.price.toLocaleString("en-IN") : "0" %></p>
+            </div>
+        </div>
+
+        <form action="/review/<%= product._id %>" method="POST" class="review-form">
+            <div class="rating-section">
+                <label for="rating">Rating:</label>
+                <div class="rating-stars">
+                    <input type="radio" id="star5" name="rating" value="5" <%= existingReview && existingReview.rating == 5 ? 'checked' : '' %>>
+                    <label for="star5" title="5 stars">★</label>
+                    <input type="radio" id="star4" name="rating" value="4" <%= existingReview && existingReview.rating == 4 ? 'checked' : '' %>>
+                    <label for="star4" title="4 stars">★</label>
+                    <input type="radio" id="star3" name="rating" value="3" <%= existingReview && existingReview.rating == 3 ? 'checked' : '' %>>
+                    <label for="star3" title="3 stars">★</label>
+                    <input type="radio" id="star2" name="rating" value="2" <%= existingReview && existingReview.rating == 2 ? 'checked' : '' %>>
+                    <label for="star2" title="2 stars">★</label>
+                    <input type="radio" id="star1" name="rating" value="1" <%= existingReview && existingReview.rating == 1 ? 'checked' : '' %>>
+                    <label for="star1" title="1 star">★</label>
+                </div>
+            </div>
+
+            <div class="comment-section">
+                <label for="comment">Your Review:</label>
+                <textarea name="comment" id="comment" rows="5" placeholder="Share your experience with this product..."
+                          maxlength="500"><%= existingReview ? existingReview.comment : '' %></textarea>
+                <div class="char-count">
+                    <span id="charCount"><%= (existingReview ? existingReview.comment.length : 0) %></span>/500 characters
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" onclick="window.history.back()" class="btn-cancel">Cancel</button>
+                <button type="submit" class="btn-submit">
+                    <%= existingReview ? 'Update Review' : 'Submit Review' %>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.review-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.review-form-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+.review-form-card h1 {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.product-info {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.review-product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.product-details h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    color: #2c3e50;
+}
+
+.product-price {
+    color: #27ae60;
+    font-weight: bold;
+    margin: 0;
+}
+
+.rating-section {
+    margin-bottom: 2rem;
+}
+
+.rating-section label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 0.2rem;
+}
+
+.rating-stars input[type="radio"] {
+    display: none;
+}
+
+.rating-stars label {
+    font-size: 2rem;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.rating-stars input[type="radio"]:checked ~ label,
+.rating-stars label:hover,
+.rating-stars label:hover ~ label {
+    color: #f39c12;
+}
+
+.comment-section {
+    margin-bottom: 2rem;
+}
+
+.comment-section label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.comment-section textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+.comment-section textarea:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.char-count {
+    text-align: right;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.btn-cancel,
+.btn-submit {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+}
+
+.btn-submit {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-submit:hover {
+    background: #229954;
+}
+
+@media (max-width: 768px) {
+    .product-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const textarea = document.getElementById('comment');
+    const charCount = document.getElementById('charCount');
+
+    textarea.addEventListener('input', function() {
+        charCount.textContent = this.value.length;
+    });
+});
+</script>

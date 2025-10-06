@@ -37,6 +37,62 @@ module.exports.admindashboard = async (req, res, next) => {
             monthlyRevenue[monthKey] = 0;
         }
 
+        // Calculate actual monthly revenue from orders
+        orders.forEach(order => {
+            const orderDate = new Date(order.createdAt);
+            const monthKey = orderDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            if (monthlyRevenue.hasOwnProperty(monthKey)) {
+                monthlyRevenue[monthKey] += order.totalAmount;
+            }
+        });
+
+        // Payment method data
+        const paymentMethodData = orders.reduce((acc, order) => {
+            acc[order.paymentMethod] = (acc[order.paymentMethod] || 0) + 1;
+            return acc;
+        }, {});
+
+        // Payment status data
+        const paymentStatusData = orders.reduce((acc, order) => {
+            acc[order.paymentStatus] = (acc[order.paymentStatus] || 0) + 1;
+            return acc;
+        }, {});
+
+        // Top selling products data
+        const topProductsData = {};
+        orders.forEach(order => {
+            order.items.forEach(item => {
+                const productName = item.name;
+                if (topProductsData[productName]) {
+                    topProductsData[productName] += item.quantity;
+                } else {
+                    topProductsData[productName] = item.quantity;
+                }
+            });
+        });
+
+        // Sort top products and take top 10
+        const sortedTopProducts = Object.entries(topProductsData)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 10);
+        const topProductsDataSorted = Object.fromEntries(sortedTopProducts);
+
+        // User registration data
+        const userRegistrationData = {};
+        for (let i = 5; i >= 0; i--) {
+            const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            const monthKey = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            userRegistrationData[monthKey] = 0;
+        }
+
+        users.forEach(user => {
+            const userDate = new Date(user.createdAt);
+            const monthKey = userDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            if (userRegistrationData.hasOwnProperty(monthKey)) {
+                userRegistrationData[monthKey] += 1;
+            }
+        });
+
         return res.render("./admin/dashboard.ejs", {
             users,
             products,
@@ -44,7 +100,11 @@ module.exports.admindashboard = async (req, res, next) => {
             totalRevenue,
             orderStatusData: JSON.stringify(orderStatusData),
             monthlyRevenue: JSON.stringify(monthlyRevenue),
-            categoryData: JSON.stringify(categoryData)
+            categoryData: JSON.stringify(categoryData),
+            paymentMethodData: JSON.stringify(paymentMethodData),
+            paymentStatusData: JSON.stringify(paymentStatusData),
+            topProductsData: JSON.stringify(topProductsDataSorted),
+            userRegistrationData: JSON.stringify(userRegistrationData)
         });
     } catch (err) {
         return next(err); // Pass to global error handler

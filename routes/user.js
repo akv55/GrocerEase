@@ -17,6 +17,9 @@ router.post("/user-address/edit", isLogined, wrapAsync(userController.AddressUpd
 // User Orders Route
 router.get("/my-orders/:id", isLogined, wrapAsync(userController.Orders));
 router.get("/my-orders/:id/:orderId", isLogined, wrapAsync(userController.OrderDetails));
+// Review Routes
+router.get("/review/:productId", isLogined, wrapAsync(userController.ReviewForm));
+router.post("/review/:productId", isLogined, wrapAsync(userController.SubmitReview));
 // Checkout Routes
 router.get("/checkout", isLogined, wrapAsync(userController.checkoutForm));
 router.post("/checkout", isLogined, wrapAsync(userController.checkoutProcess));

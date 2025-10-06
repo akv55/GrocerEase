@@ -48,6 +48,11 @@
                             <div class="item-total">
                                 <strong>₹<%= (item.price * item.quantity).toFixed(2) %></strong>
                             </div>
+                            <% if (order.status === 'Delivered') { %>
+                                <div class="item-actions">
+                                    <a href="/review/<%= item.product._id %>" class="btn-review">Write Review</a>
+                                </div>
+                            <% } %>
                         </div>
 
                         <% }); %>
